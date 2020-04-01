@@ -1,0 +1,31 @@
+{
+    "presets": [
+        [
+            "env",
+            {
+              "modules": false,
+              // "targets": {
+              //   "browsers": ["ie >=9"]
+              // },
+              // "useBuiltIns": true,
+            }
+        ],
+    ],
+    "plugins": [
+        ["transform-object-rest-spread"],
+        [
+            "transform-runtime",
+            {
+              "polyfill": true
+            }
+        ],
+        ["component", 
+           [
+            {
+              "libraryName": "element-ui",
+              "styleLibraryName": "theme-chalk"
+            }
+          ]
+        ]
+    ]
+}
