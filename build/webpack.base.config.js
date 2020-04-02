@@ -54,6 +54,7 @@ module.exports = {
       __PROD__: env === 'prod'
     }),
     new VueLoaderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new MiniCssExtractPlugin({
@@ -61,7 +62,7 @@ module.exports = {
       chunkFilename: DEV ? 'css/[id].css' : 'css/[hash:8].[id].css',
       allChunks: true
     }),
-    new webpack.ProvidePlugin({
+    new webpack.ProvidePlugin({// 使用时不用再import了 可以直接使用
       Vue: [resolve('node_modules/vue/dist/vue.esm.js'), 'default']
     }),
     new webpack.DllReferencePlugin({

@@ -2,7 +2,7 @@
 const baseWebpackConfig = require('./webpack.base.config')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const merge = require('webpack-merge')
-const webpack = require('webpack')
+// const webpack = require('webpack')
 const entrys = {}
 Object.keys(baseWebpackConfig.entry).forEach((name) => {
   entrys[name] = [baseWebpackConfig.entry[name]].concat(['webpack-hot-middleware/client?noInfo=true&reload=true']) // 热更新需要
@@ -31,9 +31,6 @@ const devConfig = {
   plugins: [
     // new OpenBrowserPlugin({ url: 'http://localhost:9999/main.html' })
     // new BundleAnalyzerPlugin()
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin()
   ]
 }
 
