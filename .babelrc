@@ -3,13 +3,13 @@
         [
             "env",
             {
-              "modules": false,
+              "modules": false
               // "targets": {
               //   "browsers": ["ie >=9"]
               // },
               // "useBuiltIns": true,
             }
-        ],
+        ]
     ],
     "plugins": [
         ["transform-object-rest-spread"],
@@ -20,12 +20,10 @@
             }
         ],
         ["component", 
-           [
-            {
-              "libraryName": "element-ui",
-              "styleLibraryName": "theme-chalk"
-            }
-          ]
+          {
+            "libraryName": "element-ui",
+            "styleLibraryName": "theme-chalk"
+          }
         ]
     ]
 }

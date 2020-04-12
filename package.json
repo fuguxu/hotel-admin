@@ -8,6 +8,7 @@
     "build": "npm run clean && cross-env NODE_ENV=prod webpack --mode production --config  ./build/webpack.pro.config.js --progress --colors",
     "build:dll": "webpack --config ./build/webpack.dll.config.js",
     "dev": "cross-env NODE_ENV=dev node ./build/server-dev.js --mode development",
+    "prod": "npm run clean && cross-env NODE_ENV=prod node ./build/server-prod.js --mode production",
     "clean": "shx rm -rf dist",
     "lint": "eslint --ignore-path .eslintignore --ext .vue,.js ./src",
     "fix": "eslint --fix --ext .vue,.js ./src",

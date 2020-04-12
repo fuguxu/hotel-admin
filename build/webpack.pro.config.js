@@ -7,6 +7,7 @@ const merge = require('webpack-merge')
 
 const prodConfig = {
   devtool: '#source-map',
+  mode: 'production',
   plugins: [
     // new CleanWebpackPlugin()
   ],
