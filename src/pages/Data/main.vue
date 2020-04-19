@@ -3,10 +3,10 @@
         <el-button>111</el-button>
         <el-input v-model="value"></el-input>
         <div class="test" :class="$style.tsr">
-        <img style="height:42px;" src="../../img/welcome@2x.png" alt="">
         </div>
         <i class="icon el-icon-info"></i>
         <m-button></m-button>
+        <router-view></router-view>
     </div>
 </template>
 <script>

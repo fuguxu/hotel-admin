@@ -19,7 +19,7 @@ export default {
 
 <style lang="scss" module>
     .app-header{
-        background: #292e41;
+        background: #000;
         height: 62px;
         .g-wrap{
             width:1120px;

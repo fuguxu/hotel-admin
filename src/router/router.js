@@ -3,47 +3,53 @@ import VueRouter from 'vue-router'
 import app from '../pages/App/app.vue'
 console.log(app)
 Vue.use(VueRouter)
-
+const setMeta = (leftMuen = true, muenIndex = 0) => ({ leftMuen, muenIndex })
 const routesMap = [
   {
     path: '/',
     component: app,
-    redirect: '/r',
-    name: 'studySys',
+    redirect: '/h',
+    name: 'sys',
     children: [
       {
-        path: '/r',
-        redirect: '/r/reception_center',
-        component: (resolve) => { require(['../pages/ReceptionPortal/main.vue'], resolve) },
-        name: 'study protal',
+        path: '/h',
+        redirect: '/h/data',
+        component: (resolve) => { require(['../pages/Portal/main.vue'], resolve) },
+        name: 'protal',
         children: [
           {
-            path: '/r/reception_center',
-            component: (resolve) => { require(['../pages/ReceptionCenter/main.vue'], resolve) },
-            name: 'node crud',
-            meta: {
-              leftMuen: true,
-              muenIndex: 0
-            }
+            path: '/h/data',
+            redirect: '/h/month_sale',
+            component: (resolve) => { require(['../pages/Data/main.vue'], resolve) },
+            name: '数据统计分析',
+            meta: setMeta(),
+            children: [
+              {
+                path: '/h/month_sale',
+                component: (resolve) => { require(['../pages/MonthSale/main.vue'], resolve) },
+                name: '月度销量',
+                meta: setMeta()
+              },
+              {
+                path: '/h/year_sale',
+                component: (resolve) => { require(['../pages/YearSale/main.vue'], resolve) },
+                name: '年度销量',
+                meta: setMeta()
+              }
+            ]
           },
           {
-            path: '/r/my_reception',
-            component: (resolve) => { require(['../pages/MyReception/main.vue'], resolve) },
-            name: 'pdf',
-            meta: {
-              leftMuen: true,
-              muenIndex: 0
-            }
+            path: '/h/order',
+            component: (resolve) => { require(['../pages/Order/main.vue'], resolve) },
+            name: '订单管理',
+            meta: setMeta()
           },
 
           {
-            path: '/r/my_attend',
-            component: (resolve) => { require(['../pages/MyAttend/main.vue'], resolve) },
-            name: 'node chat room',
-            meta: {
-              leftMuen: true,
-              muenIndex: 0
-            }
+            path: '/h/show',
+            component: (resolve) => { require(['../pages/Show/main.vue'], resolve) },
+            name: '买家秀管理',
+            meta: setMeta()
           }
         ]
       }

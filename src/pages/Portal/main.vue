@@ -23,12 +23,12 @@ export default {
 </script>
 <style lang="scss" module>
     .reception-portal{
-        background: #f9f9f9;
+        background: #2C3B48;
         min-height: 600px;
     }
     .portal-content{
         background: #fff;
         min-height: 600px;
-        width:calc(100% - 200px);
+        width:calc(100% - 240px);
     }
 </style>
