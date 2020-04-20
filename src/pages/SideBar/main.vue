@@ -65,7 +65,7 @@ export default {
 </script>
 <style lang="scss" module>
 .side-bar {
-  width: 240px;
+  width: 100%;
   li a {
     line-height: 50px;
     font-size: 14px;

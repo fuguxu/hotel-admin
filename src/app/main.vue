@@ -1,5 +1,5 @@
 <template>
-  <div id="app-reception" class="beauty-scroll-bar">
+  <div :class="$style.app" class="beauty-scroll-bar">
     <router-view></router-view>
   </div>
 </template>
@@ -12,8 +12,8 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-#app-reception {
-  // height: 100%;
+<style lang="scss" module>
+.app {
+  height: 100%;
 }
 </style>

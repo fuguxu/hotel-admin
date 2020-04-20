@@ -1,7 +1,7 @@
 <template>
     <div >
         <el-button>111</el-button>
-        <el-input v-model="value"></el-input>
+        <el-input  v-model="value"></el-input>
         <div class="test" :class="$style.tsr">
         </div>
         <i class="icon el-icon-info"></i>

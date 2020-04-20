@@ -1,9 +1,9 @@
 <template>
-    <div class="clearfloat" :class="$style['reception-portal']">
-        <div class="side-bar-content left">
+    <div :class="$style['portal']">
+        <div :class="$style['side-bar-content']">
             <SideBar></SideBar>
         </div>
-        <div class="left" :class="$style['portal-content']">
+        <div :class="$style['portal-content']">
             <router-view></router-view>
         </div>
     </div>
@@ -22,13 +22,18 @@ export default {
 }
 </script>
 <style lang="scss" module>
-    .reception-portal{
-        background: #2C3B48;
+    .portal{
         min-height: 600px;
+        height: 100%;
+        display: flex;
+    }
+    .side-bar-content{
+      width:240px;
+      background: #2C3B48;
     }
     .portal-content{
         background: #fff;
-        min-height: 600px;
         width:calc(100% - 240px);
+        flex: 1;
     }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div id="app-main">
+    <div :class="$style['app-main']">
         <headerBar></headerBar>
         <section :class="$style['main-container']">
             <router-view></router-view>
@@ -26,13 +26,14 @@ export default {
 }
 </script>
 <style lang="scss" module>
-    // #app-main{
-    //     // height:100%;
-    // }
+    .app-main{
+        height:100%;
+    }
     .main-container{
         width:100%;
         margin:0px auto;
         min-height: 600px;
         background: #fff;
+        height: calc(100% - 62px);
     }
 </style>

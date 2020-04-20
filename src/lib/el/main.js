@@ -9,6 +9,9 @@ import {
   Submenu,
   MenuItem
 } from 'element-ui'
+Vue.prototype.$ELEMENT = { size: 'small' }
+
+// console.log(Input.props.disabled = { type: Boolean, default: true }) 在此可以修改组件的props methods computed等状态
 Vue.use(Input)//
 Vue.use(Button)
 Vue.use(Menu)

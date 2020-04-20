@@ -2,7 +2,8 @@
     <section >
         <div >
             <div class="">
-                月度销量
+                系统设置
+                <router-view></router-view>
             </div>
         </div>
     </section>
