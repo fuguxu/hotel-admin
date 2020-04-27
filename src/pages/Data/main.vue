@@ -5,6 +5,9 @@
     <div class="test" :class="$style.tsr"></div>
     <i class="icon el-icon-info"></i>
     <m-table :data="tableData" :columns="columns">
+      <template v-slot:col-address="row">
+        <el-input v-model="row.address"></el-input>
+      </template>
     </m-table>
     <!-- <router-view></router-view> -->
   </div>
@@ -48,12 +51,7 @@ export default {
         {
           label: '地址',
           prop: 'address',
-          render: (scope) => {
-            return this.$createElement('div', '测试地址')
-            // console.log(this.render)
-            // console.log(scope)
-            // return `<el-input v-model="${scope.row.address}"></el-input>`
-          }
+          type: 'slot'
         }
       ]
     }

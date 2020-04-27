@@ -2,12 +2,14 @@
     <div>
         <el-table  v-bind="$attrs" v-on="$listeners">
             <el-table-column v-for="column in columns" :key="column.prop"
-                :prop="column.prop"
-                :label="column.label"
+                v-bind="column"
                 >
-                <template slot-scope="scope">
-                    <div></div>
-                    {{column.render?column.render(scope):scope.row[column.prop]}}
+                <template v-if="column.type === 'slot'" >
+                  <slot
+                  :name = "'col-' + column.prop"
+                  :row="column"
+                  >
+                  </slot>
                 </template>
             </el-table-column>
         </el-table>
