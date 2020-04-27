@@ -4,9 +4,9 @@
     <el-input v-model="value"></el-input>
     <div class="test" :class="$style.tsr"></div>
     <i class="icon el-icon-info"></i>
-    <m-table :data="tableData" :columns="columns">
-      <template v-slot:col-address="row">
-        <el-input v-model="row.address"></el-input>
+    <m-table :data="tableData" :columns="columns" :currentPage="currentPage" :pageSize="pageSize" :total="total">
+      <template v-slot:col-address="{scope}">
+        <el-input :disabled="scope.row.disabled" v-model="scope.row.address"></el-input>
       </template>
     </m-table>
     <!-- <router-view></router-view> -->
@@ -17,11 +17,15 @@ export default {
   data () {
     return {
       value: '',
+      currentPage: 1,
+      pageSize: 10,
+      total: 100,
       tableData: [
         {
           date: '2016-05-02',
           name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          address: '上海市普陀区金沙江路 1518 弄',
+          disabled: true
         },
         {
           date: '2016-05-04',
@@ -56,9 +60,12 @@ export default {
       ]
     }
   },
-  methods: {},
+  methods: {
+    render (row, index, column) {
+      console.log(row, index, column)
+    }
+  },
   mounted () {
-    console.log(this.$createElement('div', {}, '测试地址'))
   },
   created () {
     console.log(333)
