@@ -13,13 +13,12 @@
   </div>
 </template>
 <script>
+import pagination from '@/mixins/pagination'
 export default {
+  mixins: [pagination],
   data () {
     return {
       value: '',
-      currentPage: 1,
-      pageSize: 10,
-      total: 100,
       tableData: [
         {
           date: '2016-05-02',
