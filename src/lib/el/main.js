@@ -22,7 +22,7 @@ import {
   Message,
   Notification
 } from 'element-ui'
-Vue.prototype.$ELEMENT = { size: 'size' }
+Vue.prototype.$ELEMENT = { size: 'small' }
 
 // console.log(Input.props.disabled = { type: Boolean, default: true }) 在此可以修改组件的props methods computed等状态
 Vue.use(Input)//

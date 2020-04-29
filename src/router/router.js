@@ -40,7 +40,15 @@ const routesMap = [
             path: '/h/product',
             component: (resolve) => { require(['../pages/Product/main.vue'], resolve) },
             name: '产品管理',
-            meta: setMeta()
+            meta: setMeta(),
+            children: [
+              {
+                path: '/h/product_category',
+                component: (resolve) => { require(['../pages/Product/ProductCategory/main.vue'], resolve) },
+                name: '产品分类',
+                meta: setMeta()
+              }
+            ]
           },
           {
             path: '/h/after_sale',

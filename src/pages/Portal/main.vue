@@ -35,5 +35,7 @@ export default {
         background: #fff;
         width:calc(100% - 240px);
         flex: 1;
+        box-sizing: border-box;
+        padding:20px;
     }
 </style>

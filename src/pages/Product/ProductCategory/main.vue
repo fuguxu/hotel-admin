@@ -1,7 +1,7 @@
 <template>
-    <section >
-      <router-view></router-view>
-    </section>
+    <div class="">
+        产品分类
+    </div>
 </template>
 <script>
 export default {

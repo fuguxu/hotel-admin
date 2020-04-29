@@ -58,15 +58,27 @@ input::-webkit-inner-spin-button {
 .clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0}
 /* html标签 */
 table{width:100%;}
-thead{background-color:#F6F6F6;font-size:12px;color:#767C93;line-height: 20px;}
+thead{background-color:#F6F6F6;font-size:13px;color:#767C93;line-height: 20px;}
 th{font-weight: normal;}
 textarea{border:1px solid #CBCED8;border-radius: 3px;resize: none;}
 
 .left{float: left};
 .right{float: right}
-
-
-
+.mt-10{
+  margin-top:10px;
+}
+.mb-10{
+  margin-bottom:10px;
+}
+.ml-10{
+  margin-left:10px;
+}
+.mr-10{
+  margin-right:10px;
+}
+.text-right{
+  text-align: right;
+}
 /* 覆盖element-ui样式 */
 .el-menu{
     border-right:none;
