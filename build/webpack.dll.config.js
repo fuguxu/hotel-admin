@@ -7,7 +7,7 @@ const resolve = (dir) => path.join(__dirname, '..', dir)
 module.exports = {
   mode: 'production',
   entry: {
-    vendor: ['vue/dist/vue.runtime.esm.js', 'vue-router', 'vuex', 'axios'],
+    vendor: ['vue', 'vue-router', 'vuex', 'axios'],
     polyfill: ['babel-polyfill']
   },
   output: {

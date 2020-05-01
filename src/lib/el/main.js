@@ -1,5 +1,5 @@
 // import ElementUI from 'element-ui';
-// import Vue from 'vue'
+import Vue from 'vue'
 
 // import 'element-ui/lib/theme-chalk/index.css' // 按需引入的话 样式文件不需引入 在babelrc 有配置
 import {
@@ -20,7 +20,9 @@ import {
   Loading,
   MessageBox,
   Message,
-  Notification
+  Notification,
+  Row,
+  Col
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small' }
 
@@ -39,6 +41,8 @@ Vue.use(Dialog)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(OptionGroup)
+Vue.use(Row)
+Vue.use(Col)
 
 Vue.use(Loading.directive)
 console.log(Table)

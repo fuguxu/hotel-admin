@@ -91,3 +91,10 @@ textarea{border:1px solid #CBCED8;border-radius: 3px;resize: none;}
   height:45px;
   line-height: 45px;
 }
+
+.el-dialog__header{
+  border-bottom: 1px solid #EBEEF5;
+}
+.el-dialog__footer{
+  border-top: 1px solid #EBEEF5;
+}

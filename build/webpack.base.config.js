@@ -62,9 +62,9 @@ module.exports = {
       chunkFilename: DEV ? 'css/[id].css' : 'css/[hash:8].[id].css',
       allChunks: true
     }),
-    new webpack.ProvidePlugin({// 使用时不用再import了 可以直接使用
-      Vue: [resolve('node_modules/vue/dist/vue.esm.js'), 'default']
-    }),
+    // new webpack.ProvidePlugin({// 使用时不用再import了 可以直接使用
+    //   Vue: [resolve('node_modules/vue/dist/vue.min.js')] // 如果使用此编译版本，el-table无法渲染
+    // }),
     new webpack.DllReferencePlugin({
       manifest: require('../src/public/dll/vendor.manifest')
     }),

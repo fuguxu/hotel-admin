@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table  v-bind="$attrs" v-on="$listeners">
+        <el-table border v-bind="$attrs" v-on="$listeners" :header-cell-style="{backgroundColor:'#f5f7fa',fontWeight:700}">
             <el-table-column v-for="column in columns" :key="column.prop"
                 v-bind="column"
                 >
@@ -12,15 +12,15 @@
                   </slot>
                 </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" v-if="showOperation">
               <template slot-scope="scope">
-                <el-button @click="handleEdit(scope.row, scope.$index, 'detail')" size="mini">详情</el-button>
+                <el-button @click="handleEdit(scope, scope.$index, 'detail')" size="mini">详情</el-button>
                 <el-button @click="handleEdit(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
                 <el-button @click="handleEdit(scope.row, scope.$index, 'delete')" size="mini" type="danger" >删除</el-button>
               </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="text-right mt-10"
+        <el-pagination class="text-right mt-10" v-if="showPagination"
             v-on="$listeners"
             v-bind="$attrs"
             :page-sizes="[10, 20, 30, 50]"
@@ -38,6 +38,14 @@ export default {
       default () {
         return []
       }
+    },
+    showPagination: {
+      type: Boolean,
+      default: true
+    },
+    showOperation: {
+      type: Boolean,
+      default: true
     }
   },
   data () {

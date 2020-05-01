@@ -4,6 +4,14 @@ export default {
   },
   openNewPage () {
     window.open(this.url)
+  },
+  findByAttr (data, attr, value) {
+    if (Array.isArray(data)) {
+      for (let val in data) {
+        if (val[attr] === value) return val
+      }
+    }
+    return null
   }
 }
 export function test () {
