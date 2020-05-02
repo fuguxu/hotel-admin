@@ -47,6 +47,12 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Product/ProductCategory/main.vue'], resolve) },
                 name: '产品分类',
                 meta: setMeta()
+              },
+              {
+                path: '/h/product_brand',
+                component: (resolve) => { require(['@/pages/Product/ProductBrand/main.vue'], resolve) },
+                name: '产品品牌',
+                meta: setMeta()
               }
             ]
           },

@@ -15,18 +15,19 @@ axios.defaults.validateStatus = (status) => {
 
 const TIME_OUT = 50000
 
-const MipBasePrefix = `http://localhost:8001`
+const BasePrefix = __DEV__ ? `http://ming849358679.imwork.net/base` : ''
 
 const BaseAxiosOptions = {
-  // withCredentials: true,
+  withCredentials: true,
   timeout: TIME_OUT,
   headers: { 'content-type': 'application/json' }
 }
 
 // 模块相关接口
-const MipBaseUrl = `${MipBasePrefix}`
-const mipAxios = axios.create(Object.assign({}, { baseURL: MipBaseUrl }, BaseAxiosOptions))
-export const mipModuleApi = makeFetch(mipAxios)
+const BaseUrl = `${BasePrefix}`
+const Axios = axios.create(Object.assign({}, { baseURL: BaseUrl }, BaseAxiosOptions))
+
+export const ModuleApi = makeFetch(Axios)
 
 function makeFetch (moduleAxios) {
   return {
@@ -37,4 +38,26 @@ function makeFetch (moduleAxios) {
       return moduleAxios.post(url, params).then(res => res.data)
     }
   }
+}
+
+// 定义相关接口
+// 登录接口
+export async function doLogin (params) {
+  return ModuleApi.get('/doLogin', params)
+}
+// 产品分类保存接口
+export async function saveProductCategory (params) {
+  return ModuleApi.post('/productCategory/save', params)
+}
+// 产品分类获取接口
+export async function getProductCategory (params) {
+  return ModuleApi.get('/productCategory/getByPage', params)
+}
+// 获取子分类产品
+export async function getProductById (params) {
+  return ModuleApi.get('/productCategory/getByPage', params)
+}
+// 删除产品分类
+export async function deleteProduct (params) {
+  return ModuleApi.get('/productCategory/del', params)
 }

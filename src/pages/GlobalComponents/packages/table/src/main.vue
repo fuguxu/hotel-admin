@@ -23,6 +23,8 @@
         <el-pagination class="text-right mt-10" v-if="showPagination"
             v-on="$listeners"
             v-bind="$attrs"
+            @current-change="currentChange"
+            @size-change="sizeChange"
             :page-sizes="[10, 20, 30, 50]"
             layout="total, sizes, prev, pager, next, jumper"
             >
@@ -55,6 +57,12 @@ export default {
   methods: {
     handleEdit (row, index, type) {
       this.$emit('operationHandler', ...arguments)
+    },
+    currentChange (currentPage) {
+      this.$emit('handlePagination', currentPage, this.pageSize)
+    },
+    sizeChange (pageSize) {
+      this.$emit('handlePagination', this.currentPage, pageSize)
     }
   },
   mounted () {

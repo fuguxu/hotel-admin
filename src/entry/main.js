@@ -8,10 +8,11 @@ import '@/css/base.css'
 import plugin from '@/pages/GlobalComponents/index'
 // 注册插件
 import AppUtil from '@/util/main'
+import { ModuleApi } from '@/service/service'
 Vue.use(plugin)
 console.log('entry')
 Vue.prototype.AppUtil = AppUtil
-
+Vue.prototype.API = ModuleApi
 new Vue({
   router: router,
   store,

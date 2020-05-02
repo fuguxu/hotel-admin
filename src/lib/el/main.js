@@ -53,5 +53,12 @@ Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
+Vue.prototype.$handleRequestTip = (res) => {
+  let isSuccess = res.code === 200
+  Message({
+    type: isSuccess ? 'success' : 'error',
+    message: isSuccess ? '操作成功!' : '操作失败'
+  })
+}
 // Vue.use(ElementUI);
 // export default ElementUI;
