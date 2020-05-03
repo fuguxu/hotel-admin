@@ -12,6 +12,11 @@ export default {
       }
     }
     return null
+  },
+  stringQuery (query) {
+    return Object.keys(query).map((item) => {
+      return `${item}=${query[item]}`
+    }).join('&')
   }
 }
 export function test () {

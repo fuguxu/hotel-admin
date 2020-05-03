@@ -53,6 +53,12 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Product/ProductBrand/main.vue'], resolve) },
                 name: '产品品牌',
                 meta: setMeta()
+              },
+              {
+                path: '/h/product_brand_detail',
+                component: (resolve) => { require(['@/pages/Product/ProductBrandForm/main.vue'], resolve) },
+                name: '品牌表单',
+                meta: setMeta(false)
               }
             ]
           },
@@ -101,20 +107,20 @@ const routesMap = [
             meta: setMeta(),
             children: [
               {
-                path: '/h/user_person',
-                component: (resolve) => { require(['@/pages/UserPerson/main.vue'], resolve) },
-                name: '用户管理',
+                path: '/h/user_level',
+                component: (resolve) => { require(['@/pages/User/UserLevel/main.vue'], resolve) },
+                name: '用户等级管理',
                 meta: setMeta()
               },
               {
-                path: '/h/user_advice',
-                component: (resolve) => { require(['@/pages/UserAdvice/main.vue'], resolve) },
-                name: '用户建议管理',
-                meta: setMeta()
+                path: '/h/user_level_detail',
+                component: (resolve) => { require(['@/pages/User/UserLevelForm/main.vue'], resolve) },
+                name: '用户等级表单',
+                meta: setMeta(false)
               },
               {
                 path: '/h/user_admin',
-                component: (resolve) => { require(['@/pages/UserAdmin/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/User/UserAdmin/main.vue'], resolve) },
                 name: '管理员管理',
                 meta: setMeta()
               }

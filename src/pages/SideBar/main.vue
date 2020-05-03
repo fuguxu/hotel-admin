@@ -42,11 +42,10 @@ export default {
     let muenIndex = this.$route.meta.muenIndex
     let routers = this.$router.options.routes[0].children
     if (muenIndex !== undefined && routers[muenIndex].children) {
-      this.muens = routers[muenIndex].children.filter(item => {
-        return item.meta.leftMuen
-      })
+      this.muens = this.filterMuens(routers[muenIndex].children)
     }
     console.log(this.$route)
+    console.log(this.muens)
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -54,6 +53,12 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    filterMuens (data) {
+      return data.filter(item => {
+        if (item.children) item.children = this.filterMuens(item.children)
+        return item.meta.leftMuen
+      })
     }
   },
   computed: {

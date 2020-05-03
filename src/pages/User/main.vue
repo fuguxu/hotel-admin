@@ -1,11 +1,6 @@
 <template>
     <section >
-        <div >
-            <div class="">
-                用户设置
-                <router-view></router-view>
-            </div>
-        </div>
+      <router-view></router-view>
     </section>
 </template>
 <script>

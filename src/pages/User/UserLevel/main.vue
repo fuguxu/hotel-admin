@@ -1,10 +1,10 @@
 <template>
-    <div class="product_category">
+    <div class="user_level">
       <el-row class="mb-10">
         <el-form :form="query" label-width="120px">
           <el-col :span="6">
             <el-form-item label="等级名称">
-              <el-input v-model="query.brandName"  placeholder="请输入品牌名称"></el-input>
+              <el-input v-model="query.levelName"  placeholder="请输入等级名称"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -22,19 +22,16 @@
        @operationHandler="operationHandler"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
-          <template v-slot:col-brandLogo="{scope}">
-             <img :class="$style.brandLogo" :src="scope.row.brandLogo" alt="">
-          </template>
-          <template v-slot:col-brandUrl="{scope}">
-             <a  :href="scope.row.brandUrl" target="__blank"><el-button type="text">{{scope.row.brandUrl}}</el-button></a>
+         <template v-slot:col-levleIcon="{scope}">
+             <img :class="$style.levleIcon" :src="scope.row.levleIcon" alt="">
           </template>
       </m-table>
     </div>
 </template>
 <script>
-import { getProductBrand, deleteProductBrand } from '@/service/service.js'
+import { getUserLevel, deleteUserLevel } from '@/service/service.js'
 import pagination from '@/mixins/pagination'
-const formPath = '/h/product_brand_detail'
+const formPath = '/h/user_level_detail'
 export default {
   mixins: [pagination],
   data () {
@@ -42,26 +39,37 @@ export default {
       tableData: [],
       columns: [
         {
-          label: '品牌名称',
-          prop: 'brandName'
+          label: '等级编码',
+          prop: 'levleCode'
         },
         {
-          label: '品牌LOGO',
-          prop: 'brandLogo',
+          label: '等级名称',
+          prop: 'levleName'
+        },
+        {
+          label: '开始积分',
+          prop: 'startScore'
+        },
+        {
+          label: '结束积分',
+          prop: 'endScore'
+        },
+        {
+          label: '积分比例',
+          prop: 'addScoreRatio'
+        },
+        {
+          label: '积分折扣',
+          prop: 'discount'
+        },
+        {
+          label: '等级图标',
+          prop: 'levleIcon',
           type: 'slot'
-        },
-        {
-          label: '品牌网址',
-          prop: 'brandUrl',
-          type: 'slot'
-        },
-        {
-          label: '品牌描述',
-          prop: 'brandDesc'
         }
       ],
       query: {
-        brandName: ''
+        levelName: ''
       }
     }
   },
@@ -81,7 +89,7 @@ export default {
           done()
         }
       }).then(async () => {
-        let res = await deleteProductBrand({ id: row.id })
+        let res = await deleteUserLevel({ id: row.id })
         this.$handleRequestTip(res)
         res.code === 200 && this.getData()
       }).catch(() => {})
@@ -90,7 +98,7 @@ export default {
       this.$router.push({ path: formPath, query: { id: row.id, edit: 1 } })
     },
     async getData () {
-      let res = await getProductBrand({
+      let res = await getUserLevel({
         ...this.query,
         pageNo: this.currentPage,
         pageSize: this.pageSize
@@ -108,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" module>
-  .brandLogo{
-    width:55px;
+  .levleIcon{
+    width:30px;
   }
 </style>

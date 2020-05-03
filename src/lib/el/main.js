@@ -21,6 +21,7 @@ import {
   MessageBox,
   Message,
   Notification,
+  upload,
   Row,
   Col
 } from 'element-ui'
@@ -41,6 +42,7 @@ Vue.use(Dialog)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(OptionGroup)
+Vue.use(upload)
 Vue.use(Row)
 Vue.use(Col)
 

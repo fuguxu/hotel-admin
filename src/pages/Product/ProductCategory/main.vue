@@ -1,6 +1,18 @@
 <template>
     <div class="product_category">
       <el-row class="mb-10">
+        <el-form :form="query" label-width="120px">
+          <el-col :span="6">
+            <el-form-item label="分类名称">
+              <el-input v-model="query.name"  placeholder="请输入分类名称"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-button class="ml-10" type="primary" @click="getData">查询</el-button>
+          </el-col>
+        </el-form>
+      </el-row>
+      <el-row class="mb-10">
         <el-col :span="12">
           <el-button type="primary" @click="create">新建</el-button>
         </el-col>
@@ -10,7 +22,6 @@
        :load="load"
        lazy
        :showOperation="false"
-       @operationHandler="operationHandler"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
           <template v-slot:col-operate="{scope}">
@@ -37,7 +48,7 @@
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { saveProductCategory, getProductCategory, getProductById, deleteProduct } from '@/service/service'
+import { saveProductCategory, getProductCategory, getProductByParentId, deleteProduct } from '@/service/service'
 export default {
   mixins: [pagination],
   data () {
@@ -60,7 +71,10 @@ export default {
       ],
       dialogFormVisible: false,
       form: {},
-      title: ''
+      title: '',
+      query: {
+        name: ''
+      }
     }
   },
   created () {
@@ -69,10 +83,6 @@ export default {
   methods: {
     create () {
       this.add({})
-    },
-    operationHandler (row, index, type) {
-      console.log(row, index, type)
-      if (this[type]) this[type](row)
     },
     async delete (row) {
       this.$confirm('是否删除该数据', '提示', {
@@ -103,29 +113,27 @@ export default {
         this.getData()
       }
     },
-    async getData (name) {
+    async getData () {
       let res = await getProductCategory({
-        name: name,
+        ...this.query,
         pageNo: this.currentPage,
         pageSize: this.pageSize
       })
       if (res.code === 200) {
-        this.tableData = (res.data ? res.data.records : []).map((item) => {
-          item.hasChildren = true
-          return item
-        })
+        this.tableData = this.handleData(res.data ? res.data.records : [])
         this.total = res.data.total || 0
       }
     },
     load (tree, treeNode, resolve) {
-      getProductById({ id: tree.id }).then((res) => {
-        resolve(res.data.records || [])
+      getProductByParentId({ id: tree.id }).then((res) => {
+        resolve(this.handleData(res.data || []))
       })
     },
-    handlePagination (currentPage, pageSize) {
-      this.currentPage = currentPage || this.currentPage
-      this.pageSize = pageSize || this.pageSize
-      this.getData()
+    handleData (data) {
+      return data.map((item) => {
+        item.hasChildren = true
+        return item
+      })
     }
   }
 }
