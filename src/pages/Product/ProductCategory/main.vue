@@ -24,19 +24,40 @@
        :showOperation="false"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
+          <template v-slot:col-imageUrl="{scope}">
+             <img :class="$style.imageUrl" :src="scope.row.imageUrl" alt="">
+          </template>
           <template v-slot:col-operate="{scope}">
             <el-button type="primary" @click="operationHandler(scope.row, scope.$index, 'add')" size="mini">新增</el-button>
             <el-button @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
             <el-button @click="operationHandler(scope.row, scope.$index, 'delete')" size="mini">删除</el-button>
           </template>
       </m-table>
-      <el-dialog :title="title" :visible.sync="dialogFormVisible" width="30%">
+      <el-dialog :title="title" :visible.sync="dialogFormVisible" width="33%">
         <el-form :model="form" label-width="100px">
           <el-form-item label="上级分类名称" v-if="form.parentName">
             <el-input v-model="form.parentName" disabled autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="分类名称" >
             <el-input v-model="form.name" placeholder="请输入分类名称" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="分类主图">
+            <div :class="$style.imageWrap" v-if="form.imageUrl">
+              <img  :src="form.imageUrl" alt="">
+              <div  :class="$style.mask"><i @click="removeLogo" :class="$style.icon" class="el-icon-delete"></i></div>
+            </div>
+            <el-upload
+              v-else
+              class="upload-demo"
+              :with-credentials="true"
+              drag
+              :action="uploadUrl"
+              :on-success="onSuccess"
+              :show-file-list="false"
+              >
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            </el-upload>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -48,7 +69,7 @@
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { saveProductCategory, getProductCategory, getProductByParentId, deleteProduct } from '@/service/service'
+import { saveProductCategory, getProductCategory, getProductByParentId, deleteProduct, getUploadUrl } from '@/service/service'
 export default {
   mixins: [pagination],
   data () {
@@ -62,6 +83,11 @@ export default {
         {
           label: '全分类路径',
           prop: 'totalCategoryPath'
+        },
+        {
+          label: '分类主图',
+          prop: 'imageUrl',
+          type: 'slot'
         },
         {
           label: '操作',
@@ -97,7 +123,7 @@ export default {
     },
     add (row) {
       this.title = '新增分类'
-      this.form = { ...row, parentName: row.name, parentId: row.id, name: '', id: '' }
+      this.form = { ...row, parentName: row.name, parentId: row.id, name: '', id: '', imageUrl: '' }
       this.dialogFormVisible = true
     },
     edit (row) {
@@ -134,11 +160,53 @@ export default {
         item.hasChildren = true
         return item
       })
+    },
+    onSuccess (res, file, fileList) {
+      if (res.code === 200) {
+        this.form.imageUrl = res.data.downloadUrl
+      }
+    },
+    removeLogo () {
+      this.form.imageUrl = ''
+    }
+  },
+  computed: {
+    uploadUrl () {
+      return getUploadUrl({ dir: 'produce/category' })
     }
   }
 }
 </script>
 
 <style lang="scss" module>
-
+  .imageUrl{
+    width:50px;
+  }
+  .imageWrap{
+    position: relative;
+    width: fit-content;
+    .mask{
+      position: absolute;
+      width:100%;
+      height:100%;
+      top:0px;
+      left:0px;
+      background: rgba(0,0,0,0.3);
+      display: none;
+      .icon{
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        font-size: 30px;
+        color:#fff;
+        cursor: pointer;
+      }
+    }
+    &:hover{
+      .mask{
+        display: block;
+      }
+    }
+  }
 </style>
