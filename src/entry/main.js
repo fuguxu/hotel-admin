@@ -5,11 +5,11 @@ import router from '@/router/router'
 import store from '@/store/store'
 import '@/lib/el/main'
 import '@/css/base.css'
+import 'nprogress/nprogress.css'
 import plugin from '@/pages/GlobalComponents/index'
 // 注册插件
 import AppUtil from '@/util/main'
 Vue.use(plugin)
-console.log('entry')
 Vue.prototype.AppUtil = AppUtil
 new Vue({
   router: router,

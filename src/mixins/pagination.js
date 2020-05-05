@@ -7,6 +7,11 @@ export default {
     }
   },
   methods: {
+    initQuery () {
+      this.currentPage = 1
+      this.pageSize = 10
+      this.total = 0
+    },
     operationHandler (row, index, type) {
       if (this[type]) this[type](row, index)
     },

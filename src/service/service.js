@@ -1,6 +1,6 @@
 import axios from 'axios'
+import { interceptors } from '@/service/interceptors'
 const { stringQuery } = require('@/util/main').default
-
 axios.defaults.validateStatus = (status) => {
   if (status === 403) { // 无权限访问资源
     return false
@@ -27,7 +27,9 @@ const BaseAxiosOptions = {
 const BaseUrl = `${BasePrefix}`
 const Axios = createAxios()
 function createAxios (options = {}) {
-  return axios.create(Object.assign({}, { baseURL: BaseUrl }, BaseAxiosOptions, options))
+  let instance = axios.create(Object.assign({}, { baseURL: BaseUrl }, BaseAxiosOptions, options))
+  interceptors(instance)
+  return instance
 }
 function makeFetch (moduleAxios) {
   return {
@@ -112,4 +114,16 @@ export async function saveSku (params) {
 }
 export async function getSku (params) {
   return ConfModuleApi.get('/confProductSku/getByPage', params)
+}
+export async function deleteSku (params) {
+  return ConfModuleApi.get('/confProductSku/del', params)
+}
+export async function saveSpu (params) {
+  return ConfModuleApi.post('/confProductSpu/save', params)
+}
+export async function getSpu (params) {
+  return ConfModuleApi.get('/confProductSpu/getByPage', params)
+}
+export async function deleteSpu (params) {
+  return ConfModuleApi.get('/confProductSpu/del', params)
 }

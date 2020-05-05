@@ -11,8 +11,13 @@
               >
             </el-tree>
         </el-col>
-        <el-col :span="18">
-          <el-row class="mb-10">
+        <el-col :span="18" :class="$style.tableWrap">
+          <el-row>
+            <el-tabs type="border-card" v-model="tab" @tab-click="tabClick">
+              <el-tab-pane v-for="item in tabs" :label="item.label" :name="item.name" :key="item.name"></el-tab-pane>
+            </el-tabs>
+          </el-row>
+          <el-row class="mb-10 mt-15">
             <el-form :form="query" label-width="120px">
               <el-col :span="9">
                 <el-form-item label="属性名称">
@@ -24,17 +29,12 @@
               </el-col>
             </el-form>
           </el-row>
-          <el-row>
-            <el-tabs type="border-card" v-model="tab">
-              <el-tab-pane v-for="item in tabs" :label="item.label" :name="item.name" :key="item.name"></el-tab-pane>
-            </el-tabs>
-          </el-row>
           <el-row class="mb-10 mt-15">
             <el-col :span="12">
-              <el-button type="primary" :disabled="!query.categoryId" @click="create">新增</el-button>
+              <el-button class="ml-15" type="primary" :disabled="!query.categoryId" @click="create">新增</el-button>
             </el-col>
           </el-row>
-          <m-table :data="tableData" :columns="columns"
+          <m-table :data="tableData" :columns="columns" :class="$style.table"
           row-key="id"
           :showOperation="false"
           @handlePagination="handlePagination"
@@ -42,8 +42,11 @@
               <template v-slot:col-attributeName="{scope}">
                 <el-input :disabled="!scope.row.isEdit" v-model="scope.row.attributeName" placeholder="请输入"></el-input>
               </template>
+              <template v-slot:col-attributeValueEnum="{scope}">
+                <el-input type="textarea" :disabled="!scope.row.isEdit" v-model="scope.row.attributeValueEnum" placeholder="请输入"></el-input>
+              </template>
               <template v-slot:col-operate="{scope}">
-                <el-button v-if="!scope.row.isEdit" @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
+                <el-button v-if="!scope.row.isEdit" type="primary" @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
                 <el-button v-else type="primary" @click="operationHandler(scope.row, scope.$index, 'save')" size="mini">保存</el-button>
                 <el-button @click="operationHandler(scope.row, scope.$index, 'delete')" size="mini">删除</el-button>
               </template>
@@ -54,34 +57,60 @@
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { saveSku, getSku, getProductCategory, getProductByParentId, deleteProduct } from '@/service/service'
+import { saveSku, getSku, deleteSku, saveSpu, getSpu, deleteSpu, getProductCategory, getProductByParentId } from '@/service/service'
+const KP = {
+  sku: {
+    columns: [
+      {
+        label: 'sku名称',
+        prop: 'attributeName',
+        type: 'slot'
+      }
+    ],
+    save: saveSku,
+    delete: deleteSku,
+    getData: getSku
+  },
+  spu: {
+    columns: [
+      {
+        label: 'spu名称',
+        prop: 'attributeName',
+        type: 'slot'
+      }
+    ],
+    save: saveSpu,
+    delete: deleteSpu,
+    getData: getSpu
+  }
+}
+const COLUMNS = [
+  {
+    label: '属性值',
+    prop: 'attributeValueEnum',
+    type: 'slot'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime'
+  },
+  {
+    label: '操作',
+    prop: 'operate',
+    type: 'slot'
+  }
+]
 export default {
   mixins: [pagination],
   data () {
     return {
       tableData: [],
-      columns: [
-        {
-          label: 'spu名称',
-          prop: 'attributeName',
-          type: 'slot'
-        },
-        {
-          label: '创建时间',
-          prop: 'createTime'
-        },
-        {
-          label: '操作',
-          prop: 'operate',
-          type: 'slot'
-        }
-      ],
+      columns: [],
       props: {
         label: 'name',
         children: 'children',
         isLeaf: 'leaf'
       },
-      form: {},
       query: {
         attributeName: '',
         createTime: '',
@@ -92,6 +121,7 @@ export default {
     }
   },
   created () {
+    this.setColumns()
   },
   methods: {
     create () {
@@ -108,20 +138,18 @@ export default {
         if (!row.id) {
           return this.tableData.splice(index, 1)
         }
-        let res = await deleteProduct({ id: row.id })
+        let res = await KP[this.tab].delete({ id: row.id })
         this.$handleRequestTip(res)
-        this.getData()
+        res.code === 200 && this.getData()
       }).catch(() => {})
     },
     edit (row) {
       row.isEdit = true
     },
     async save (row) {
-      let res = await saveSku({ ...row, categoryId: this.query.categoryId, createTime: '' })
+      let res = await KP[this.tab].save({ ...row, categoryId: this.query.categoryId, createTime: '' })
       this.$handleRequestTip(res)
-      if (res.code === 200) {
-        this.getData()
-      }
+      res.code === 200 && this.getData()
     },
     async getData () {
       if (!this.query.categoryId) {
@@ -130,7 +158,13 @@ export default {
           message: '请先选择分类'
         })
       }
-      let res = await getSku(this.query)
+      let res = await KP[this.tab].getData(
+        {
+          ...this.query,
+          pageNo: this.currentPage,
+          pageSize: this.pageSize
+        }
+      )
       if (res.code === 200) {
         this.tableData = (res.data ? res.data.records : []).map(item => {
           item.isEdit = false
@@ -139,6 +173,9 @@ export default {
         })
         this.total = res.data.total
       }
+    },
+    setColumns () {
+      this.columns = KP[this.tab].columns.concat(COLUMNS)
     },
     load (node, resolve) { // 一进来就会调用load方法
       if (node.level === 0) {
@@ -149,6 +186,11 @@ export default {
       getProductByParentId({ id: node.id }).then((res) => {
         resolve(res.data || [])
       })
+    },
+    tabClick (tab) {
+      this.initQuery()
+      this.setColumns()
+      this.query.categoryId && this.getData()
     },
     nodeClick (data, node, vnode) {
       this.query.categoryId = data.id
@@ -162,21 +204,35 @@ export default {
 </script>
 
 <style lang="scss" module>
+$border-color: #DCDFE6;
 .product_spec{
   height:100%;
 }
 .rowWrap{
   height:100%;
 }
+.table{
+  margin:0 15px;
+}
 .treeWrap{
   box-sizing: border-box;
   margin-right:20px;
-  border-right: 1px solid #DCDFE6;
+  padding-top:20px;
+  border: 1px solid $border-color;
+  overflow-y: auto;
+}
+.tableWrap{
+  box-sizing: border-box;
+  border-right: 1px solid $border-color;
+  border-left: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
 }
 </style>
 <style scoped>
   .el-tabs--border-card{
     border-bottom: none;
+    border-left: none;
+    border-right: none;
     box-shadow: none;
   }
   .el-tabs--border-card >>> .el-tabs__content{

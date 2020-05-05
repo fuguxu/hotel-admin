@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import app from '@/pages/App/app.vue'
-console.log(app)
 Vue.use(VueRouter)
 const setMeta = (leftMuen = true, muenIndex = 0) => ({ leftMuen, muenIndex })
 const routesMap = [
