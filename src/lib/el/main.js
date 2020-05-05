@@ -23,7 +23,10 @@ import {
   Notification,
   upload,
   Row,
-  Col
+  Col,
+  tree,
+  tabs,
+  tabPane
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small' }
 
@@ -45,6 +48,9 @@ Vue.use(OptionGroup)
 Vue.use(upload)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(tree)
+Vue.use(tabs)
+Vue.use(tabPane)
 
 Vue.use(Loading.directive)
 console.log(Table)

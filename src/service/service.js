@@ -106,3 +106,10 @@ export async function getUserLevelById (params) {
 export async function deleteUserLevel (params) {
   return ConfModuleApi.get('/userLevelManage/del', params)
 }
+// spu sku相关配置接口
+export async function saveSku (params) {
+  return ConfModuleApi.post('/confProductSku/save', params)
+}
+export async function getSku (params) {
+  return ConfModuleApi.get('/confProductSku/getByPage', params)
+}

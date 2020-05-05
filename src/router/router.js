@@ -39,7 +39,7 @@ const routesMap = [
           {
             path: '/h/product',
             component: (resolve) => { require(['@/pages/Product/main.vue'], resolve) },
-            name: '产品管理',
+            name: '配置管理',
             meta: setMeta(),
             children: [
               {
@@ -59,6 +59,24 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Product/ProductBrandForm/main.vue'], resolve) },
                 name: '品牌表单',
                 meta: setMeta(false)
+              },
+              {
+                path: '/h/user_level',
+                component: (resolve) => { require(['@/pages/User/UserLevel/main.vue'], resolve) },
+                name: '用户等级',
+                meta: setMeta()
+              },
+              {
+                path: '/h/user_level_detail',
+                component: (resolve) => { require(['@/pages/User/UserLevelForm/main.vue'], resolve) },
+                name: '用户等级表单',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/product_spec',
+                component: (resolve) => { require(['@/pages/Product/ProductSpec/main.vue'], resolve) },
+                name: '规格配置',
+                meta: setMeta()
               }
             ]
           },
@@ -106,18 +124,6 @@ const routesMap = [
             name: '用户设置',
             meta: setMeta(),
             children: [
-              {
-                path: '/h/user_level',
-                component: (resolve) => { require(['@/pages/User/UserLevel/main.vue'], resolve) },
-                name: '用户等级管理',
-                meta: setMeta()
-              },
-              {
-                path: '/h/user_level_detail',
-                component: (resolve) => { require(['@/pages/User/UserLevelForm/main.vue'], resolve) },
-                name: '用户等级表单',
-                meta: setMeta(false)
-              },
               {
                 path: '/h/user_admin',
                 component: (resolve) => { require(['@/pages/User/UserAdmin/main.vue'], resolve) },

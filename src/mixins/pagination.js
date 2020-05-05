@@ -13,7 +13,7 @@ export default {
     handlePagination (currentPage, pageSize) {
       this.currentPage = currentPage || this.currentPage
       this.pageSize = pageSize || this.pageSize
-      this.getData()
+      this.getData && this.getData()
     }
   }
 }

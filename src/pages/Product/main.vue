@@ -1,5 +1,5 @@
 <template>
-    <section >
+    <section :class="$style.product">
       <router-view></router-view>
     </section>
 </template>
@@ -14,5 +14,7 @@ export default {
 </script>
 
 <style lang="scss" module>
-
+  .product{
+    height:100%;
+  }
 </style>
