@@ -36,45 +36,59 @@ const routesMap = [
             meta: setMeta()
           },
           {
-            path: '/h/product',
-            component: (resolve) => { require(['@/pages/Product/main.vue'], resolve) },
+            path: '/h/config',
+            component: (resolve) => { require(['@/pages/ConfigManage/main.vue'], resolve) },
             name: '配置管理',
             meta: setMeta(),
             children: [
               {
                 path: '/h/product_category',
-                component: (resolve) => { require(['@/pages/Product/ProductCategory/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/ConfigManage/ProductCategory/main.vue'], resolve) },
                 name: '产品分类',
                 meta: setMeta()
               },
               {
                 path: '/h/product_brand',
-                component: (resolve) => { require(['@/pages/Product/ProductBrand/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/ConfigManage/ProductBrand/main.vue'], resolve) },
                 name: '产品品牌',
                 meta: setMeta()
               },
               {
                 path: '/h/product_brand_detail',
-                component: (resolve) => { require(['@/pages/Product/ProductBrandForm/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/ConfigManage/ProductBrandForm/main.vue'], resolve) },
                 name: '品牌表单',
                 meta: setMeta(false)
               },
               {
                 path: '/h/user_level',
-                component: (resolve) => { require(['@/pages/User/UserLevel/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/ConfigManage/UserLevel/main.vue'], resolve) },
                 name: '用户等级',
                 meta: setMeta()
               },
               {
                 path: '/h/user_level_detail',
-                component: (resolve) => { require(['@/pages/User/UserLevelForm/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/ConfigManage/UserLevelForm/main.vue'], resolve) },
                 name: '用户等级表单',
                 meta: setMeta(false)
               },
               {
                 path: '/h/product_spec',
-                component: (resolve) => { require(['@/pages/Product/ProductSpec/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/ConfigManage/ProductSpec/main.vue'], resolve) },
                 name: '规格配置',
+                meta: setMeta()
+              }
+            ]
+          },
+          {
+            path: '/h/market',
+            component: (resolve) => { require(['@/pages/MarketManage/main.vue'], resolve) },
+            name: '营销管理',
+            meta: setMeta(),
+            children: [
+              {
+                path: '/h/store',
+                component: (resolve) => { require(['@/pages/MarketManage/Store/main.vue'], resolve) },
+                name: '店铺管理',
                 meta: setMeta()
               }
             ]
