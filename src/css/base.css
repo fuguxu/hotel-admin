@@ -113,3 +113,7 @@ textarea{border:1px solid #CBCED8;border-radius: 3px;resize: none;}
 .el-dialog__footer{
   border-top: 1px solid #EBEEF5;
 }
+
+.el-select {
+  width:100%;
+}

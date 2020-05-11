@@ -44,6 +44,8 @@ function makeFetch (moduleAxios) {
 
 // 配置管理模块的接口
 export const ConfModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/conf/base` }))
+// 营销管理模块接口
+export const MarketModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/product/store` }))
 
 // 登录模块接口
 export const LoginModuleApi = makeFetch(Axios)
@@ -126,4 +128,22 @@ export async function getSpu (params) {
 }
 export async function deleteSpu (params) {
   return ConfModuleApi.get('/confProductSpu/del', params)
+}
+
+// 营销模块接口
+// 店铺保存接口
+export async function saveProductStroe (params) {
+  return MarketModuleApi.post('/productStore/save', params)
+}
+// 店铺详情接口
+export async function getProductStoreById (params) {
+  return MarketModuleApi.get('/productStore/getById', params)
+}
+// 店铺列表
+export async function getProductStore (params) {
+  return MarketModuleApi.get('/productStore/getByPage', params)
+}
+// 删除店铺
+export async function deleteProductStore (params) {
+  return MarketModuleApi.get('/productStore/del', params)
 }

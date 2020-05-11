@@ -8,7 +8,7 @@ export default {
   findByAttr (data, attr, value) {
     if (Array.isArray(data)) {
       for (let val in data) {
-        if (val[attr] === value) return val
+        if (data[val][attr] === value) return data[val]
       }
     }
     return null

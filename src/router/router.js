@@ -90,6 +90,12 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/MarketManage/Store/main.vue'], resolve) },
                 name: '店铺管理',
                 meta: setMeta()
+              },
+              {
+                path: '/h/store_detail',
+                component: (resolve) => { require(['@/pages/MarketManage/StoreForm/main.vue'], resolve) },
+                name: '店铺表单',
+                meta: setMeta(false)
               }
             ]
           },

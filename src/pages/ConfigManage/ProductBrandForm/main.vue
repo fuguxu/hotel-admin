@@ -14,7 +14,7 @@
             <el-input v-model="form.brandDesc" placeholder="请输入品牌描述"></el-input>
           </el-form-item>
           <el-form-item label="品牌LOGO">
-            <m-upload v-model="form.brandLogo" dir="product/category"></m-upload>
+            <m-upload v-model="form.brandLogo" :isShowDel="isEdit" dir="product/category"></m-upload>
           </el-form-item>
         </el-form>
         <div class="text-center">
@@ -60,7 +60,7 @@ export default {
     }
   },
   created () {
-    this.isEdit = !this.$route.query.id || this.$route.query.edit
+    this.isEdit = !!((!this.$route.query.id) || this.$route.query.edit)
     this.$route.query.id && this.getData(this.$route.query.id)
   },
   computed: {

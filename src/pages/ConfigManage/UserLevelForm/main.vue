@@ -23,7 +23,7 @@
             <el-input v-model="form.discount" placeholder="请输入积分折扣"></el-input>
           </el-form-item>
           <el-form-item label="等级图标">
-            <m-upload v-model="form.levleIcon" dir="user/level"></m-upload>
+            <m-upload v-model="form.levleIcon" :isShowDel="isEdit" dir="user/level"></m-upload>
           </el-form-item>
         </el-form>
         <div class="text-center">
@@ -71,7 +71,7 @@ export default {
     }
   },
   created () {
-    this.isEdit = !this.$route.query.id || this.$route.query.edit
+    this.isEdit = !!((!this.$route.query.id) || this.$route.query.edit)
     this.$route.query.id && this.getData(this.$route.query.id)
   },
   computed: {

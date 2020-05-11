@@ -11,6 +11,7 @@
             drag
             :action="uploadUrl"
             :on-success="onSuccess"
+            :on-error="onError"
             :show-file-list="false"
             >
             <i class="el-icon-upload"></i>
@@ -38,14 +39,25 @@ export default {
     onSuccess (res, file, fileList) {
       if (res.code === 200) {
         this.$emit('input', res.data.downloadUrl) // 将链接与v-model绑定
+      } else {
+        this.$message({
+          type: 'error',
+          message: '上传失败'
+        })
       }
+    },
+    onError () {
+      this.$message({
+        type: 'error',
+        message: '上传失败'
+      })
     },
     remove () {
       this.$emit('input', '')
     }
   },
   mounted () {
-
+    console.log(this.isShowDel)
   },
   computed: {
     uploadUrl () {
