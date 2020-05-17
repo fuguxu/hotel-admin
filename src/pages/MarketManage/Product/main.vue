@@ -53,14 +53,9 @@ export default {
   computed: {
     pathLabels () {
       let node = this.selectedNode[0]
-      console.log(node)
-      if (!node) {
-        return ''
-      } else {
-        return node.pathLabels.map(path => {
-          return `<span class="selected-path">${path}</span>`
-        }).join(' > ')
-      }
+      return !node ? '' : node.pathLabels.map(path => {
+        return `<span class="selected-path">${path}</span>`
+      }).join(' > ')
     }
   }
 }

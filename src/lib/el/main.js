@@ -28,7 +28,9 @@ import {
   Tabs,
   TabPane,
   CascaderPanel,
-  Scrollbar
+  Scrollbar,
+  RadioGroup,
+  Radio
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small' }
 
@@ -55,6 +57,8 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(CascaderPanel)
 Vue.use(Scrollbar)
+Vue.use(RadioGroup)
+Vue.use(Radio)
 
 Vue.use(Loading.directive)
 
