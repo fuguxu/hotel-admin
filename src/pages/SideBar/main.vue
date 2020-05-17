@@ -44,15 +44,11 @@ export default {
     if (muenIndex !== undefined && routers[muenIndex].children) {
       this.muens = this.filterMuens(routers[muenIndex].children)
     }
-    console.log(this.$route)
-    console.log(this.muens)
   },
   methods: {
     handleOpen (key, keyPath) {
-      console.log(key, keyPath)
     },
     handleClose (key, keyPath) {
-      console.log(key, keyPath)
     },
     filterMuens (data) {
       return data.filter(item => {

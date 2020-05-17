@@ -1,16 +1,21 @@
 <template>
     <div :class="$style.product_spec">
       <el-row type="flex" :class="$style.rowWrap">
-        <el-col :span="6" :class="$style.treeWrap">
-            <el-tree
-              :props="props"
-              :load="load"
-              @node-click="nodeClick"
-              lazy
-              :highlight-current="true"
-              >
-            </el-tree>
-        </el-col>
+          <el-col :span="6" :class="$style.treeWrap">
+            <el-scrollbar role="menu"
+              class="el-cascader-menu"
+              wrap-class="el-cascader-menu__wrap"
+              view-class="el-cascader-menu__list">
+              <el-tree
+                :props="props"
+                :load="load"
+                @node-click="nodeClick"
+                lazy
+                :highlight-current="true"
+                >
+              </el-tree>
+            </el-scrollbar>
+          </el-col>
         <el-col :span="18" :class="$style.tableWrap">
           <el-row>
             <el-tabs type="border-card" v-model="tab" @tab-click="tabClick">
@@ -57,7 +62,7 @@
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { saveSku, getSku, deleteSku, saveSpu, getSpu, deleteSpu, getProductCategory, getProductByParentId } from '@/service/service'
+import { saveSku, getSku, deleteSku, saveSpu, getSpu, deleteSpu, getProductByParentId } from '@/service/service'
 const KP = {
   sku: {
     columns: [
@@ -178,12 +183,7 @@ export default {
       this.columns = KP[this.tab].columns.concat(COLUMNS)
     },
     load (node, resolve) { // 一进来就会调用load方法
-      if (node.level === 0) {
-        return getProductCategory().then(res => {
-          resolve(res.data ? res.data.records : [])
-        })
-      }
-      getProductByParentId({ id: node.id }).then((res) => {
+      getProductByParentId({ id: node.level === 0 ? 0 : node.data.id }).then((res) => {
         resolve(res.data || [])
       })
     },
@@ -238,4 +238,10 @@ $border-color: #DCDFE6;
   .el-tabs--border-card >>> .el-tabs__content{
     display: none;
   }
+  .el-scrollbar{
+    height:100%;
+  }
+  .el-scrollbar >>> .el-cascader-menu__wrap {
+    height: calc(100% + 20px) !important;
+}
 </style>

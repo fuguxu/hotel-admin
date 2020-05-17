@@ -27,7 +27,8 @@ import {
   Tree,
   Tabs,
   TabPane,
-  CascaderPanel
+  CascaderPanel,
+  Scrollbar
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small' }
 
@@ -53,9 +54,10 @@ Vue.use(Tree)
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(CascaderPanel)
+Vue.use(Scrollbar)
 
 Vue.use(Loading.directive)
-console.log(Table)
+
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$alert = MessageBox.alert

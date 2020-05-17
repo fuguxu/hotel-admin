@@ -1,5 +1,5 @@
 <template>
-  <section class="product_detail">
+  <section class="product_brand_detail">
     <form-header>产品品牌</form-header>
     <el-row class="mt-10">
       <el-col :span="12">

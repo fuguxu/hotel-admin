@@ -6,12 +6,12 @@
         <span v-html="pathLabels"></span>
       </div>
       <div :class="$style['btn']">
-        <el-button type="primary">下一步，发布商品</el-button>
+        <el-button :disabled="!pathLabels" @click="nextStep" type="primary">下一步，发布商品</el-button>
       </div>
     </div>
 </template>
 <script>
-import { getProductCategory, getProductByParentId } from '@/service/service.js'
+import { getProductByParentId } from '@/service/service.js'
 import pagination from '@/mixins/pagination'
 export default {
   mixins: [pagination],
@@ -32,26 +32,28 @@ export default {
   created () {
   },
   methods: {
-    async initData () {
-      let res = await getProductCategory()
-      return res.data ? res.data.records : []
-    },
     async lazyLoad (node, resolve) {
-      if (node.root) {
-        resolve(await this.initData())
-      } else {
-        getProductByParentId({ id: node.value }).then((res) => {
-          resolve(res.data || [])
-        })
-      }
+      getProductByParentId({ id: node.root ? 0 : node.value }).then((res) => {
+        resolve(res.data || [])
+      })
     },
     changeNode (node) {
       this.selectedNode = this.$refs.cascader.getCheckedNodes()
+    },
+    nextStep () {
+      this.$router.push({
+        path: '/h/product_detail',
+        query: {
+          path: this.selectedNode[0].data.totalCategoryPath,
+          id: this.selectedNode[0].value
+        }
+      })
     }
   },
   computed: {
     pathLabels () {
       let node = this.selectedNode[0]
+      console.log(node)
       if (!node) {
         return ''
       } else {

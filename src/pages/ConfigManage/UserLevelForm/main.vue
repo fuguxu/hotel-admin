@@ -1,5 +1,5 @@
 <template>
-  <section class="product_detail">
+  <section class="user_level_detail">
     <form-header>用户等级</form-header>
     <el-row class="mt-10">
       <el-col :span="12">

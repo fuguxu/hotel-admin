@@ -102,6 +102,12 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/MarketManage/Product/main.vue'], resolve) },
                 name: '产品管理',
                 meta: setMeta()
+              },
+              {
+                path: '/h/product_detail',
+                component: (resolve) => { require(['@/pages/MarketManage/ProductForm/main.vue'], resolve) },
+                name: '产品配置详情',
+                meta: setMeta(false)
               }
             ]
           },
