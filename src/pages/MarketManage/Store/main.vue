@@ -1,20 +1,20 @@
 <template>
     <div class="product_category">
-      <el-row class="mb-10">
-        <el-form :form="query" label-width="120px">
-          <el-col :span="6">
-            <el-form-item label="店铺名称">
-              <el-input v-model="query.brandName"  placeholder="请输入店铺名称"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-button class="ml-10" type="primary" @click="getData">查询</el-button>
-          </el-col>
-        </el-form>
-      </el-row>
-      <el-row class="mb-10">
+      <el-row >
         <el-col :span="12">
           <el-button type="primary" @click="create">新建</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-form :form="query" label-width="120px">
+            <el-col :span="20">
+              <el-form-item label="店铺名称">
+                <el-input v-model="query.brandName"  placeholder="请输入店铺名称"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col class="text-right" :span="4">
+              <el-button  type="primary" @click="getData">查询</el-button>
+            </el-col>
+          </el-form>
         </el-col>
       </el-row>
       <m-table :data="tableData" :columns="columns"

@@ -1,21 +1,10 @@
 import axios from 'axios'
 import { interceptors } from '@/service/interceptors'
 const { stringQuery } = require('@/util/main').default
-axios.defaults.validateStatus = (status) => {
-  if (status === 403) { // 无权限访问资源
-    return false
-  } else if (status === 401) { // 用户未登录或者登录已超时
-    return false
-  } else if (status === 404) {
-    return false
-  } else {
-    return true
-  }
-}
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? `http://ming849358679.imwork.net` : ''
+export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8083') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
