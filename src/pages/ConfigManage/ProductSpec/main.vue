@@ -50,6 +50,15 @@
               <template v-slot:col-attributeValueEnum="{scope}">
                 <el-input type="textarea" :disabled="!scope.row.isEdit" v-model="scope.row.attributeValueEnum" placeholder="请输入"></el-input>
               </template>
+              <template v-slot:col-elementType="{scope}">
+                <el-select :disabled="!scope.row.isEdit" v-model="scope.row.elementType" placeholder="请选择">
+                  <el-option
+                    v-for="item in elementTypeOptions"
+                    :key="item.value"
+                    v-bind="item">
+                  </el-option>
+                </el-select>
+              </template>
               <template v-slot:col-operate="{scope}">
                 <el-button v-if="!scope.row.isEdit" type="primary" @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
                 <el-button v-else type="primary" @click="operationHandler(scope.row, scope.$index, 'save')" size="mini">保存</el-button>
@@ -96,6 +105,11 @@ const COLUMNS = [
     type: 'slot'
   },
   {
+    label: '属性类型',
+    prop: 'elementType',
+    type: 'slot'
+  },
+  {
     label: '创建时间',
     prop: 'createTime'
   },
@@ -122,7 +136,21 @@ export default {
         categoryId: ''
       },
       tabs: [{ label: 'spu属性', name: 'spu' }, { label: 'sku属性', name: 'sku' }],
-      tab: 'spu'
+      tab: 'spu',
+      elementTypeOptions: [
+        {
+          value: 'input',
+          label: '输入框'
+        },
+        {
+          value: 'select',
+          label: '下拉框'
+        },
+        {
+          value: 'check',
+          label: '复选框'
+        }
+      ]
     }
   },
   created () {
