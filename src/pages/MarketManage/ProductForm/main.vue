@@ -1,14 +1,14 @@
 <template>
   <section class="product_detail">
     <div :class="$style['tab-info']">
-      <a :class="$style['tab-info-item']"  v-for="item in tabs" :key="item.name">{{item.name}}</a>
+      <a :class="$style['tab-info-item']" @click="linkToTab(item.herf)" v-for="item in tabs" :key="item.name">{{item.name}}</a>
     </div>
     <div :class="$style['select-product']">
       <span>当前分类：</span>
       <span>{{pathLabels}}</span>
     </div>
     <div :class="$style.content">
-      <div :class="$style.header">
+      <div id="base" :class="$style.header">
         基本信息
       </div>
       <el-row class="mt-10" >
@@ -51,15 +51,15 @@ export default {
       tabs: [
         {
           name: '基础信息',
-          herf: ''
+          herf: 'base'
         },
         {
           name: '销售信息',
-          herf: ''
+          herf: 'sale'
         },
         {
           name: '图文描述',
-          herf: ''
+          herf: 'desc'
         }
       ],
       formBase: {
@@ -80,6 +80,10 @@ export default {
       if (res.code === 200) {
         this.brandOptions = (res.data ? res.data.records : [])
       }
+    },
+    linkToTab (selector) {
+      const el = document.querySelector(`#${selector}`)
+      el && el.scrollIntoView()
     }
   },
   created () {
