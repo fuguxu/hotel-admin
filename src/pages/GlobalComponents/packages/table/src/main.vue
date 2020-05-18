@@ -12,7 +12,7 @@
                   </slot>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" v-if="showOperation" min-width="130px">
+            <el-table-column label="操作" v-if="showOperation" width="220px">
               <template slot-scope="scope">
                 <el-button @click="handleEdit(scope.row, scope.$index, 'detail')" size="mini">详情</el-button>
                 <el-button @click="handleEdit(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>

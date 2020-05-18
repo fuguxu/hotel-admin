@@ -22,21 +22,21 @@
               <el-tab-pane v-for="item in tabs" :label="item.label" :name="item.name" :key="item.name"></el-tab-pane>
             </el-tabs>
           </el-row>
-          <el-row class="mb-10 mt-15">
-            <el-form :form="query" label-width="120px">
-              <el-col :span="9">
-                <el-form-item label="属性名称">
-                  <el-input v-model="query.attributeName"  placeholder="请输入属性名称"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-button class="ml-10" type="primary" :disabled="!query.categoryId" @click="getData">查询</el-button>
-              </el-col>
-            </el-form>
-          </el-row>
-          <el-row class="mb-10 mt-15">
+          <el-row class="mt-15">
             <el-col :span="12">
               <el-button class="ml-15" type="primary" :disabled="!query.categoryId" @click="create">新增</el-button>
+            </el-col>
+            <el-col :span="12" class="pr-15">
+              <el-form :form="query" label-width="120px">
+                <el-col :span="20">
+                  <el-form-item label="属性名称">
+                    <el-input v-model="query.attributeName"  placeholder="请输入属性名称"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button class="ml-10" type="primary" :disabled="!query.categoryId" @click="getData">查询</el-button>
+                </el-col>
+              </el-form>
             </el-col>
           </el-row>
           <m-table :data="tableData" :columns="columns" :class="$style.table"
@@ -241,6 +241,7 @@ $border-color: #DCDFE6;
 }
 .table{
   margin:0 15px;
+  padding-bottom: 15px;
 }
 .treeWrap{
   box-sizing: border-box;

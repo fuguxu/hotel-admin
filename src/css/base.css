@@ -88,6 +88,9 @@ textarea{border:1px solid #CBCED8;border-radius: 3px;resize: none;}
 .mr-15{
   margin-right:15px;
 }
+.pr-15{
+  padding-right: 15px;
+}
 .text-right{
   text-align: right;
 }

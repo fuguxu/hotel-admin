@@ -1,10 +1,10 @@
 <template>
     <div class="select_product_category">
-      <el-cascader-panel ref="cascader" :props="props" @change="changeNode" ></el-cascader-panel>
       <div :class="$style['selected-item']">
         <span>已选类目:</span>
         <span v-html="pathLabels"></span>
       </div>
+      <el-cascader-panel ref="cascader" :props="props" @change="changeNode" ></el-cascader-panel>
       <div :class="$style['btn']">
         <el-button :disabled="!pathLabels" @click="nextStep" type="primary">下一步，发布商品</el-button>
       </div>
@@ -65,7 +65,7 @@ export default {
   .selected-item{
     border:1px solid #E4E7ED;
     padding: 10px 0 25px 10px;
-    margin-top:15px;
+    margin-bottom:15px;
     background-color: #F5F7FA;
   }
   .btn{

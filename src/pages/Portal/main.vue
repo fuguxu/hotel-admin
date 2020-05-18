@@ -24,7 +24,7 @@ export default {
 <style lang="scss" module>
     .portal{
         min-height: 600px;
-        height: 100%;
+        // height: 100%;
         display: flex;
     }
     .side-bar-content{
