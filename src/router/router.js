@@ -178,6 +178,11 @@ const routesMap = [
         ]
       }
     ]
+  },
+  {
+    path: '/login',
+    component: (resolve) => { require(['@/pages/Login/main.vue'], resolve) },
+    name: 'login'
   }
 ]
 
