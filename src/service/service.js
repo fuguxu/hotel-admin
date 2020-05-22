@@ -118,6 +118,14 @@ export async function getSpu (params) {
 export async function deleteSpu (params) {
   return ConfModuleApi.get('/confProductSpu/del', params)
 }
+// 根据产品分类id获取spu
+export async function getConfSpuByCategroy (params) {
+  return ConfModuleApi.get('/confProductSpu/getConfSpuByCategroy', params)
+}
+// 根据产品分类id获取sku
+export async function getConfSkuByCategroy (params) {
+  return ConfModuleApi.get('/confProductSku/getConfSkuByCategroy', params)
+}
 
 // 营销模块接口
 // 店铺保存接口

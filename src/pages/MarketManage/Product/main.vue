@@ -21,6 +21,7 @@ export default {
         value: 'id',
         label: 'name',
         lazy: true,
+        leaf: 'isLeaf',
         lazyLoad: this.lazyLoad
       },
       selectedNode: [],

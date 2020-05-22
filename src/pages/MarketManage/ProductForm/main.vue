@@ -8,9 +8,7 @@
       <span>{{pathLabels}}</span>
     </div>
     <div :class="$style.content">
-      <div id="base" :class="$style.header">
-        基本信息
-      </div>
+      <div id="base" :class="$style.header">基本信息</div>
       <el-row class="mt-10" >
         <el-col :span="20">
           <el-form  :model="formBase" label-width="86px" >
@@ -39,9 +37,31 @@
             <el-col :span="24">
               <el-form-item label="商品属性">
                 <div :class="$style.tip">为您更好的销售，请认真准确填写商品属性</div>
-                <div :class="$style['property-wrap']"></div>
+                <div class="clearfloat" :class="$style['property-wrap']" v-if="formBase.spuValues.length">
+                  <el-col :span="12" v-for="(item, index) in formBase.spuValues" :key="index">
+                    <asyncFormItem label-width="120px" :label="item.attributeName" :attributeValueList="item.attributeValueList" :elementType="item.elementType" v-model="item.attributeValue"></asyncFormItem>
+                  </el-col>
+                </div>
               </el-form-item>
             </el-col>
+          </el-form>
+        </el-col>
+      </el-row>
+    </div>
+    <div :class="$style.content">
+      <div id="sale" :class="$style.header">销售信息</div>
+      <el-row class="mt-10" >
+        <el-col :span="20">
+          <el-form  :model="formBase" label-width="86px" >
+            <div class="clearfloat" v-if="formBase.skuValues.length">
+              <el-col :span="18" v-for="(item, index) in formBase.skuValues" :key="index">
+                <asyncFormItem :label="item.attributeName" multiple :attributeValueList="item.attributeValueList" :elementType="item.elementType" v-model="item.attributeValue">
+                  <template slot="tip">
+                    <div :class="$style.tip">请选择或输入{{item.attributeName}}，增加搜索或导购机会</div>
+                  </template>
+                </asyncFormItem>
+              </el-col>
+            </div>
           </el-form>
         </el-col>
       </el-row>
@@ -49,8 +69,9 @@
   </section>
 </template>
 <script>
-import { getProductBrand } from '@/service/service.js'
+import { getProductBrand, getConfSpuByCategroy, getConfSkuByCategroy } from '@/service/service.js'
 import { storeTypeOptions } from '@/pages/MarketManage/config.json.js'
+import asyncFormItem from '@/pages/Components/asyncFormItem/main'
 export default {
   data () {
     return {
@@ -72,7 +93,10 @@ export default {
         type: '',
         productName: '',
         productProfile: '',
-        brandId: ''
+        brandId: '',
+        spuValues: [],
+        skuValues: [],
+        skuItemValues: []
       },
       storeTypeOptions: storeTypeOptions,
       brandOptions: []
@@ -87,6 +111,36 @@ export default {
         this.brandOptions = (res.data ? res.data.records : [])
       }
     },
+    async getConfSpuByCategroy () {
+      let res = await getConfSpuByCategroy({ categoryId: this.categoryId })
+      if (res.code === 200) {
+        this.formBase.spuValues = (res.data || []).map(item => {
+          return {
+            attributeValue: '',
+            productId: item.categoryId,
+            spuConfId: item.id,
+            attributeValueList: item.attributeValueList || [],
+            elementType: item.elementType,
+            attributeName: item.attributeName
+          }
+        })
+      }
+    },
+    async getConfSkuByCategroy () {
+      let res = await getConfSkuByCategroy({ categoryId: this.categoryId })
+      if (res.code === 200) {
+        this.formBase.skuValues = (res.data || []).map(item => {
+          return {
+            attributeValue: [],
+            productId: item.categoryId,
+            spuConfId: item.id,
+            attributeValueList: item.attributeValueList || [],
+            elementType: item.elementType,
+            attributeName: item.attributeName
+          }
+        })
+      }
+    },
     linkToTab (selector) {
       const el = document.querySelector(`#${selector}`)
       el && el.scrollIntoView()
@@ -94,11 +148,19 @@ export default {
   },
   created () {
     this.getProductBrand()
+    this.getConfSpuByCategroy()
+    this.getConfSkuByCategroy()
   },
   computed: {
     pathLabels () {
       return (this.$route.query.path || '').replace(/x/g, ' > ')
+    },
+    categoryId () {
+      return this.$route.query.id
     }
+  },
+  components: {
+    asyncFormItem
   }
 }
 </script>
