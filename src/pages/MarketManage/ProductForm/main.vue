@@ -61,6 +61,31 @@
                   </template>
                 </asyncFormItem>
               </el-col>
+              <el-col :span="24">
+                <el-form-item label="销售规格">
+                  <el-col :span="12">
+                    <div :class="$style.tip">请合理填写销售规格</div>
+                  </el-col>
+                  <el-col class="text-right" :span="12">
+                    <el-button type="primary" @click="multiFull" >批量填充</el-button>
+                  </el-col>
+                  <m-table :data="tableData" :columns="columns"
+                    :showOperation="false" :showPagination="false"
+                    >
+                      <template v-for="(item, index) in skuColumns" v-slot:[`col-header-${item.prop}`]>
+                        <el-select :key="index" :placeholder="item.label">
+                          <el-option v-for="it in item.attributeValueList" :key="it.value" v-bind="it"></el-option>
+                        </el-select>
+                      </template>
+                      <template v-slot:col-header-salePrice>
+                        <el-input placeholder="价格(元)" />
+                      </template>
+                      <template v-slot:col-header-stockAmount>
+                        <el-input placeholder="数量(件)" />
+                      </template>
+                  </m-table>
+                </el-form-item>
+              </el-col>
             </div>
           </el-form>
         </el-col>
@@ -99,7 +124,28 @@ export default {
         skuItemValues: []
       },
       storeTypeOptions: storeTypeOptions,
-      brandOptions: []
+      brandOptions: [],
+      commonColumns: [
+        {
+          label: '价格',
+          prop: 'salePrice',
+          type: 'slot'
+        },
+        {
+          label: '数量',
+          prop: 'stockAmount',
+          type: 'slot'
+        }
+      ],
+      tableRow: {
+        salePrice: '',
+        stockAmount: '',
+        costPrice: '',
+        originalPrice: '',
+        skuValue: []
+      },
+      skuColumns: [],
+      tableData: []
     }
   },
   methods: {
@@ -119,7 +165,12 @@ export default {
             attributeValue: '',
             productId: item.categoryId,
             spuConfId: item.id,
-            attributeValueList: item.attributeValueList || [],
+            attributeValueList: (item.attributeValueList || []).map(it => {
+              return {
+                value: it,
+                label: it
+              }
+            }),
             elementType: item.elementType,
             attributeName: item.attributeName
           }
@@ -133,13 +184,56 @@ export default {
           return {
             attributeValue: [],
             productId: item.categoryId,
-            spuConfId: item.id,
-            attributeValueList: item.attributeValueList || [],
+            skuConfId: item.id,
+            attributeValueList: (item.attributeValueList || []).map(it => {
+              return {
+                value: it,
+                label: it
+              }
+            }),
             elementType: item.elementType,
             attributeName: item.attributeName
           }
         })
+        this.renderColumns()
       }
+    },
+    renderColumns () {
+      this.skuColumns = this.formBase.skuValues.map(item => {
+        return {
+          label: item.attributeName,
+          prop: item.attributeName,
+          type: 'slot',
+          attributeValueList: item.attributeValueList
+        }
+      })
+    },
+    renderData () {
+      let skus = []
+      skus = this.formBase.skuValues.reduce((pre, cur) => {
+        let ret = []
+        pre.forEach(t => {
+          cur.attributeValue.forEach(it => {
+            ret.push(t.concat([{ [cur.attributeName]: it, skuValue: [{ attributeName: cur.attributeName, attributeValue: it, productId: cur.productId, skuConfId: cur.skuConfId }] }]))
+          })
+        })
+        return ret
+      }, [[]])
+      console.log(skus)
+      this.tableData = skus.reduce((pre, cur) => {
+        let obj = {}
+        let skuValue = []
+        cur.forEach(item => {
+          obj = { ...obj, ...item, skuValue: skuValue.concat(item.skuValue) }
+        })
+        obj = { ...this.tableRow, ...obj }
+        return pre.concat([obj])
+      }, [])
+      console.log(this.tableData)
+    },
+    multiFull () {
+      console.log(this.formBase)
+      this.renderData()
     },
     linkToTab (selector) {
       const el = document.querySelector(`#${selector}`)
@@ -157,6 +251,9 @@ export default {
     },
     categoryId () {
       return this.$route.query.id
+    },
+    columns () {
+      return this.skuColumns.concat(this.commonColumns)
     }
   },
   components: {

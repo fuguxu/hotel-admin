@@ -11,6 +11,13 @@
                   >
                   </slot>
                 </template>
+                <template  slot="header" v-if="column.type === 'slot' && $scopedSlots['col-header-' + column.prop]" >
+                  <slot
+                  :name = "'col-header-' + column.prop"
+                  :scope="scope"
+                  >
+                  </slot>
+                </template>
             </el-table-column>
             <el-table-column label="操作" v-if="showOperation" width="220px">
               <template slot-scope="scope">

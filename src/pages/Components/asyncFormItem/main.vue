@@ -3,7 +3,7 @@
     <slot name="tip"></slot>
     <component @change="change" v-model="value" :placeholder="placeholder" v-on="$listeners" v-bind="$attrs" :is="currentComp">
       <template v-if="attributeValueList && childComp">
-        <component v-for="(item, index) in attributeValueList" :label="item" :value="item" :key="index" :is="childComp.comp"></component>
+        <component v-for="(item, index) in attributeValueList" v-bind="item"  :key="index" :is="childComp.comp"></component>
       </template>
     </component>
   </el-form-item>
