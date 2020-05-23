@@ -55,7 +55,7 @@
           <el-form  :model="formBase" label-width="86px" >
             <div class="clearfloat" v-if="formBase.skuValues.length">
               <el-col :span="18" v-for="(item, index) in formBase.skuValues" :key="index">
-                <asyncFormItem :label="item.attributeName" multiple :attributeValueList="item.attributeValueList" :elementType="item.elementType" v-model="item.attributeValue">
+                <asyncFormItem @change="changeSku" :label="item.attributeName" multiple :attributeValueList="item.attributeValueList" :elementType="item.elementType" v-model="item.attributeValue">
                   <template slot="tip">
                     <div :class="$style.tip">请选择或输入{{item.attributeName}}，增加搜索或导购机会</div>
                   </template>
@@ -63,25 +63,25 @@
               </el-col>
               <el-col :span="24">
                 <el-form-item label="销售规格">
-                  <el-col :span="12">
-                    <div :class="$style.tip">请合理填写销售规格</div>
-                  </el-col>
-                  <el-col class="text-right" :span="12">
-                    <el-button type="primary" @click="multiFull" >批量填充</el-button>
-                  </el-col>
-                  <m-table :data="tableData" :columns="columns"
+                  <el-row>
+                    <el-col :span="12">
+                      <div :class="$style.tip">请合理填写销售规格</div>
+                    </el-col>
+                    <el-col class="text-right" :span="12">
+                      <el-button type="primary" @click="multiFull" >批量填充</el-button>
+                    </el-col>
+                  </el-row>
+                  <m-table class="mt-10" :data="tableData" :columns="columns"
                     :showOperation="false" :showPagination="false"
                     >
-                      <template v-for="(item, index) in skuColumns" v-slot:[`col-header-${item.prop}`]>
-                        <el-select :key="index" :placeholder="item.label">
+                      <template v-for="(item) in columns" v-slot:[`col-header-${item.prop}`]>
+                        <el-select v-if="item.attributeValueList" :key="item.prop" :placeholder="item.label">
                           <el-option v-for="it in item.attributeValueList" :key="it.value" v-bind="it"></el-option>
                         </el-select>
+                        <el-input v-else :key="item.prop"  v-model="item.colValue" :placeholder="item.placeholder" />
                       </template>
-                      <template v-slot:col-header-salePrice>
-                        <el-input placeholder="价格(元)" />
-                      </template>
-                      <template v-slot:col-header-stockAmount>
-                        <el-input placeholder="数量(件)" />
+                      <template v-for="(item) in commonColumns" v-slot:[`col-${item.prop}`]="{scope}">
+                        <el-input :key="item.prop" v-model="scope.row[item.prop]" />
                       </template>
                   </m-table>
                 </el-form-item>
@@ -90,6 +90,9 @@
           </el-form>
         </el-col>
       </el-row>
+    </div>
+    <div :class="$style.content">
+      <div id="desc" :class="$style.header">图文描述</div>
     </div>
   </section>
 </template>
@@ -127,13 +130,31 @@ export default {
       brandOptions: [],
       commonColumns: [
         {
-          label: '价格',
+          label: '成本价',
+          prop: 'costPrice',
+          placeholder: '成本价(元)',
+          colValue: '',
+          type: 'slot'
+        },
+        {
+          label: '原价',
+          prop: 'originalPrice',
+          placeholder: '原价(元)',
+          colValue: '',
+          type: 'slot'
+        },
+        {
+          label: '销售价',
           prop: 'salePrice',
+          placeholder: '销售价(元)',
+          colValue: '',
           type: 'slot'
         },
         {
           label: '数量',
           prop: 'stockAmount',
+          placeholder: '数量(件)',
+          colValue: '',
           type: 'slot'
         }
       ],
@@ -219,21 +240,33 @@ export default {
         })
         return ret
       }, [[]])
-      console.log(skus)
       this.tableData = skus.reduce((pre, cur) => {
         let obj = {}
-        let skuValue = []
+        let skuValues = []
         cur.forEach(item => {
-          obj = { ...obj, ...item, skuValue: skuValue.concat(item.skuValue) }
+          const { skuValue, ...rest } = item
+          skuValues = skuValues.concat(skuValue)
+          obj = { ...obj, ...rest }
         })
-        obj = { ...this.tableRow, ...obj }
+        obj = { ...this.tableRow, ...obj, skuValue: skuValues }
         return pre.concat([obj])
       }, [])
       console.log(this.tableData)
     },
-    multiFull () {
-      console.log(this.formBase)
+    changeSku () {
       this.renderData()
+    },
+    multiFull () {
+      const dataColumns = this.commonColumns.filter(item => {
+        return item.colValue
+      })
+      if (dataColumns.length === 0) return
+      this.tableData.forEach(item => {
+        dataColumns.forEach(col => {
+          item[col.prop] = col.colValue
+        })
+      })
+      console.log(JSON.stringify(this.tableData))
     },
     linkToTab (selector) {
       const el = document.querySelector(`#${selector}`)
