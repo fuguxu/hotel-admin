@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8083') : ''
+export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8083') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -34,7 +34,7 @@ function makeFetch (moduleAxios) {
 // 配置管理模块的接口
 export const ConfModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/conf/base` }))
 // 营销管理模块接口
-export const MarketModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/product/store` }))
+export const MarketModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/product` }))
 
 // 登录模块接口
 export const LoginModuleApi = makeFetch(Axios)
@@ -64,7 +64,7 @@ export async function getProductByParentId (params) {
   return ConfModuleApi.get('/productCategory/getChildren', params)
 }
 // 删除产品分类
-export async function deleteProduct (params) {
+export async function deleteProductCategory (params) {
   return ConfModuleApi.get('/productCategory/del', params)
 }
 // 保存品牌
@@ -130,17 +130,42 @@ export async function getConfSkuByCategroy (params) {
 // 营销模块接口
 // 店铺保存接口
 export async function saveProductStroe (params) {
-  return MarketModuleApi.post('/productStore/save', params)
+  return MarketModuleApi.post('/store/productStore/save', params)
 }
 // 店铺详情接口
 export async function getProductStoreById (params) {
-  return MarketModuleApi.get('/productStore/getById', params)
+  return MarketModuleApi.get('/store/productStore/getById', params)
 }
 // 店铺列表
 export async function getProductStore (params) {
-  return MarketModuleApi.get('/productStore/getByPage', params)
+  return MarketModuleApi.get('/store/productStore/getByPage', params)
 }
 // 删除店铺
 export async function deleteProductStore (params) {
-  return MarketModuleApi.get('/productStore/del', params)
+  return MarketModuleApi.get('/store/productStore/del', params)
+}
+
+// 产品保存接口
+export async function saveProductInfo (params) {
+  return MarketModuleApi.post('/base/productInfo/save', params)
+}
+// 产品列表分页接口
+export async function getProduct (params) {
+  return MarketModuleApi.get('/base/productInfo/getByPage', params)
+}
+// 删除产品
+export async function deleteProduct (params) {
+  return MarketModuleApi.get('/base/productInfo/del', params)
+}
+// 获取产品详情
+export async function getProductById (params) {
+  return MarketModuleApi.get('/base/productInfo/getById', params)
+}
+// 获取 getSpuValue
+export async function getSpuValue (params) {
+  return MarketModuleApi.get('/base/productInfo/getSpuValue', params)
+}
+// 获取 getSkuValue
+export async function getSkuValue (params) {
+  return MarketModuleApi.get('/base/productInfo/getSkuValue', params)
 }

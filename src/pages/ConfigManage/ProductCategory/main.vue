@@ -54,7 +54,7 @@
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { saveProductCategory, getProductCategory, getProductByParentId, deleteProduct } from '@/service/service'
+import { saveProductCategory, getProductCategory, getProductByParentId, deleteProductCategory } from '@/service/service'
 export default {
   mixins: [pagination],
   data () {
@@ -101,7 +101,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        let res = await deleteProduct({ id: row.id })
+        let res = await deleteProductCategory({ id: row.id })
         this.$handleRequestTip(res)
         this.getData()
       }).catch(() => {})

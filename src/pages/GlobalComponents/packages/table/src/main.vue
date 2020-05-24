@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table border v-bind="$attrs" v-on="$listeners" :header-cell-style="{backgroundColor:'#f5f7fa',fontWeight:700}">
+        <el-table border @selection-change="selectionChange" ref="table" v-bind="$attrs" v-on="$listeners" :header-cell-style="{backgroundColor:'#f5f7fa',fontWeight:700}">
             <el-table-column v-for="column in columns" :key="column.prop"
                 v-bind="column"
                 >
@@ -59,6 +59,7 @@ export default {
   },
   data () {
     return {
+      selections: []
     }
   },
   methods: {
@@ -70,6 +71,13 @@ export default {
     },
     sizeChange (pageSize) {
       this.$emit('handlePagination', this.currentPage, pageSize)
+    },
+    selectionChange (selections) {
+      this.selections = selections
+      this.$emit('selectionChange', selections)
+    },
+    getSelection () {
+      return this.selections
     }
   },
   mounted () {

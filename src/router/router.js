@@ -98,8 +98,14 @@ const routesMap = [
                 meta: setMeta(false)
               },
               {
+                path: '/h/product_publish',
+                component: (resolve) => { require(['@/pages/MarketManage/ProductPublish/main.vue'], resolve) },
+                name: '产品发布',
+                meta: setMeta(false)
+              },
+              {
                 path: '/h/product_manage',
-                component: (resolve) => { require(['@/pages/MarketManage/Product/main.vue'], resolve) },
+                component: (resolve) => { require(['@/pages/MarketManage/ProductManage/main.vue'], resolve) },
                 name: '产品管理',
                 meta: setMeta()
               },

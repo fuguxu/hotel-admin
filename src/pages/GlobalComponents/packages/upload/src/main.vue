@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="upload-wrap">
         <div :class="$style.logoWrap" v-if="value">
             <img  :src="value" alt="">
             <div v-if="isShowDel" :class="$style.mask"><i @click="remove" :class="$style.icon" class="el-icon-delete"></i></div>
@@ -14,8 +14,11 @@
             :on-error="onError"
             :show-file-list="false"
             >
-            <i class="el-icon-upload"></i>
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <i :class="iconClass"></i>
+            <div class="el-upload__text">
+              <span v-if="tipText">{{tipText}}</span>
+              <span v-else>将文件拖到此处，或<em>点击上传</em></span>
+            </div>
         </el-upload>
      </div>
 </template>
@@ -29,6 +32,11 @@ export default {
     isShowDel: {
       type: Boolean,
       default: true
+    },
+    iconClass: {
+      default: 'el-icon-upload'
+    },
+    tipText: {
     }
   },
   data () {

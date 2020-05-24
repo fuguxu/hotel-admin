@@ -46,7 +46,7 @@ export default {
         path: '/h/product_detail',
         query: {
           path: this.selectedNode[0].data.totalCategoryPath,
-          id: this.selectedNode[0].value
+          categoryId: this.selectedNode[0].value
         }
       })
     }
