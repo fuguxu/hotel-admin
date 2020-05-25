@@ -283,22 +283,19 @@ export default {
       }, [[]])
       let tableData = skus.reduce((pre, cur) => {
         let obj = {}
+        let skuObj = {}
         let skuValues = []
         cur.forEach(item => {
           const { skuValue, ...rest } = item
           skuValues = skuValues.concat(skuValue)
           obj = { ...obj, ...rest }
         })
-        obj = { ...this.tableRow, ...obj, skuValue: skuValues }
-        return pre.concat([obj])
-      }, [])
-      tableData.forEach(item => {
-        let skuObj = {}
-        item.skuValue.forEach(it => {
+        skuValues.forEach(it => {
           skuObj[it.attributeName] = it.attributeValue
         })
-        item.skuInfo = JSON.stringify(skuObj)
-      })
+        obj = { ...this.tableRow, ...obj, skuValue: skuValues, skuInfo: JSON.stringify(skuObj) }
+        return pre.concat([obj])
+      }, [])
       this.handlerTableData(tableData)
       console.log([...this.tableData])
     },

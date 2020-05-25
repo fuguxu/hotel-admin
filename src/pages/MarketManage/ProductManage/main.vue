@@ -5,7 +5,7 @@
           <el-button type="primary" @click="create">新增</el-button>
           <el-button >上架</el-button>
           <el-button >下架</el-button>
-          <el-button >删除</el-button>
+          <el-button @click="deleteMuli">删除</el-button>
         </el-col>
         <el-col :span="12">
           <el-form :form="query" label-width="120px">
@@ -21,6 +21,7 @@
         </el-col>
       </el-row>
       <m-table :data="tableData" :columns="columns"
+        ref="table"
        :showOperation="false"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
@@ -95,6 +96,7 @@ export default {
       this.$router.push({ path: formPath, query: { id: row.id } })
     },
     delete (row) {
+      let ids = row.id ? [row.id] : row
       this.$confirm('是否删除该数据', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -103,10 +105,17 @@ export default {
           done()
         }
       }).then(async () => {
-        let res = await deleteProduct([ row.id ])
+        let res = await deleteProduct(ids)
         this.$handleRequestTip(res)
         res.code === 200 && this.getData()
       }).catch(() => {})
+    },
+    deleteMuli () {
+      let data = this.$refs.table.getSelection()
+      if (data.length) {
+        let ids = data.map(it => it.id)
+        this.delete(ids)
+      }
     },
     edit (row) {
       this.$router.push({ path: formPath, query: { id: row.id, edit: 1 } })
