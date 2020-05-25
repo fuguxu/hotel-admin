@@ -281,7 +281,7 @@ export default {
         })
         return ret
       }, [[]])
-      this.tableData = skus.reduce((pre, cur) => {
+      let tableData = skus.reduce((pre, cur) => {
         let obj = {}
         let skuValues = []
         cur.forEach(item => {
@@ -292,7 +292,27 @@ export default {
         obj = { ...this.tableRow, ...obj, skuValue: skuValues }
         return pre.concat([obj])
       }, [])
-      console.log(this.tableData)
+      tableData.forEach(item => {
+        let skuObj = {}
+        item.skuValue.forEach(it => {
+          skuObj[it.attributeName] = it.attributeValue
+        })
+        item.skuInfo = JSON.stringify(skuObj)
+      })
+      this.handlerTableData(tableData)
+      console.log([...this.tableData])
+    },
+    handlerTableData (data) {
+      let tableData = this.tableData
+      let newTableData = data.map(n => {
+        tableData.forEach(o => {
+          if (n.skuInfo === o.skuInfo) {
+            n = o
+          }
+        })
+        return n
+      })
+      this.tableData = newTableData
     },
     changeSku () {
       this.renderData()
@@ -358,7 +378,6 @@ export default {
           }
         })
       })
-      console.log(this.formBase.spuValues)
     },
     setSkuValue (skuValue = []) {
       this.formBase.skuValues.map(item => {
@@ -372,14 +391,13 @@ export default {
       // this.renderData()
     },
     setTableData (skuItemValue = []) {
-      console.log(this.tableData)
       this.tableData = skuItemValue.map(item => {
         item = { ...item, ...JSON.parse(item.skuInfo) }
         return item
       })
+      console.log([...this.tableData])
     },
     async setFormData (arg) {
-      console.log(arg)
       const [formData, spuValue, skuValue] = arg
       await this.getProductData(formData.categoryId)
       this.setBaseForm(formData)

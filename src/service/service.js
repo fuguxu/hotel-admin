@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8083') : ''
+export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8083') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -155,7 +155,7 @@ export async function getProduct (params) {
 }
 // 删除产品
 export async function deleteProduct (params) {
-  return MarketModuleApi.get('/base/productInfo/del', params)
+  return MarketModuleApi.post('/base/productInfo/del', params)
 }
 // 获取产品详情
 export async function getProductById (params) {

@@ -103,7 +103,7 @@ export default {
           done()
         }
       }).then(async () => {
-        let res = await deleteProduct({ id: row.id })
+        let res = await deleteProduct([ row.id ])
         this.$handleRequestTip(res)
         res.code === 200 && this.getData()
       }).catch(() => {})
