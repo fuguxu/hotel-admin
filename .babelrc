@@ -12,6 +12,7 @@
         ]
     ],
     "plugins": [
+        ["transform-vue-jsx"],
         ["transform-object-rest-spread"],
         [
             "transform-runtime",
@@ -19,7 +20,7 @@
               "polyfill": true
             }
         ],
-        ["component", 
+        ["component",
           {
             "libraryName": "element-ui",
             "styleLibraryName": "theme-chalk"
