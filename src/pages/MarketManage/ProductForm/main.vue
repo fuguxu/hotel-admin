@@ -54,6 +54,14 @@
         <el-col :span="20">
           <el-form  :model="formBase" label-width="86px" >
             <div class="clearfloat" v-if="formBase.skuValues.length">
+              <el-col :span="24">
+                <el-form-item label="上架时间">
+                  <el-radio-group v-model="formBase.publishStatus">
+                    <el-radio :label="1">立刻上架</el-radio>
+                    <el-radio :label="0">放入仓库</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
               <el-col :span="18" v-for="(item, index) in formBase.skuValues" :key="index">
                 <asyncFormItem @change="changeSku" :label="item.attributeName" multiple :attributeValueList="item.attributeValueList" :elementType="item.elementType" v-model="item.attributeValue">
                   <template slot="tip">
@@ -154,6 +162,7 @@ export default {
         productProfile: '',
         brandId: '',
         mainPictureUrl: '',
+        publishStatus: 1,
         subImage: Array.from({ length: 4 }).map(item => {
           return {
             imageUrl: ''
@@ -293,7 +302,7 @@ export default {
         skuValues.forEach(it => {
           skuObj[it.attributeName] = it.attributeValue
         })
-        obj = { ...this.tableRow, ...obj, skuValue: skuValues, skuInfo: JSON.stringify(skuObj) }
+        obj = { ...this.tableRow, ...obj, skuValue: skuValues, skuInfo: JSON.stringify(this.sortObjectAttr(skuObj)) }
         return pre.concat([obj])
       }, [])
       this.handlerTableData(tableData)
@@ -310,6 +319,13 @@ export default {
         return n
       })
       this.tableData = newTableData
+    },
+    sortObjectAttr (obj) {
+      const newObj = {}
+      Object.keys(obj).sort().map(key => {
+        newObj[key] = obj[key]
+      })
+      return newObj
     },
     changeSku () {
       this.renderData()
@@ -364,6 +380,7 @@ export default {
       this.formBase.mainPictureUrl = formData.mainPictureUrl
       this.formBase.detail = formData.detail
       this.formBase.categortName = formData.categortName
+      this.formBase.publishStatus = formData.publishStatus
       this.formBase.subImage = formData.subImage || this.formBase.subImage
     },
     setSpuValue (spuValue) {
@@ -389,6 +406,7 @@ export default {
     },
     setTableData (skuItemValue = []) {
       this.tableData = skuItemValue.map(item => {
+        item.skuInfo = JSON.stringify(this.sortObjectAttr(JSON.parse(item.skuInfo)))
         item = { ...item, ...JSON.parse(item.skuInfo) }
         return item
       })

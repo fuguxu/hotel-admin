@@ -169,3 +169,7 @@ export async function getSpuValue (params) {
 export async function getSkuValue (params) {
   return MarketModuleApi.get('/base/productInfo/getSkuValue', params)
 }
+// 商品上下架
+export async function handleProduct (params, query) {
+  return MarketModuleApi.post(`/base/productInfo/handleProduct?${stringQuery(query)}`, params)
+}
