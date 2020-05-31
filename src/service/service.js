@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8083') : ''
+export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -13,7 +13,7 @@ const BaseAxiosOptions = {
 }
 
 // 模块相关接口
-const BaseUrl = `${BasePrefix}`
+const BaseUrl = `${BasePrefix}/marketAdmin`
 const Axios = createAxios()
 function createAxios (options = {}) {
   let instance = axios.create(Object.assign({}, { baseURL: BaseUrl }, BaseAxiosOptions, options))

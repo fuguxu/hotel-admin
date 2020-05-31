@@ -118,7 +118,7 @@ module.exports = {
         vender: {// 第三方模块抽离
           priority: 1, // 权重 比commons要重
           test: /node_modules/,
-          chunks: 'initial',
+          chunks: 'all',
           minSize: 1,
           minChunks: 2
         }
