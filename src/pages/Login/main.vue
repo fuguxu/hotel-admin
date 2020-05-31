@@ -35,7 +35,7 @@ export default {
   .login{
     width:100%;
     height:100%;
-    background-image: url('/img/login-bg.jpg');
+    background-image: url('../../img/login-bg.jpg');
     background-size:cover;
     position: relative;
     .loginBox{

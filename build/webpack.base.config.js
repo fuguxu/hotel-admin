@@ -16,6 +16,12 @@ const cssModuleOption = {
   camelCase: true,
   sourceMaps: true
 }
+const cssModuleOptionLoader = {
+  loader: MiniCssExtractPlugin.loader,
+  options: {
+    publicPath: '../'
+  }
+}
 const resolve = (dir) => { return path.join(__dirname, '../', dir) }
 
 module.exports = {
@@ -144,7 +150,7 @@ module.exports = {
           {
             resourceQuery: /module/,
             use: [
-              'css-hot-loader', MiniCssExtractPlugin.loader, 'postcss-loader',
+              'css-hot-loader', cssModuleOptionLoader, 'postcss-loader',
               {
                 loader: 'css-loader',
                 options: cssModuleOption
@@ -153,7 +159,7 @@ module.exports = {
             ]
           },
           {
-            use: ['css-hot-loader', MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+            use: ['css-hot-loader', cssModuleOptionLoader, 'css-loader', 'postcss-loader']
           }
         ]
       },
@@ -161,7 +167,7 @@ module.exports = {
         test: /\.(scss|sass)$/,
         use: [
           'css-hot-loader',
-          MiniCssExtractPlugin.loader,
+          cssModuleOptionLoader,
           {
             loader: 'css-loader',
             options: cssModuleOption

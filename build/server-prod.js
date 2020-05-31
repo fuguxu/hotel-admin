@@ -26,4 +26,5 @@ webpack(webpackConfig, (err, stats) => {
   }
 
   console.log(chalk.cyan('build finished!'))
+  process.exit(0)
 })
