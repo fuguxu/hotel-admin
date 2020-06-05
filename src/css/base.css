@@ -123,3 +123,6 @@ textarea{border:1px solid #CBCED8;border-radius: 3px;resize: none;}
 .el-cascader-menu__wrap{
   height:204px !important;
 }
+.el-table__header colgroup col[name="gutter"] {
+  display: none;
+}

@@ -12,29 +12,29 @@ const routesMap = [
     children: [
       {
         path: '/h',
-        redirect: '/h/data',
+        redirect: '/h/product_manage',
         component: (resolve) => { require(['@/pages/Portal/main.vue'], resolve) },
         name: 'protal',
         children: [
-          {
-            path: '/h/data',
-            // redirect: '/h/month_sale',
-            component: (resolve) => { require(['@/pages/Data/main.vue'], resolve) },
-            name: '数据统计分析',
-            meta: setMeta()
-          },
-          {
-            path: '/h/order',
-            component: (resolve) => { require(['@/pages/Order/main.vue'], resolve) },
-            name: '订单管理',
-            meta: setMeta()
-          },
-          {
-            path: '/h/show',
-            component: (resolve) => { require(['@/pages/Show/main.vue'], resolve) },
-            name: '买家秀管理',
-            meta: setMeta()
-          },
+          // {
+          //   path: '/h/data',
+          //   // redirect: '/h/month_sale',
+          //   component: (resolve) => { require(['@/pages/Data/main.vue'], resolve) },
+          //   name: '数据统计分析',
+          //   meta: setMeta()
+          // },
+          // {
+          //   path: '/h/order',
+          //   component: (resolve) => { require(['@/pages/Order/main.vue'], resolve) },
+          //   name: '订单管理',
+          //   meta: setMeta()
+          // },
+          // {
+          //   path: '/h/show',
+          //   component: (resolve) => { require(['@/pages/Show/main.vue'], resolve) },
+          //   name: '买家秀管理',
+          //   meta: setMeta()
+          // },
           {
             path: '/h/config',
             component: (resolve) => { require(['@/pages/ConfigManage/main.vue'], resolve) },
@@ -117,63 +117,77 @@ const routesMap = [
               }
             ]
           },
-          {
-            path: '/h/after_sale',
-            component: (resolve) => { require(['@/pages/AfterSale/main.vue'], resolve) },
-            name: '售后管理',
-            meta: setMeta()
-          },
-          {
-            path: '/h/distribution',
-            component: (resolve) => { require(['@/pages/Distribution/main.vue'], resolve) },
-            name: '分销管理',
-            meta: setMeta(),
-            children: [
-              {
-                path: '/h/vote',
-                component: (resolve) => { require(['@/pages/Vote/main.vue'], resolve) },
-                name: '邀请信息管理',
-                meta: setMeta()
-              },
-              {
-                path: '/h/distributors',
-                component: (resolve) => { require(['@/pages/Distributors/main.vue'], resolve) },
-                name: '分销商管理',
-                meta: setMeta()
-              },
-              {
-                path: '/h/withdrawal',
-                component: (resolve) => { require(['@/pages/Withdrawal/main.vue'], resolve) },
-                name: '提现记录',
-                meta: setMeta()
-              }
-            ]
-          },
-          {
-            path: '/h/logistics',
-            component: (resolve) => { require(['@/pages/Logistics/main.vue'], resolve) },
-            name: '物流管理',
-            meta: setMeta()
-          },
-          {
-            path: '/h/user',
-            component: (resolve) => { require(['@/pages/User/main.vue'], resolve) },
-            name: '用户设置',
-            meta: setMeta(),
-            children: [
-              {
-                path: '/h/user_admin',
-                component: (resolve) => { require(['@/pages/User/UserAdmin/main.vue'], resolve) },
-                name: '管理员管理',
-                meta: setMeta()
-              }
-            ]
-          },
+          // {
+          //   path: '/h/after_sale',
+          //   component: (resolve) => { require(['@/pages/AfterSale/main.vue'], resolve) },
+          //   name: '售后管理',
+          //   meta: setMeta()
+          // },
+          // {
+          //   path: '/h/distribution',
+          //   component: (resolve) => { require(['@/pages/Distribution/main.vue'], resolve) },
+          //   name: '分销管理',
+          //   meta: setMeta(),
+          //   children: [
+          //     {
+          //       path: '/h/vote',
+          //       component: (resolve) => { require(['@/pages/Vote/main.vue'], resolve) },
+          //       name: '邀请信息管理',
+          //       meta: setMeta()
+          //     },
+          //     {
+          //       path: '/h/distributors',
+          //       component: (resolve) => { require(['@/pages/Distributors/main.vue'], resolve) },
+          //       name: '分销商管理',
+          //       meta: setMeta()
+          //     },
+          //     {
+          //       path: '/h/withdrawal',
+          //       component: (resolve) => { require(['@/pages/Withdrawal/main.vue'], resolve) },
+          //       name: '提现记录',
+          //       meta: setMeta()
+          //     }
+          //   ]
+          // },
+          // {
+          //   path: '/h/logistics',
+          //   component: (resolve) => { require(['@/pages/Logistics/main.vue'], resolve) },
+          //   name: '物流管理',
+          //   meta: setMeta()
+          // },
+          // {
+          //   path: '/h/user',
+          //   component: (resolve) => { require(['@/pages/User/main.vue'], resolve) },
+          //   name: '用户设置',
+          //   meta: setMeta(),
+          //   children: [
+          //     {
+          //       path: '/h/user_admin',
+          //       component: (resolve) => { require(['@/pages/User/UserAdmin/main.vue'], resolve) },
+          //       name: '管理员管理',
+          //       meta: setMeta()
+          //     }
+          //   ]
+          // },
           {
             path: '/h/set_up',
             component: (resolve) => { require(['@/pages/SetUp/main.vue'], resolve) },
-            name: '系统设置',
-            meta: setMeta()
+            name: '系统管理',
+            meta: setMeta(),
+            children: [
+              {
+                path: '/h/dict',
+                component: (resolve) => { require(['@/pages/SetUp/DictManage/main.vue'], resolve) },
+                name: '字典配置',
+                meta: setMeta()
+              },
+              {
+                path: '/h/dict_detail',
+                component: (resolve) => { require(['@/pages/SetUp/DictForm/main.vue'], resolve) },
+                name: '字典表单',
+                meta: setMeta(false)
+              }
+            ]
           },
           {
             path: '/h/inventory',

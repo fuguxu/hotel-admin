@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:8085') : ''
+export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -12,9 +12,11 @@ const BaseAxiosOptions = {
   headers: { 'content-type': 'application/json' }
 }
 
-// 模块相关接口
+// 新零售api模块相关接口
 const BaseUrl = `${BasePrefix}/marketAdmin`
-const Axios = createAxios()
+// 基础架构相关api
+const StructureUrl = `${BasePrefix}/ljm`
+
 function createAxios (options = {}) {
   let instance = axios.create(Object.assign({}, { baseURL: BaseUrl }, BaseAxiosOptions, options))
   interceptors(instance)
@@ -35,9 +37,10 @@ function makeFetch (moduleAxios) {
 export const ConfModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/conf/base` }))
 // 营销管理模块接口
 export const MarketModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/product` }))
-
 // 登录模块接口
-export const LoginModuleApi = makeFetch(Axios)
+export const LoginModuleApi = makeFetch(createAxios())
+// 字典相关接口
+export const DictModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/dict` }))
 
 // 文件上传url
 export function getUploadUrl (params) {
@@ -172,4 +175,25 @@ export async function getSkuValue (params) {
 // 商品上下架
 export async function handleProduct (params, query) {
   return MarketModuleApi.post(`/base/productInfo/handleProduct?${stringQuery(query)}`, params)
+}
+
+// 字典保存接口
+export async function dictSave (params) {
+  return DictModuleApi.post(`/sysDict/save`, params)
+}
+// 分页获取字典
+export async function getDictByPage (params) {
+  return DictModuleApi.get(`/sysDict/getByPage`, params)
+}
+// 删除字典
+export async function deleteDict (params) {
+  return DictModuleApi.post(`/sysDict/del`, params)
+}
+// 获取字典详情
+export async function getDictById (params) {
+  return DictModuleApi.get(`/sysDict/getById`, params)
+}
+// 保存字典条目
+export async function dictItemSave (params) {
+  return DictModuleApi.post(`/sysDictItem/save`, params)
 }
