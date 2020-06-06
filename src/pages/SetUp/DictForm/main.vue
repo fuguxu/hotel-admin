@@ -13,7 +13,7 @@
             <el-input v-model="form.dictName"  placeholder="请输入字典名称"></el-input>
           </el-form-item>
           <el-form-item label="字典标识">
-            <el-input v-model="form.dictKey" placeholder="请输入字典标识"></el-input>
+            <el-input v-model="form.dictKey" :disabled="form.id" placeholder="请输入字典标识"></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="form.status">
@@ -37,8 +37,8 @@
        :showPagination="false"
        :showOperation="false"
        >
-        <template v-slot:col-itemKey="{scope}">
-            <el-input v-model="scope.row.itemKey" :disabled="!isEdit" placeholder="请输入条目标识"></el-input>
+        <template v-slot:col-itemValue="{scope}">
+            <el-input v-model="scope.row.itemValue" :disabled="scope.row.id" placeholder="请输入条目标识"></el-input>
         </template>
         <template v-slot:col-itemName="{scope}">
             <el-input v-model="scope.row.itemName" :disabled="!isEdit" placeholder="请输入条目名称"></el-input>
@@ -66,6 +66,7 @@
 <script>
 import { dictSave, getDictById, dictItemSave, getDictItemByPage, deleteDictItem } from '@/service/service.js'
 import header from '@/pages/Components/formHeader/main'
+let itemKeyIndex = 0
 export default {
   data () {
     return {
@@ -86,7 +87,7 @@ export default {
         },
         {
           label: '条目标识',
-          prop: 'itemKey',
+          prop: 'itemValue',
           type: 'slot'
         },
         {
@@ -128,8 +129,9 @@ export default {
     },
     add () {
       this.tableData.push({
-        itemKey: '',
+        itemValue: '',
         itemName: '',
+        itemKey: Symbol(itemKeyIndex++),
         status: 0,
         remark: ''
       })
@@ -148,6 +150,7 @@ export default {
       const { dictKey } = this.form
       let res = await dictItemSave({ ...scope.row, dictKey })
       this.$handleRequestTip(res)
+      res.code === 200 && this.getDictItem()
     },
     deleteItem (scope) {
       this.$confirm('是否删除该数据', '提示', {
