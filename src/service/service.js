@@ -197,3 +197,11 @@ export async function getDictById (params) {
 export async function dictItemSave (params) {
   return DictModuleApi.post(`/sysDictItem/save`, params)
 }
+// 获取字典条目
+export async function getDictItemByPage (params) {
+  return DictModuleApi.get(`/sysDictItem/getByPage`, params)
+}
+// 删除字典条目
+export async function deleteDictItem (params) {
+  return DictModuleApi.post(`/sysDictItem/del`, params)
+}

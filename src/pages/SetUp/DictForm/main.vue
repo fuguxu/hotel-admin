@@ -1,6 +1,11 @@
 <template>
   <section class="product_brand_detail">
-    <form-header>基本信息</form-header>
+    <form-header>
+      基本信息
+      <template slot="rightItem">
+        <el-button v-if="isEdit" @click="save" type="primary">保存</el-button>
+      </template>
+    </form-header>
     <el-row class="mt-10">
       <el-col :span="12">
         <el-form ref="form" :model="form" label-width="120px" :disabled="!isEdit">
@@ -22,8 +27,12 @@
         </el-form>
       </el-col>
     </el-row>
-    <form-header>字典条目</form-header>
-    <el-button type="primary" class="mt-10" @click="add">添加</el-button>
+    <form-header>
+      字典条目
+      <template slot="rightItem">
+        <el-button v-if="isEdit" :disabled="!$route.query.id" @click="add" type="primary">添加</el-button>
+      </template>
+    </form-header>
     <m-table class="mt-10" :data="tableData" :columns="columns"
        :showPagination="false"
        :showOperation="false"
@@ -44,18 +53,18 @@
             <el-input v-model="scope.row.remark" :disabled="!isEdit" placeholder="请输入备注"></el-input>
         </template>
         <template v-slot:col-operate="{scope}">
-            <el-button type="danger" @click="deleteItem(scope)">删除</el-button>
+            <el-button type="primary" :disabled="!isEdit" @click="saveItem(scope)">保存</el-button>
+            <el-button type="danger" :disabled="!isEdit" @click="deleteItem(scope)">删除</el-button>
         </template>
     </m-table>
     <div class="text-center mt-15">
-        <el-button v-if="isEdit" @click="save" type="primary">保存</el-button>
-        <el-button v-else @click="edit" type="primary">编辑</el-button>
+        <el-button v-if="!isEdit" @click="edit" type="primary">编辑</el-button>
         <el-button @click="goBack">返回</el-button>
     </div>
   </section>
 </template>
 <script>
-import { dictSave, getDictById } from '@/service/service.js'
+import { dictSave, getDictById, dictItemSave, getDictItemByPage, deleteDictItem } from '@/service/service.js'
 import header from '@/pages/Components/formHeader/main'
 export default {
   data () {
@@ -99,7 +108,7 @@ export default {
           label: '操作',
           prop: 'operate',
           type: 'slot',
-          width: '100px'
+          width: '180px'
         }
       ],
       isEdit: false
@@ -128,6 +137,17 @@ export default {
     async getData (id) {
       let res = await getDictById({ id })
       res.code === 200 && (this.form = res.data || this.form)
+      this.getDictItem()
+    },
+    async getDictItem () {
+      const { dictKey } = this.form
+      let res = await getDictItemByPage({ dictKey, pageNo: 1, pageSize: 1000 })
+      res.code === 200 && (this.tableData = res.data.records || [])
+    },
+    async saveItem (scope) {
+      const { dictKey } = this.form
+      let res = await dictItemSave({ ...scope.row, dictKey })
+      this.$handleRequestTip(res)
     },
     deleteItem (scope) {
       this.$confirm('是否删除该数据', '提示', {
@@ -138,9 +158,13 @@ export default {
           done()
         }
       }).then(async () => {
-        let res = await deleteDict([row.id])
-        this.$handleRequestTip(res)
-        // res.code === 200 && this.getData()
+        if (scope.row.id) {
+          let res = await deleteDictItem([scope.row.id])
+          this.$handleRequestTip(res)
+          res.code === 200 && this.getDictItem()
+        } else {
+          this.tableData.splice(scope.$index, 1)
+        }
       }).catch(() => {})
     }
   },
