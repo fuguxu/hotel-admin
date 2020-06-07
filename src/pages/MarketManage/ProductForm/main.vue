@@ -12,7 +12,7 @@
       <el-row class="mt-10" >
         <el-col :span="20">
           <el-form  :model="formBase" label-width="100px" >
-            <el-form-item label="商品类型">
+            <el-form-item label="营销类型">
               <el-radio-group v-model="formBase.type">
                 <el-radio v-for="item in storeTypeOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
               </el-radio-group>
@@ -31,6 +31,13 @@
               <el-form-item label="商品品牌">
                 <el-select v-model="formBase.brandId" filterable remote :remote-method="getProductBrand" @clear="getProductBrand" clearable placeholder="请选择">
                   <el-option v-for="item in brandOptions" :key="item.id" :label="item.brandName" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="商品类型">
+                <el-select v-model="formBase.productType"   clearable placeholder="请选择">
+                  <el-option  label="热销" value="hotSale"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -169,6 +176,7 @@ export default {
         mainPictureUrl: '',
         publishStatus: 1,
         customCategoryList: [],
+        productType: '',
         subImage: Array.from({ length: 4 }).map(item => {
           return {
             imageUrl: ''
@@ -404,6 +412,7 @@ export default {
       this.formBase.detail = formData.detail
       this.formBase.categortName = formData.categortName
       this.formBase.publishStatus = formData.publishStatus
+      this.formBase.productType = formData.productType
       this.formBase.customCategoryList = formData.customCategoryList || []
       this.formBase.subImage = formData.subImage || this.formBase.subImage
     },
