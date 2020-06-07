@@ -28,6 +28,7 @@ import {
   Tabs,
   TabPane,
   CascaderPanel,
+  Cascader,
   Scrollbar,
   RadioGroup,
   Radio
@@ -56,6 +57,7 @@ Vue.use(Tree)
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(CascaderPanel)
+Vue.use(Cascader)
 Vue.use(Scrollbar)
 Vue.use(RadioGroup)
 Vue.use(Radio)

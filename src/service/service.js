@@ -176,6 +176,10 @@ export async function getSkuValue (params) {
 export async function handleProduct (params, query) {
   return MarketModuleApi.post(`/base/productInfo/handleProduct?${stringQuery(query)}`, params)
 }
+// 商品制定分类接口
+export async function getCustomCategory (params) {
+  return MarketModuleApi.get('/base/productInfo/getCustomCategory', params)
+}
 
 // 字典保存接口
 export async function dictSave (params) {

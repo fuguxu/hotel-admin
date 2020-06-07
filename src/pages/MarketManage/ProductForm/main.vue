@@ -11,7 +11,7 @@
       <div id="base" :class="$style.header">基本信息</div>
       <el-row class="mt-10" >
         <el-col :span="20">
-          <el-form  :model="formBase" label-width="86px" >
+          <el-form  :model="formBase" label-width="100px" >
             <el-form-item label="商品类型">
               <el-radio-group v-model="formBase.type">
                 <el-radio v-for="item in storeTypeOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
@@ -32,6 +32,11 @@
                 <el-select v-model="formBase.brandId" filterable remote :remote-method="getProductBrand" @clear="getProductBrand" clearable placeholder="请选择">
                   <el-option v-for="item in brandOptions" :key="item.id" :label="item.brandName" :value="item.id"></el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="商品定制分类">
+                <el-cascader ref="cascader" v-if="showCustomCategory" v-model="formBase.customCategoryList" :props="customCategoryProps" ></el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -129,12 +134,12 @@
     </div>
     <div :class="$style.footer">
       <el-button @click="submit" type="primary">提交</el-button>
-      <el-button >返回</el-button>
+      <el-button @click="goBack">返回</el-button>
     </div>
   </section>
 </template>
 <script>
-import { getProductBrand, getConfSpuByCategroy, getConfSkuByCategroy, saveProductInfo, getProductById, getSpuValue, getSkuValue } from '@/service/service.js'
+import { getProductBrand, getConfSpuByCategroy, getConfSkuByCategroy, saveProductInfo, getProductById, getSpuValue, getSkuValue, getCustomCategory } from '@/service/service.js'
 import { storeTypeOptions } from '@/pages/MarketManage/config.json.js'
 import asyncFormItem from '@/pages/Components/asyncFormItem/main'
 import editor from '@/pages/Components/editor/main'
@@ -163,6 +168,7 @@ export default {
         brandId: '',
         mainPictureUrl: '',
         publishStatus: 1,
+        customCategoryList: [],
         subImage: Array.from({ length: 4 }).map(item => {
           return {
             imageUrl: ''
@@ -215,7 +221,21 @@ export default {
         skuValue: []
       },
       skuColumns: [],
-      tableData: []
+      tableData: [],
+      customCategoryProps: {
+        lazy: true,
+        label: 'name',
+        value: 'categoryKey',
+        leaf: 'isLeaf',
+        lazyLoad: async (node, resolve) => {
+          let res = await getCustomCategory({
+            categoryKey: (node.data || {}).categoryKey
+          })
+          resolve(res.data || [])
+          this.id && node.data && this.setDefaultCustomCategory(node) // 详情的时候 回显数据此方法回调用多次
+        }
+      },
+      showCustomCategory: false
     }
   },
   methods: {
@@ -227,6 +247,10 @@ export default {
         this.brandOptions = (res.data ? res.data.records : [])
       }
       return this.brandOptions
+    },
+    setDefaultCustomCategory (node) {
+      let customCategory = [...this.formBase.customCategoryList].pop()
+      node.data.categoryKey === customCategory && this.$refs.cascader.computePresentContent()
     },
     async getConfSpuByCategroy (categoryId) {
       let res = await getConfSpuByCategroy({ categoryId: categoryId || this.categoryId })
@@ -306,7 +330,6 @@ export default {
         return pre.concat([obj])
       }, [])
       this.handlerTableData(tableData)
-      console.log([...this.tableData])
     },
     handlerTableData (data) {
       let tableData = this.tableData
@@ -381,6 +404,7 @@ export default {
       this.formBase.detail = formData.detail
       this.formBase.categortName = formData.categortName
       this.formBase.publishStatus = formData.publishStatus
+      this.formBase.customCategoryList = formData.customCategoryList || []
       this.formBase.subImage = formData.subImage || this.formBase.subImage
     },
     setSpuValue (spuValue) {
@@ -410,7 +434,6 @@ export default {
         item = { ...item, ...JSON.parse(item.skuInfo) }
         return item
       })
-      console.log([...this.tableData])
     },
     async setFormData (arg) {
       const [formData, spuValue, skuValue] = arg
@@ -419,6 +442,7 @@ export default {
       this.setSpuValue(spuValue)
       this.setSkuValue(skuValue.selectSkuValue)
       this.setTableData(skuValue.skuItemValue)
+      this.showCustomCategory = true
     },
     async getProductData (categoryId) {
       return Promise.all([this.getProductBrand(), this.getConfSpuByCategroy(categoryId), this.getConfSkuByCategroy(categoryId)])
@@ -426,9 +450,13 @@ export default {
     async initData () {
       if (this.categoryId) {
         this.getProductData()
+        this.showCustomCategory = true
       } else {
         Promise.all([this.getProductById(), this.getSpuValue(), this.getSkuValue()]).then(this.setFormData)
       }
+    },
+    goBack () {
+      this.$router.go(-1)
     }
   },
   created () {

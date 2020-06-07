@@ -37,8 +37,11 @@
        :showPagination="false"
        :showOperation="false"
        >
+        <template v-slot:col-itemKey="{scope}">
+            <el-input v-model="scope.row.itemKey" :disabled="scope.row.id" placeholder="请输入条目标识"></el-input>
+        </template>
         <template v-slot:col-itemValue="{scope}">
-            <el-input v-model="scope.row.itemValue" :disabled="scope.row.id" placeholder="请输入条目标识"></el-input>
+            <el-input v-model="scope.row.itemValue" :disabled="!isEdit" placeholder="请输入条目值"></el-input>
         </template>
         <template v-slot:col-itemName="{scope}">
             <el-input v-model="scope.row.itemName" :disabled="!isEdit" placeholder="请输入条目名称"></el-input>
@@ -66,7 +69,6 @@
 <script>
 import { dictSave, getDictById, dictItemSave, getDictItemByPage, deleteDictItem } from '@/service/service.js'
 import header from '@/pages/Components/formHeader/main'
-let itemKeyIndex = 0
 export default {
   data () {
     return {
@@ -87,6 +89,11 @@ export default {
         },
         {
           label: '条目标识',
+          prop: 'itemKey',
+          type: 'slot'
+        },
+        {
+          label: '条目值',
           prop: 'itemValue',
           type: 'slot'
         },
@@ -131,7 +138,7 @@ export default {
       this.tableData.push({
         itemValue: '',
         itemName: '',
-        itemKey: Symbol(itemKeyIndex++),
+        itemKey: '',
         status: 0,
         remark: ''
       })
