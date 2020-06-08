@@ -1,7 +1,7 @@
 <template>
     <div class="upload-wrap">
         <div :class="$style.logoWrap" v-if="value">
-            <img  :src="value" alt="">
+            <img :class="$style.img" :src="value" alt="">
             <div v-if="isShowDel" :class="$style.mask"><i @click="remove" :class="$style.icon" class="el-icon-delete"></i></div>
         </div>
         <el-upload
@@ -79,6 +79,10 @@ export default {
   .logoWrap{
     position: relative;
     width: fit-content;
+    display: inline-block;
+    .img {
+      width:150px;
+    }
     .mask{
       position: absolute;
       width:100%;

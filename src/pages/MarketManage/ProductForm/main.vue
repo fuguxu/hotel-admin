@@ -414,7 +414,7 @@ export default {
       this.formBase.publishStatus = formData.publishStatus
       this.formBase.productType = formData.productType
       this.formBase.customCategoryList = formData.customCategoryList || []
-      this.formBase.subImage = formData.subImage || this.formBase.subImage
+      this.formBase.subImage = Object.assign(this.formBase.subImage, formData.subImage || [])
     },
     setSpuValue (spuValue) {
       this.formBase.spuValues.map(item => {
