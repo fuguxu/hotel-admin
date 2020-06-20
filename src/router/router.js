@@ -190,6 +190,38 @@ const routesMap = [
             ]
           },
           {
+            path: '/h/auth',
+            component: (resolve) => { require(['@/pages/Auth/main.vue'], resolve) },
+            name: '权限管理',
+            meta: setMeta(),
+            children: [
+              {
+                path: '/h/project',
+                component: (resolve) => { require(['@/pages/Auth/Project/main.vue'], resolve) },
+                name: '项目管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/project_detail',
+                component: (resolve) => { require(['@/pages/Auth/ProjectForm/main.vue'], resolve) },
+                name: '项目表单',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/application',
+                component: (resolve) => { require(['@/pages/Auth/Application/main.vue'], resolve) },
+                name: '应用管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/application_detail',
+                component: (resolve) => { require(['@/pages/Auth/ApplicationForm/main.vue'], resolve) },
+                name: '应用表单',
+                meta: setMeta(false)
+              }
+            ]
+          },
+          {
             path: '/h/inventory',
             component: (resolve) => { require(['@/pages/Inventory/main.vue'], resolve) },
             name: '库存管理',

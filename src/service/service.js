@@ -41,7 +41,8 @@ export const MarketModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/prod
 export const LoginModuleApi = makeFetch(createAxios())
 // 字典相关接口
 export const DictModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/dict` }))
-
+// 权限相关接口
+export const AuthModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/auth` }))
 // 文件上传url
 export function getUploadUrl (params) {
   return `${BaseUrl}/file/handler/publicUpload?${stringQuery(params)}`
@@ -208,4 +209,38 @@ export async function getDictItemByPage (params) {
 // 删除字典条目
 export async function deleteDictItem (params) {
   return DictModuleApi.post(`/sysDictItem/del`, params)
+}
+
+// 项目管理保存接口
+export async function projectSave (params) {
+  return AuthModuleApi.post(`/sysAuthProject/save`, params)
+}
+// 分页获取项目
+export async function getProjectByPage (params) {
+  return AuthModuleApi.get(`/sysAuthProject/getByPage`, params)
+}
+// 获取项目详情
+export async function getProjectById (params) {
+  return AuthModuleApi.get(`/sysAuthProject/getById`, params)
+}
+// 删除项目
+export async function deleteProjectById (params) {
+  return AuthModuleApi.post(`/sysAuthProject/del?${stringQuery(params)}`)
+}
+
+// 应用管理保存接口
+export async function appSave (params) {
+  return AuthModuleApi.post(`/sysAuthApp/save`, params)
+}
+// 应用管理保存接口
+export async function getAppById (params) {
+  return AuthModuleApi.get(`/sysAuthApp/getById`, params)
+}
+// 分页获取应用
+export async function getAppByPage (params) {
+  return AuthModuleApi.get(`/sysAuthApp/getByPage`, params)
+}
+// 删除应用
+export async function deleteAppById (params) {
+  return AuthModuleApi.get(`/sysAuthApp/del`, params)
 }
