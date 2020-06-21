@@ -218,6 +218,18 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Auth/ApplicationForm/main.vue'], resolve) },
                 name: '应用表单',
                 meta: setMeta(false)
+              },
+              {
+                path: '/h/resource',
+                component: (resolve) => { require(['@/pages/Auth/Resource/main.vue'], resolve) },
+                name: '资源管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/resource_detail',
+                component: (resolve) => { require(['@/pages/Auth/ResourceForm/main.vue'], resolve) },
+                name: '资源表单',
+                meta: setMeta(false)
               }
             ]
           },

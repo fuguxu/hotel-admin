@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
+export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -219,6 +219,10 @@ export async function projectSave (params) {
 export async function getProjectByPage (params) {
   return AuthModuleApi.get(`/sysAuthProject/getByPage`, params)
 }
+// 获取所有项目
+export async function getAllProject (params) {
+  return AuthModuleApi.get(`/sysAuthProject/getAllProject`, params)
+}
 // 获取项目详情
 export async function getProjectById (params) {
   return AuthModuleApi.get(`/sysAuthProject/getById`, params)
@@ -243,4 +247,25 @@ export async function getAppByPage (params) {
 // 删除应用
 export async function deleteAppById (params) {
   return AuthModuleApi.get(`/sysAuthApp/del`, params)
+}
+
+// 分页获取资源应用
+export async function getResourceAppByPage (params) {
+  return AuthModuleApi.get(`/sysAuthResource/getAppByPage`, params)
+}
+// 保存资源
+export async function resourceSave (params) {
+  return AuthModuleApi.post(`/sysAuthResource/save`, params)
+}
+// 分页获取资源
+export async function getResourceByPage (params) {
+  return AuthModuleApi.get(`/sysAuthResource/getResTree`, params)
+}
+// 获取资源详情
+export async function getResourceById (params) {
+  return AuthModuleApi.get(`/sysAuthResource/getById`, params)
+}
+// 删除资源
+export async function deleteResourceById (params) {
+  return AuthModuleApi.post(`/sysAuthResource/del?${stringQuery(params)}`, params)
 }
