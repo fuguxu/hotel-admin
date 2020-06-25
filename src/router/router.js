@@ -230,6 +230,24 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Auth/ResourceForm/main.vue'], resolve) },
                 name: '资源表单',
                 meta: setMeta(false)
+              },
+              {
+                path: '/h/role',
+                component: (resolve) => { require(['@/pages/Auth/Role/main.vue'], resolve) },
+                name: '角色管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/role_detail',
+                component: (resolve) => { require(['@/pages/Auth/RoleForm/main.vue'], resolve) },
+                name: '角色表单',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/role_auth',
+                component: (resolve) => { require(['@/pages/Auth/RoleAuth/main.vue'], resolve) },
+                name: '角色授权',
+                meta: setMeta(false)
               }
             ]
           },

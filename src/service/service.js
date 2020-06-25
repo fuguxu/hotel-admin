@@ -269,3 +269,27 @@ export async function getResourceById (params) {
 export async function deleteResourceById (params) {
   return AuthModuleApi.post(`/sysAuthResource/del?${stringQuery(params)}`, params)
 }
+// 保存角色
+export async function roleSave (params) {
+  return AuthModuleApi.post(`/sysAuthRole/save`, params)
+}
+// 分页获取角色
+export async function getRoleByPage (params) {
+  return AuthModuleApi.get(`/sysAuthRole/getByPage`, params)
+}
+// 获取角色详情
+export async function getRoleById (params) {
+  return AuthModuleApi.get(`/sysAuthRole/getById`, params)
+}
+// 删除角色
+export async function deleteRoleById (params) {
+  return AuthModuleApi.get(`/sysAuthRole/del`, params)
+}
+// 获取已授权的资源
+export async function getAuthorizedRes (params) {
+  return AuthModuleApi.get(`/sysAuthRole/getAuthorizedRes`, params)
+}
+// 角色授权
+export async function roleAuthorize (params) {
+  return AuthModuleApi.post(`/sysAuthRole/authorize`, params)
+}

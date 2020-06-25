@@ -25,15 +25,15 @@
         </el-col>
       </el-row>
       <m-table :data="tableData" :columns="columns"
-       row-key="id"
+       row-key="fdKey"
        :load="load"
        lazy
        :showOperation="false"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
           <template v-slot:col-operate="{scope}">
-            <el-button type="primary" @click="operationHandler(scope.row, scope.$index, 'add')" size="mini">新增</el-button>
-            <el-button @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
+            <el-button type="primary" :disabled="scope.row.fdParentId === -1" @click="operationHandler(scope.row, scope.$index, 'add')" size="mini">新增</el-button>
+            <el-button :disabled="scope.row.fdParentId === -1" @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
             <el-button @click="operationHandler(scope.row, scope.$index, 'delete')" size="mini">删除</el-button>
           </template>
       </m-table>
