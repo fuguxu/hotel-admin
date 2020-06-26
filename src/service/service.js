@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
+export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -43,6 +43,8 @@ export const LoginModuleApi = makeFetch(createAxios())
 export const DictModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/dict` }))
 // 权限相关接口
 export const AuthModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/auth` }))
+// 组织相关接口
+export const OrgModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/org` }))
 // 文件上传url
 export function getUploadUrl (params) {
   return `${BaseUrl}/file/handler/publicUpload?${stringQuery(params)}`
@@ -292,4 +294,62 @@ export async function getAuthorizedRes (params) {
 // 角色授权
 export async function roleAuthorize (params) {
   return AuthModuleApi.post(`/sysAuthRole/authorize`, params)
+}
+
+// 获取顶层组织
+export async function getRootOrg (params) {
+  return OrgModuleApi.get(`/sysOrgInfo/getRootOrg`, params)
+}
+// 获取子层组织
+export async function getChildOrgByParentOrg (params) {
+  return OrgModuleApi.get(`/sysOrgInfo/getChildOrg`, params)
+}
+// 保存机构
+export async function OrgSave (params) {
+  return OrgModuleApi.post(`/sysOrgInfo/save`, params)
+}
+// 获取机构信息
+export async function getOrgById (params) {
+  return OrgModuleApi.get(`/sysOrgInfo/getById`, params)
+}
+// 删除机构
+export async function deleteOrgById (params) {
+  return OrgModuleApi.get(`/sysOrgInfo/delOrg`, params)
+}
+
+// 获取顶级部门
+export async function getRootDept (params) {
+  return OrgModuleApi.get(`/sysDept/getRootDept`, params)
+}
+// 获取子部门
+export async function getChildDept (params) {
+  return OrgModuleApi.get(`/sysDept/getChildDept`, params)
+}
+// 保存部门
+export async function deptSave (params) {
+  return OrgModuleApi.post(`/sysDept/save`, params)
+}
+// 获取部门详情
+export async function getDeptById (params) {
+  return OrgModuleApi.get(`/sysDept/getById`, params)
+}
+// 删除部门
+export async function deleteDeptById (params) {
+  return OrgModuleApi.post(`/sysDept/del`, params)
+}
+// 分页获取岗位
+export async function getPositionsByPage (params) {
+  return OrgModuleApi.get(`/sysPost/getByPage`, params)
+}
+// 获取岗位信息
+export async function getPositionsById (params) {
+  return OrgModuleApi.get(`/sysPost/getById`, params)
+}
+// 保存岗位
+export async function positionsSave (params) {
+  return OrgModuleApi.post(`/sysPost/save`, params)
+}
+// 删除岗位
+export async function deletePositionsById (params) {
+  return OrgModuleApi.post(`/sysPost/del`, params)
 }

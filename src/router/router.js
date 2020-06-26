@@ -252,6 +252,50 @@ const routesMap = [
             ]
           },
           {
+            path: '/h/org',
+            component: (resolve) => { require(['@/pages/Org/main.vue'], resolve) },
+            name: '组织管理',
+            meta: setMeta(),
+            children: [
+              {
+                path: '/h/organization',
+                component: (resolve) => { require(['@/pages/Org/Organization/main.vue'], resolve) },
+                name: '机构管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/organization_detail',
+                component: (resolve) => { require(['@/pages/Org/OrganizationForm/main.vue'], resolve) },
+                name: '机构表单',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/dept',
+                component: (resolve) => { require(['@/pages/Org/Dept/main.vue'], resolve) },
+                name: '部门管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/dept_detail',
+                component: (resolve) => { require(['@/pages/Org/DeptForm/main.vue'], resolve) },
+                name: '部门表单',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/posit',
+                component: (resolve) => { require(['@/pages/Org/Position/main.vue'], resolve) },
+                name: '岗位管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/posit_detail',
+                component: (resolve) => { require(['@/pages/Org/PositionForm/main.vue'], resolve) },
+                name: '岗位表单',
+                meta: setMeta(false)
+              }
+            ]
+          },
+          {
             path: '/h/inventory',
             component: (resolve) => { require(['@/pages/Inventory/main.vue'], resolve) },
             name: '库存管理',
