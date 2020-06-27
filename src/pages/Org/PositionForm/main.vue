@@ -4,6 +4,11 @@
     <el-row class="mt-10">
       <el-col :span="12">
         <el-form ref="form" :model="form" label-width="120px" :disabled="!isEdit">
+          <el-form-item label="所属机构">
+            <el-select v-model="form.orgNo"  filterable remote :remote-method="getorgNo" @clear="getorgNo" clearable placeholder="请选择">
+              <el-option v-for="item in orgNoOptions" :key="item.id" :label="item.name" :value="item.orgNo"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="岗位名称">
             <el-input v-model="form.postName"  placeholder="请输入岗位名称"></el-input>
           </el-form-item>
@@ -29,7 +34,7 @@
   </section>
 </template>
 <script>
-import { positionsSave, getPositionsById } from '@/service/service.js'
+import { positionsSave, getPositionsById, getAllOrg } from '@/service/service.js'
 import header from '@/pages/Components/formHeader/main'
 export default {
   data () {
@@ -39,7 +44,8 @@ export default {
         postCode: '',
         remark: '',
         status: '',
-        postSort: '1'
+        postSort: '1',
+        orgNo: ''
       },
       statusOptions: [
         {
@@ -51,10 +57,15 @@ export default {
           value: 1
         }
       ],
-      isEdit: false
+      isEdit: false,
+      orgNoOptions: []
     }
   },
   methods: {
+    async getorgNo () {
+      let res = await getAllOrg()
+      res.code === 200 && (this.orgNoOptions = res.data || [])
+    },
     async save () {
       let res = await positionsSave(this.form)
       this.$handleRequestTip(res)
@@ -72,9 +83,9 @@ export default {
     }
   },
   created () {
-    this.form.parentId = this.$route.query.parentId
     this.isEdit = !!((!this.$route.query.id) || this.$route.query.edit)
     this.$route.query.id !== undefined && this.getData(this.$route.query.id)
+    this.getorgNo()
   },
   computed: {
   },

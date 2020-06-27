@@ -19,7 +19,7 @@
             <el-col :span="7">
               <el-form-item label="所属项目">
                 <el-select v-model="query.projectKey" filterable remote clearable  placeholder="请选择">
-                  <el-option v-for="item in projectOptions" :key="item.id" :label="item.fdName" :value="item.id"></el-option>
+                  <el-option v-for="item in projectOptions" :key="item.id" :label="item.fdName" :value="item.fdKey"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>

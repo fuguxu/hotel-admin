@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
+export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -312,6 +312,10 @@ export async function OrgSave (params) {
 export async function getOrgById (params) {
   return OrgModuleApi.get(`/sysOrgInfo/getById`, params)
 }
+// 获取所有机构
+export async function getAllOrg () {
+  return OrgModuleApi.get(`/sysOrgInfo/getAllOrg`)
+}
 // 删除机构
 export async function deleteOrgById (params) {
   return OrgModuleApi.get(`/sysOrgInfo/delOrg`, params)
@@ -337,6 +341,10 @@ export async function getDeptById (params) {
 export async function deleteDeptById (params) {
   return OrgModuleApi.post(`/sysDept/del`, params)
 }
+// 获取所有部门
+export async function getAllDepts (params) {
+  return OrgModuleApi.get(`/sysDept/getDepts`, params)
+}
 // 分页获取岗位
 export async function getPositionsByPage (params) {
   return OrgModuleApi.get(`/sysPost/getByPage`, params)
@@ -352,4 +360,25 @@ export async function positionsSave (params) {
 // 删除岗位
 export async function deletePositionsById (params) {
   return OrgModuleApi.post(`/sysPost/del`, params)
+}
+// 获取所有岗位
+export async function getAllPositions (params) {
+  return OrgModuleApi.get(`/sysPost/getPositions`, params)
+}
+
+// 保存用户信息
+export async function userInfoSave (params) {
+  return OrgModuleApi.post(`/sysUser/save`, params)
+}
+// 获取用户信息
+export async function getUserInfoById (params) {
+  return OrgModuleApi.get(`/sysUser/getById`, params)
+}
+// 分页获取用户信息
+export async function getUserByPage (params) {
+  return OrgModuleApi.get(`/sysUser/getByPage`, params)
+}
+// 删除用户信息
+export async function deleteUserById (params) {
+  return OrgModuleApi.post(`/sysUser/del`, params)
 }

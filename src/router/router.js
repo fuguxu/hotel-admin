@@ -292,6 +292,18 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Org/PositionForm/main.vue'], resolve) },
                 name: '岗位表单',
                 meta: setMeta(false)
+              },
+              {
+                path: '/h/user',
+                component: (resolve) => { require(['@/pages/Org/User/main.vue'], resolve) },
+                name: '用户管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/user_detail',
+                component: (resolve) => { require(['@/pages/Org/UserForm/main.vue'], resolve) },
+                name: '用户表单',
+                meta: setMeta(false)
               }
             ]
           },

@@ -4,6 +4,11 @@
     <el-row class="mt-10">
       <el-col :span="12">
         <el-form ref="form" :model="form" label-width="120px" :disabled="!isEdit">
+          <el-form-item label="所属机构">
+            <el-select v-model="form.orgNo" :disabled="isDisabledOrg" filterable remote :remote-method="getorgNo" @clear="getorgNo" clearable placeholder="请选择">
+              <el-option v-for="item in orgNoOptions" :key="item.id" :label="item.name" :value="item.orgNo"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="部门名称">
             <el-input v-model="form.deptName"  placeholder="请输入部门名称"></el-input>
           </el-form-item>
@@ -32,7 +37,7 @@
   </section>
 </template>
 <script>
-import { deptSave, getDeptById } from '@/service/service.js'
+import { deptSave, getDeptById, getAllOrg } from '@/service/service.js'
 import header from '@/pages/Components/formHeader/main'
 export default {
   data () {
@@ -43,7 +48,8 @@ export default {
         phone: '',
         leader: '',
         status: '',
-        parentId: ''
+        parentId: '',
+        orgNo: ''
       },
       statusOptions: [
         {
@@ -55,10 +61,15 @@ export default {
           value: 0
         }
       ],
-      isEdit: false
+      isEdit: false,
+      orgNoOptions: []
     }
   },
   methods: {
+    async getorgNo () {
+      let res = await getAllOrg()
+      res.code === 200 && (this.orgNoOptions = res.data || [])
+    },
     async save () {
       let res = await deptSave(this.form)
       this.$handleRequestTip(res)
@@ -77,10 +88,15 @@ export default {
   },
   created () {
     this.form.parentId = this.$route.query.parentId
+    this.form.orgNo = this.$route.query.orgNo
     this.isEdit = !!((!this.$route.query.id) || this.$route.query.edit)
     this.$route.query.id !== undefined && this.getData(this.$route.query.id)
+    this.getorgNo()
   },
   computed: {
+    isDisabledOrg () {
+      return Object.keys(this.$route.query).length !== 0
+    }
   },
   components: {
     formHeader: header
