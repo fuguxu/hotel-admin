@@ -36,7 +36,7 @@
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
           <template v-slot:col-operate="{scope}">
             <el-button type="primary"  @click="operationHandler(scope.row, scope.$index, 'auth')" size="mini">授权</el-button>
-            <!-- <el-button type="primary"  @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">详情</el-button> -->
+            <el-button type="primary"  @click="operationHandler(scope.row, scope.$index, 'appoint')" size="mini">指派用户</el-button>
             <el-button  @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">编辑</el-button>
             <el-button type="danger" @click="operationHandler(scope.row, scope.$index, 'delete')" size="mini">删除</el-button>
           </template>
@@ -75,7 +75,7 @@ export default {
         {
           label: '操作',
           prop: 'operate',
-          width: '220px',
+          width: '320px',
           type: 'slot'
         }
       ],
@@ -101,6 +101,9 @@ export default {
     },
     detail (row) {
       this.$router.push({ path: formPath, query: { id: row.id } })
+    },
+    appoint (row) {
+      this.$router.push({ path: '/h/appoint_user', query: { roleId: row.id } })
     },
     auth (row) {
       this.$router.push({ path: '/h/role_auth', query: { roleId: row.id, edit: 1, projectKey: row.projectKey } })

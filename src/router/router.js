@@ -248,6 +248,12 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Auth/RoleAuth/main.vue'], resolve) },
                 name: '角色授权',
                 meta: setMeta(false)
+              },
+              {
+                path: '/h/appoint_user',
+                component: (resolve) => { require(['@/pages/Auth/AppointUser/main.vue'], resolve) },
+                name: '指派用户',
+                meta: setMeta(false)
               }
             ]
           },

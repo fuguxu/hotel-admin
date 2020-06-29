@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
+export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -294,6 +294,18 @@ export async function getAuthorizedRes (params) {
 // 角色授权
 export async function roleAuthorize (params) {
   return AuthModuleApi.post(`/sysAuthRole/authorize`, params)
+}
+// 获取已指派用户
+export async function getAppointedUser (params) {
+  return AuthModuleApi.post(`/sysAuthRole/getAppointedUser?${stringQuery(params)}`, params)
+}
+// 指派用户
+export async function appointUser (query, params) {
+  return AuthModuleApi.post(`/sysAuthRole/appointUser?${stringQuery(query)}`, params)
+}
+// 取消指派用户
+export async function removeAppointedUser (query, params) {
+  return AuthModuleApi.post(`/sysAuthRole/removeAppointedUser?${stringQuery(query)}`, params)
 }
 
 // 获取顶层组织

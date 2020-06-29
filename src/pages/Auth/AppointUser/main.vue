@@ -1,52 +1,56 @@
 <template>
     <div class="product_category">
       <el-row class="mb-10">
-        <el-col :span="4">
-          <el-button v-if="!inDialog" type="primary" @click="create">新建</el-button>
-        </el-col>
-        <el-col :span="20">
+        <el-col :span="24">
           <el-form :form="query" label-width="120px">
-            <el-col :span="11">
+            <el-col :span="8">
               <el-form-item label="用户名称">
                 <el-input v-model="query.userName"  placeholder="请输入用户名称"></el-input>
               </el-form-item>
             </el-col>
-             <el-col :span="11">
+             <el-col :span="8">
               <el-form-item label="登录账号">
                 <el-input v-model="query.loginName"  placeholder="请输入登录账号"></el-input>
               </el-form-item>
             </el-col>
-            <el-col class="text-right" :span="2">
+            <el-col class="text-right" :span="8">
+              <el-button   @click="add">添加用户</el-button>
+              <el-button   @click="cancel">取消指派</el-button>
               <el-button  type="primary" @click="getData">查询</el-button>
             </el-col>
           </el-form>
         </el-col>
       </el-row>
       <m-table :data="tableData" :columns="columns"
-       :showOperation="!inDialog"
+       :showOperation="false"
        @operationHandler="operationHandler"
        @selection-change="selectChange"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
       </m-table>
+      <el-dialog title="选择用户"  :visible.sync="dialogFormVisible" width="80%">
+        <user-table ref="user" v-if="dialogFormVisible" :inDialog="true"></user-table>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="comfirm">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { getUserByPage, deleteUserById } from '@/service/service'
-const formPath = '/h/user_detail'
+import { getAppointedUser, removeAppointedUser, appointUser } from '@/service/service'
+import userTable from '@/pages/Org/User/main'
 let selectionDatas = []
 export default {
   mixins: [pagination],
-  props: {
-    inDialog: {
-      default: false
-    }
-  },
   data () {
     return {
       tableData: [],
-      columns: (this.inDialog ? [{ type: 'selection' }] : []).concat([
+      columns: [
+        {
+          type: 'selection'
+        },
         {
           label: '用户名称',
           prop: 'userName'
@@ -56,62 +60,63 @@ export default {
           prop: 'loginName'
         },
         {
-          label: '手机号',
-          prop: 'phone'
-        },
-        {
-          label: '状态',
-          prop: 'status',
-          formatter: (row, column, cellValue, index) => {
-            return row.status === 0 ? '正常' : '停用'
-          }
+          label: '用户邮箱',
+          prop: 'email'
         },
         {
           label: '备注',
           prop: 'remark'
         }
-      ]),
+      ],
       query: {
         userName: '',
-        loginName: ''
-      }
+        loginName: '',
+        roleId: this.$route.query.roleId
+      },
+      dialogFormVisible: false
     }
   },
   async created () {
     this.getData()
   },
   methods: {
-    create () {
-      this.$router.push({ path: formPath })
-    },
-    async delete (row) {
-      this.$confirm('是否删除该数据', '提示', {
+    async cancel () {
+      if (!selectionDatas.length) {
+        return this.$message({
+          type: 'warning',
+          message: '请选择用户'
+        })
+      }
+      this.$confirm('此操作将取消该用户的关联, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        let res = await deleteUserById([ row.userId ])
+        let res = await removeAppointedUser({ roleId: this.query.roleId }, selectionDatas.map(item => item.userId))
         this.$handleRequestTip(res)
         this.getData()
       }).catch(() => {})
     },
-    detail (row) {
-      this.$router.push({ path: formPath,
-        query: {
-          id: row.userId
-        }
-      })
+    add () {
+      this.dialogFormVisible = true
     },
-    edit (row) {
-      this.$router.push({ path: formPath,
-        query: {
-          id: row.userId,
-          edit: 1
-        }
-      })
+    async comfirm () {
+      const data = this.$refs.user.getSelection()
+      if (!data.length) {
+        return this.$message({
+          type: 'warning',
+          message: '请选择用户'
+        })
+      }
+      const res = await appointUser({ roleId: this.query.roleId }, data.map(item => item.userId))
+      this.$handleRequestTip(res)
+      if (res.code === 200) {
+        this.dialogFormVisible = false
+        this.getData()
+      }
     },
     async getData () {
-      let res = await getUserByPage({
+      let res = await getAppointedUser({
         ...this.query,
         pageNo: this.currentPage,
         pageSize: this.pageSize
@@ -123,12 +128,10 @@ export default {
     },
     selectChange (selection) {
       selectionDatas = selection
-    },
-    getSelection () {
-      return selectionDatas
     }
   },
-  computed: {
+  components: {
+    userTable
   }
 }
 </script>
