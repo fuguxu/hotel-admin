@@ -314,10 +314,18 @@ const routesMap = [
             ]
           },
           {
-            path: '/h/inventory',
-            component: (resolve) => { require(['@/pages/Inventory/main.vue'], resolve) },
-            name: '库存管理',
-            meta: setMeta()
+            path: '/h/merchants',
+            component: (resolve) => { require(['@/pages/Merchants/main.vue'], resolve) },
+            name: '分销商管理',
+            meta: setMeta(),
+            children: [
+              {
+                path: '/h/merchant_detail',
+                component: (resolve) => { require(['@/pages/Merchants/MerchantForm/main.vue'], resolve) },
+                name: '商户表单',
+                meta: setMeta()
+              }
+            ]
           }
         ]
       }

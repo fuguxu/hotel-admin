@@ -37,6 +37,8 @@ function makeFetch (moduleAxios) {
 export const ConfModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/conf/base` }))
 // 营销管理模块接口
 export const MarketModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/product` }))
+// 分销商管理模块
+export const MerchantModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/merchant` }))
 // 登录模块接口
 export const LoginModuleApi = makeFetch(createAxios())
 // 字典相关接口
@@ -393,4 +395,8 @@ export async function getUserByPage (params) {
 // 删除用户信息
 export async function deleteUserById (params) {
   return OrgModuleApi.post(`/sysUser/del`, params)
+}
+// 保存商户信息
+export async function merchantInfoSave (params) {
+  return MerchantModuleApi.post(`/info/merchantInfo/save`, params)
 }

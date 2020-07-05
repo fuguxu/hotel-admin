@@ -31,7 +31,8 @@ import {
   Cascader,
   Scrollbar,
   RadioGroup,
-  Radio
+  Radio,
+  DatePicker
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small' }
 
@@ -61,6 +62,7 @@ Vue.use(Cascader)
 Vue.use(Scrollbar)
 Vue.use(RadioGroup)
 Vue.use(Radio)
+Vue.use(DatePicker)
 
 Vue.use(Loading.directive)
 

@@ -8,14 +8,15 @@
             v-else
             class="upload-demo"
             :with-credentials="true"
-            drag
+            :drag="type==='drag'"
             :action="uploadUrl"
             :on-success="onSuccess"
             :on-error="onError"
             :show-file-list="false"
             >
-            <i :class="iconClass"></i>
-            <div class="el-upload__text">
+            <el-button size="small" v-if="type==='button'" type="primary">{{typeText}}</el-button>
+            <i v-if="type === 'drag'" :class="iconClass"></i>
+            <div v-if="type === 'drag'" class="el-upload__text">
               <span v-if="tipText">{{tipText}}</span>
               <span v-else>将文件拖到此处，或<em>点击上传</em></span>
             </div>
@@ -37,6 +38,12 @@ export default {
       default: 'el-icon-upload'
     },
     tipText: {
+    },
+    type: {
+      default: 'drag'
+    },
+    typeText: {
+      default: ''
     }
   },
   data () {
