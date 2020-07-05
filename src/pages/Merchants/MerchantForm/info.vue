@@ -4,6 +4,20 @@
       <el-col :span="24">
         <el-form ref="form" :model="form" label-width="120px" :disabled="!isEdit">
           <el-col :span="12">
+             <el-form-item label="账户类型">
+                <el-select v-model="form.accountType"  filterable  clearable placeholder="请选择">
+                  <el-option v-for="item in accountTypeOptions" :key="item.id" v-bind="item"></el-option>
+                </el-select>
+              </el-form-item>
+          </el-col>
+          <el-col :span="12">
+             <el-form-item label="是否默认">
+              <el-radio-group v-model="form.isDefault">
+                <el-radio v-for="item in sisDefaultOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
              <el-form-item label="账户名称">
                 <el-input v-model="form.accountName"  placeholder="请输入账户名称"></el-input>
               </el-form-item>
@@ -13,14 +27,7 @@
               <el-input v-model="form.accountNo" placeholder="请输入账户号"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-             <el-form-item label="账户类型">
-                <el-select v-model="form.accountType"  filterable  clearable placeholder="请选择">
-                  <el-option v-for="item in accountTypeOptions" :key="item.id" v-bind="item"></el-option>
-                </el-select>
-              </el-form-item>
-          </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="银行编码">
               <el-input v-model="form.bankCode" placeholder="请输入银行编码"></el-input>
             </el-form-item>
@@ -29,18 +36,18 @@
             <el-form-item label="银行联行号">
               <el-input v-model="form.bankLinkNo" placeholder="请输入银行联行号"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="银行名称">
-              <el-input v-model="form.bankName" placeholder="请输入银行名称"></el-input>
-            </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
              <el-form-item label="银行账户类型">
                 <el-select v-model="form.bankType"  filterable  clearable placeholder="请选择">
                   <el-option v-for="item in bankTypeOptions" :key="item.id" v-bind="item"></el-option>
                 </el-select>
               </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="银行名称">
+              <el-input v-model="form.bankName" placeholder="请输入银行名称"></el-input>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="开户支行名称">
@@ -57,7 +64,7 @@
               <el-input v-model="form.city" placeholder="请输入开户行所在城市"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="身份证号码">
               <el-input v-model="form.idcard" placeholder="请输入身份证号码"></el-input>
             </el-form-item>
@@ -66,14 +73,14 @@
             <el-form-item label="手机号码">
               <el-input v-model="form.mobileNo" placeholder="请输入手机号码"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
+          </el-col> -->
+          <!-- <el-col :span="12">
              <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio v-for="item in statusOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-form>
       </el-col>
       <div class="text-center">
@@ -85,7 +92,7 @@
   </section>
 </template>
 <script>
-import { merchantInfoSave, getDeptById } from '@/service/service.js'
+import { merchantAccountSave, getDeptById } from '@/service/service.js'
 export default {
   name: 'merchant-info',
   data () {
@@ -102,7 +109,8 @@ export default {
         province: '',
         city: '',
         idcard: '',
-        mobileNo: ''
+        mobileNo: '',
+        isDefault: ''
       },
       statusOptions: [
         {
@@ -111,6 +119,16 @@ export default {
         },
         {
           label: '冻结',
+          value: 1
+        }
+      ],
+      sisDefaultOptions: [
+        {
+          label: '是',
+          value: 1
+        },
+        {
+          label: '否',
           value: 1
         }
       ],
@@ -143,7 +161,7 @@ export default {
   },
   methods: {
     async save () {
-      let res = await merchantInfoSave(this.form)
+      let res = await merchantAccountSave(this.form)
       this.$handleRequestTip(res)
       // res.code === 200 && this.goBack()
     },

@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
+export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -399,4 +399,12 @@ export async function deleteUserById (params) {
 // 保存商户信息
 export async function merchantInfoSave (params) {
   return MerchantModuleApi.post(`/info/merchantInfo/save`, params)
+}
+// 保存商户账户信息
+export async function merchantAccountSave (params) {
+  return MerchantModuleApi.post(`/info/merchantInfo/saveMerchantAccount`, params)
+}
+// 保存商户分润属性
+export async function merchantLevelSave (params) {
+  return MerchantModuleApi.post(`/info/merchantInfo/saveMerchantLevel`, params)
 }

@@ -50,8 +50,9 @@
               <el-col :span="11">
                 <el-date-picker
                   v-model="form.contractStartTime"
-                  value-format="yyyy-MM-dd"
-                  type="date"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
                   placeholder="选择日期">
                 </el-date-picker>
               </el-col>
@@ -59,8 +60,9 @@
               <el-col :span="11">
                 <el-date-picker
                   v-model="form.contractEndTime"
-                  value-format="yyyy-MM-dd"
-                  type="date"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
                   placeholder="选择日期">
                 </el-date-picker>
               </el-col>
@@ -81,12 +83,50 @@
               <el-input disabled="" v-model="form.distributMoney" placeholder=""></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
              <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio v-for="item in statusOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
+          </el-col> -->
+          <el-col :span="24">
+            <h1>企业信息</h1>
+            <el-col :span="12">
+              <el-form-item label="法人">
+                <el-input v-model="form.detailInfoDto.legalName" placeholder="请输入法人"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="法人手机号">
+                <el-input v-model="form.detailInfoDto.legalMobileNo" placeholder="请输入法人手机号"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="法人身份证号">
+                <el-input v-model="form.detailInfoDto.idcard" placeholder="请输入法人身份证号"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="营业执照">
+                <m-upload v-model="form.detailInfoDto.businessLicenseImage" type="button" typeText="上传" :isShowDel="isEdit" dir="merchant/info"></m-upload>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="身份证正面">
+                <m-upload v-model="form.detailInfoDto.idcardPositiveImage" type="button" typeText="上传" :isShowDel="isEdit" dir="merchant/info"></m-upload>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="身份证反面">
+                <m-upload v-model="form.detailInfoDto.idcardBackImage" type="button" typeText="上传" :isShowDel="isEdit" dir="merchant/info"></m-upload>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="确认函">
+                <m-upload v-model="form.detailInfoDto.confirmLetterImage" type="button" typeText="上传" :isShowDel="isEdit" dir="merchant/info"></m-upload>
+              </el-form-item>
+            </el-col>
           </el-col>
         </el-form>
       </el-col>
@@ -115,7 +155,15 @@ export default {
         mobileNo: '',
         contractStartTime: '',
         contractEndTime: '',
-        earnestMoney: ''
+        earnestMoney: '',
+        detailInfoDto: {
+          legalName: '',
+          legalMobileNo: '',
+          idcard: '',
+          idcardPositiveImage: '',
+          idcardBackImage: '',
+          confirmLetterImage: ''
+        }
       },
       statusOptions: [
         {

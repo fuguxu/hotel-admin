@@ -68,7 +68,7 @@
   </section>
 </template>
 <script>
-import { merchantInfoSave, getDeptById } from '@/service/service.js'
+import { merchantLevelSave, getDeptById } from '@/service/service.js'
 export default {
   name: 'merchant-profile',
   data () {
@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     async save () {
-      let res = await merchantInfoSave(this.form)
+      let res = await merchantLevelSave(this.form)
       this.$handleRequestTip(res)
       // res.code === 200 && this.goBack()
     },

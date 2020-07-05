@@ -324,6 +324,12 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Merchants/MerchantForm/main.vue'], resolve) },
                 name: '商户表单',
                 meta: setMeta()
+              },
+              {
+                path: '/h/merchant',
+                component: (resolve) => { require(['@/pages/Merchants/Merchant/main.vue'], resolve) },
+                name: '商户管理',
+                meta: setMeta()
               }
             ]
           }
