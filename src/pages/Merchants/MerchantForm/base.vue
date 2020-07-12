@@ -83,6 +83,16 @@
               <el-input disabled="" v-model="form.distributMoney" placeholder=""></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="冻结金额">
+              <el-input disabled="" v-model="form.frozenMoney" placeholder=""></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="历史总金额">
+              <el-input disabled="" v-model="form.totalDistributMoney" placeholder=""></el-input>
+            </el-form-item>
+          </el-col>
           <!-- <el-col :span="12">
              <el-form-item label="状态">
               <el-radio-group v-model="form.status">
@@ -139,9 +149,14 @@
   </section>
 </template>
 <script>
-import { merchantInfoSave, getDeptById } from '@/service/service.js'
+import { merchantInfoSave, getMerchantInfoById } from '@/service/service.js'
 export default {
   name: 'merchant-base',
+  props: {
+    merchantId: {
+      default: ''
+    }
+  },
   data () {
     return {
       form: {
@@ -182,11 +197,11 @@ export default {
       merchantTypeOptions: [
         {
           label: '分销会员',
-          value: '1'
+          value: 1
         },
         {
           label: '商家',
-          value: '2'
+          value: 2
         }
       ],
       isEdit: false
@@ -196,7 +211,7 @@ export default {
     async save () {
       let res = await merchantInfoSave(this.form)
       this.$handleRequestTip(res)
-      // res.code === 200 && this.goBack()
+      res.code === 200 && this.$emit('updateMerchantId', res.data)
     },
     goBack () {
       this.$router.go(-1)
@@ -205,11 +220,11 @@ export default {
       this.isEdit = true
     },
     async getData (id) {
-      let res = await getDeptById({ id })
-      res.code === 200 && (this.form = res.data || this.form)
+      let res = await getMerchantInfoById({ id })
+      res.code === 200 && (res.data.detailInfoDto = res.data.detailInfoDto || {}) && (this.form = res.data || this.form)
     }
   },
-  created () {
+  activated () {
     this.isEdit = !!((!this.$route.query.id) || this.$route.query.edit)
     this.$route.query.id !== undefined && this.getData(this.$route.query.id)
   },

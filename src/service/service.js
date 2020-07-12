@@ -396,15 +396,43 @@ export async function getUserByPage (params) {
 export async function deleteUserById (params) {
   return OrgModuleApi.post(`/sysUser/del`, params)
 }
+// 分页获取商户信息
+export async function getMerchantInfoByPage (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/getByPage`, params)
+}
 // 保存商户信息
 export async function merchantInfoSave (params) {
   return MerchantModuleApi.post(`/info/merchantInfo/save`, params)
+}
+// 获取商户详情
+export async function getMerchantInfoById (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/getById`, params)
 }
 // 保存商户账户信息
 export async function merchantAccountSave (params) {
   return MerchantModuleApi.post(`/info/merchantInfo/saveMerchantAccount`, params)
 }
+// 获取商户账户信息
+export async function getMerchantAccountList (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/getMerchantAccountList`, params)
+}
+// 删除商户账户信息
+export async function deleteMerchantAccountById (params) {
+  return MerchantModuleApi.post(`/info/merchantInfo/delMerchantAccount`, params)
+}
+// 获取账户信息
+export async function getMerchantAccountById (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/getMerchantAccount`, params)
+}
 // 保存商户分润属性
 export async function merchantLevelSave (params) {
   return MerchantModuleApi.post(`/info/merchantInfo/saveMerchantLevel`, params)
+}
+// 获取商户分润等级
+export async function getMerchantRebateConf (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/getMerchantRebateConf`, params)
+}
+// 获取分润属性详情
+export async function getMerchantLevel (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/getMerchantLevel`, params)
 }

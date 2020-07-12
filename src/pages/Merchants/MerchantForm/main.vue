@@ -5,7 +5,7 @@
       </el-tabs>
       <div :class="$style.comp">
         <keep-alive>
-          <component :is="currentTabComponent"></component>
+          <component v-bind="props" :merchantId="merchantId" @updateMerchantId="updateMerchantId" @updateComp="updateComp" :is="currentTabComponent"></component>
         </keep-alive>
       </div>
     </section>
@@ -13,23 +13,36 @@
 <script>
 import base from './base'
 import info from './info'
+import infoDetail from './infoForm/main'
 import profile from './profile'
+const comps = { base, info, infoDetail, profile }
 export default {
   data () {
     return {
       tabs: [{ label: '基本信息', name: 'base', comp: base }, { label: '账户信息', name: 'account', comp: info }, { label: '分润属性', name: 'profile', comp: profile }],
-      tab: 'base'
+      tab: 'base',
+      currentTabComponent: '',
+      merchantId: this.$route.query.id,
+      props: {}
     }
   },
   methods: {
     tabClick () {
-
+      this.currentTabComponent = this.tabs.find(item => item.name === this.tab).comp
+    },
+    updateComp (compName, props = {}) {
+      const comp = comps[compName]
+      this.props = props
+      this.currentTabComponent = comp
+    },
+    updateMerchantId (merchantId) {
+      this.merchantId = merchantId
     }
   },
+  created () {
+    this.tabClick()
+  },
   computed: {
-    currentTabComponent () {
-      return this.tabs.find(item => item.name === this.tab).comp
-    }
   }
 }
 </script>

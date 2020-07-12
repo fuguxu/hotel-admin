@@ -1,189 +1,152 @@
 <template>
-  <section class="product_brand_detail">
-    <el-row class="mt-10">
-      <el-col :span="24">
-        <el-form ref="form" :model="form" label-width="120px" :disabled="!isEdit">
-          <el-col :span="12">
-             <el-form-item label="账户类型">
-                <el-select v-model="form.accountType"  filterable  clearable placeholder="请选择">
-                  <el-option v-for="item in accountTypeOptions" :key="item.id" v-bind="item"></el-option>
-                </el-select>
-              </el-form-item>
-          </el-col>
-          <el-col :span="12">
-             <el-form-item label="是否默认">
-              <el-radio-group v-model="form.isDefault">
-                <el-radio v-for="item in sisDefaultOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-             <el-form-item label="账户名称">
-                <el-input v-model="form.accountName"  placeholder="请输入账户名称"></el-input>
-              </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="账户号">
-              <el-input v-model="form.accountNo" placeholder="请输入账户号"></el-input>
-            </el-form-item>
-          </el-col>
-          <!-- <el-col :span="12">
-            <el-form-item label="银行编码">
-              <el-input v-model="form.bankCode" placeholder="请输入银行编码"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="银行联行号">
-              <el-input v-model="form.bankLinkNo" placeholder="请输入银行联行号"></el-input>
-            </el-form-item>
-          </el-col> -->
-          <el-col :span="12">
-             <el-form-item label="银行账户类型">
-                <el-select v-model="form.bankType"  filterable  clearable placeholder="请选择">
-                  <el-option v-for="item in bankTypeOptions" :key="item.id" v-bind="item"></el-option>
-                </el-select>
-              </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="银行名称">
-              <el-input v-model="form.bankName" placeholder="请输入银行名称"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="开户支行名称">
-              <el-input v-model="form.branchName" placeholder="请输入开户支行名称"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="开户行所在省份">
-              <el-input v-model="form.province" placeholder="请输入开户行所在省份"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="开户行所在城市">
-              <el-input v-model="form.city" placeholder="请输入开户行所在城市"></el-input>
-            </el-form-item>
-          </el-col>
-          <!-- <el-col :span="12">
-            <el-form-item label="身份证号码">
-              <el-input v-model="form.idcard" placeholder="请输入身份证号码"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="手机号码">
-              <el-input v-model="form.mobileNo" placeholder="请输入手机号码"></el-input>
-            </el-form-item>
-          </el-col> -->
-          <!-- <el-col :span="12">
-             <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio v-for="item in statusOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col> -->
-        </el-form>
-      </el-col>
-      <div class="text-center">
-          <el-button v-if="isEdit" @click="save" type="primary">保存</el-button>
-          <el-button v-else @click="edit" type="primary">编辑</el-button>
-          <el-button @click="goBack">返回</el-button>
-      </div>
-    </el-row>
-  </section>
+    <div class="product_category">
+      <el-row class="mb-10">
+        <el-col :span="24">
+          <el-form :form="query" label-width="120px">
+            <el-col :span="24">
+              <el-button  type="primary" @click="add">新增</el-button>
+              <el-button  type="primary" @click="deletes">删除</el-button>
+            </el-col>
+          </el-form>
+        </el-col>
+      </el-row>
+      <m-table :data="tableData" :columns="columns"
+       :showOperation="false"
+       :showPagination="false"
+       @operationHandler="operationHandler"
+       @selection-change="selectChange"
+       @handlePagination="handlePagination"
+       :currentPage="currentPage" :pageSize="pageSize" :total="total">
+          <template v-slot:col-operate="{scope}">
+            <el-button  @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">修改</el-button>
+            <!-- <el-button type="danger" @click="operationHandler(scope.row, scope.$index, 'delete')" size="mini">删除</el-button> -->
+          </template>
+      </m-table>
+    </div>
 </template>
 <script>
-import { merchantAccountSave, getDeptById } from '@/service/service.js'
+import pagination from '@/mixins/pagination'
+import { getMerchantAccountList, deleteMerchantAccountById } from '@/service/service'
+let selectionDatas = []
+const accountTypeOptions = [
+  {
+    label: '微信',
+    value: 0
+  },
+  {
+    label: '支付宝',
+    value: 1
+  },
+  {
+    label: '银行卡',
+    value: 2
+  }
+]
 export default {
-  name: 'merchant-info',
+  name: 'merchant-info-list',
+  props: {
+    merchantId: {
+      default: ''
+    }
+  },
+  mixins: [pagination],
   data () {
     return {
-      form: {
-        accountType: '',
-        accountName: '',
-        accountNo: '',
-        bankCode: '',
-        bankLinkNo: '',
-        bankName: '',
-        bankType: '',
-        branchName: '',
-        province: '',
-        city: '',
-        idcard: '',
-        mobileNo: '',
-        isDefault: ''
-      },
-      statusOptions: [
+      tableData: [],
+      columns: [
         {
-          label: '正常',
-          value: 0
+          type: 'selection'
         },
         {
-          label: '冻结',
-          value: 1
+          label: '账户类型',
+          prop: 'accountType',
+          formatter: (row, column, cellValue, index) => {
+            return (accountTypeOptions.find(item => item.value === row.accountType) || {}).label
+          }
+        },
+        {
+          label: '账户名',
+          prop: 'accountName'
+        },
+        {
+          label: '账号',
+          prop: 'accountNo'
+        },
+        {
+          label: '状态',
+          prop: 'status',
+          formatter: (row, column, cellValue, index) => {
+            return row.status ? '正常' : '冻结'
+          }
+        },
+        {
+          label: '是否默认',
+          prop: 'isDefault',
+          formatter: (row, column, cellValue, index) => {
+            return row.isDefault ? '是' : '否'
+          }
+        },
+        {
+          label: '创建时间',
+          prop: 'createTime',
+          formatter: (row, column, cellValue, index) => {
+            return row.createTime.slice(0, 10)
+          }
+        },
+        {
+          label: '操作',
+          prop: 'operate',
+          type: 'slot',
+          width: '100px'
         }
       ],
-      sisDefaultOptions: [
-        {
-          label: '是',
-          value: 1
-        },
-        {
-          label: '否',
-          value: 1
-        }
-      ],
-      accountTypeOptions: [
-        {
-          label: '微信',
-          value: '0'
-        },
-        {
-          label: '支付宝',
-          value: '1'
-        },
-        {
-          label: '银行卡',
-          value: '2'
-        }
-      ],
-      bankTypeOptions: [
-        {
-          label: '对公',
-          value: '0'
-        },
-        {
-          label: '对私',
-          value: '1'
-        }
-      ],
-      isEdit: false
+      query: {
+        merchantId: this.merchantId
+      }
     }
+  },
+  async activated () {
+    this.getData()
   },
   methods: {
-    async save () {
-      let res = await merchantAccountSave(this.form)
-      this.$handleRequestTip(res)
-      // res.code === 200 && this.goBack()
+    async deletes () {
+      if (!selectionDatas.length) {
+        return this.$message({
+          type: 'warning',
+          message: '请选择账户'
+        })
+      }
+      this.$confirm('是否删除该数据?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        let res = await deleteMerchantAccountById(selectionDatas.map(item => item.id))
+        this.$handleRequestTip(res)
+        this.getData()
+      }).catch(() => {})
     },
-    goBack () {
-      this.$router.go(-1)
+    async getData () {
+      let res = await getMerchantAccountList({
+        ...this.query
+      })
+      if (res.code === 200) {
+        this.tableData = res.data ? res.data : []
+      }
     },
-    edit () {
-      this.isEdit = true
+    add () {
+      this.$emit('updateComp', 'infoDetail', { accountId: '' })
     },
-    async getData (id) {
-      let res = await getDeptById({ id })
-      res.code === 200 && (this.form = res.data || this.form)
+    edit (row) {
+      this.$emit('updateComp', 'infoDetail', { accountId: row.id })
+    },
+    selectChange (selection) {
+      selectionDatas = selection
     }
-  },
-  created () {
-    this.isEdit = !!((!this.$route.query.id) || this.$route.query.edit)
-    this.$route.query.id !== undefined && this.getData(this.$route.query.id)
-  },
-  computed: {
   }
 }
 </script>
 
 <style lang="scss" module>
+
 </style>
