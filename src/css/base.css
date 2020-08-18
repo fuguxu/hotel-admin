@@ -129,3 +129,6 @@ textarea{border:1px solid #CBCED8;border-radius: 3px;resize: none;}
 .el-table__header colgroup col[name="gutter"] {
   display: none;
 }
+.el-date-editor.el-input, .el-date-editor.el-input__inner {
+  width: auto;
+}
