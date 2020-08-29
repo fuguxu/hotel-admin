@@ -6,9 +6,14 @@ export function interceptors (instance) {
   })
   instance.interceptors.response.use(config => {
     NProgress.done()
-    if (config.status === 401 || config.data.code === 401) {
+    if (config.status === 403 || config.data.code === 403) {
       window.location.href = '#/login'
     }
     return config
+  }, error => {
+    if (error.response.status === 403) {
+      window.location.href = '#/login'
+    }
+    return Promise.reject(error.response.status)
   })
 }
