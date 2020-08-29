@@ -56,7 +56,7 @@ export function getUploadUrl (params) {
 // ****************************
 // 登录接口
 export async function doLogin (params) {
-  return LoginModuleApi.get('/doLogin', params)
+  return LoginModuleApi.post('/doLogin', params)
 }
 // ****************************
 // 产品分类保存接口
