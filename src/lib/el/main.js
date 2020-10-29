@@ -35,7 +35,12 @@ import {
   DatePicker
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small' }
-
+Object.assign(DatePicker.props, {
+  valueFormat: {
+    type: String,
+    default: 'yyyy-MM-dd'
+  }
+})
 // console.log(Input.props.disabled = { type: Boolean, default: true }) 在此可以修改组件的props methods computed等状态
 Vue.use(Input)//
 Vue.use(Button)

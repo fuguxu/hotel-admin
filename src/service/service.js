@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
+export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -47,6 +47,8 @@ export const DictModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/d
 export const AuthModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/auth` }))
 // 组织相关接口
 export const OrgModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/org` }))
+// 订单相关接口
+export const OrderModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/order` }))
 // 文件上传url
 export function getUploadUrl (params) {
   return `${BaseUrl}/file/handler/publicUpload?${stringQuery(params)}`
@@ -435,4 +437,9 @@ export async function getMerchantRebateConf (params) {
 // 获取分润属性详情
 export async function getMerchantLevel (params) {
   return MerchantModuleApi.get(`/info/merchantInfo/getMerchantLevel`, params)
+}
+
+// 获取订单分页接口
+export async function getOrderListByPage (params) {
+  return OrderModuleApi.post(`/base/orderInfo/getByPage`, params)
 }
