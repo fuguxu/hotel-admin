@@ -49,6 +49,8 @@ export const AuthModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/a
 export const OrgModuleApi = makeFetch(createAxios({ baseURL: `${StructureUrl}/org` }))
 // 订单相关接口
 export const OrderModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/order` }))
+// 用户相关接口
+export const UserModuleApi = makeFetch(createAxios({ baseURL: `${BaseUrl}/user` }))
 // 文件上传url
 export function getUploadUrl (params) {
   return `${BaseUrl}/file/handler/publicUpload?${stringQuery(params)}`
@@ -442,4 +444,41 @@ export async function getMerchantLevel (params) {
 // 获取订单分页接口
 export async function getOrderListByPage (params) {
   return OrderModuleApi.post(`/base/orderInfo/getByPage`, params)
+}
+// 获取订单信息接口
+export async function getOrderInfo (params) {
+  return OrderModuleApi.get(`/base/orderInfo/getOrderInfo`, params)
+}
+// 获取订单支付信息
+export async function getOrderPaymentInfo (params) {
+  return OrderModuleApi.get(`/base/orderInfo/getOrderPaymentInfo`, params)
+}
+// 获取订单售后信息
+export async function getOrderReturnInfo (params) {
+  return OrderModuleApi.get(`/base/orderInfo/getOrderReturnInfo`, params)
+}
+// 获取订单评价信息
+export async function getOrderAppraiseInfo (params) {
+  return OrderModuleApi.get(`/base/orderInfo/getOrderAppraiseInfo`, params)
+}
+
+// 获取订单分页评价
+export async function getOrderAppraiseByPage (params) {
+  return OrderModuleApi.post(`/appraise/orderAppraise/getByPage`, params)
+}
+// 分页获取物流
+export async function getDeliverGoods (params) {
+  return OrderModuleApi.get(`/base/deliver/getDeliverGoods`, params)
+}
+// 售后申请分页查询
+export async function getReturnsApply (params) {
+  return OrderModuleApi.post(`/postsale/orderReturnsApply/getByPage`, params)
+}
+// 分页获取买家秀
+export async function getBuyerShowByPage (params) {
+  return UserModuleApi.get(`/show/userBuyingShow/getByPage`, params)
+}
+// 获取买家秀详情
+export async function getBuyerShowById (params) {
+  return UserModuleApi.get(`/show/userBuyingShow/getById`, params)
 }

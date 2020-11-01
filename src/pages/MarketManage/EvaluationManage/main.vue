@@ -9,27 +9,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="成交时间">
-                <el-col :span="11">
-                  <el-date-picker
-                    v-model="query.payFinishStartTime"
-                    type="date"
-                    placeholder="开始时间">
-                  </el-date-picker>
-                </el-col>
-                <el-col :class="$style.blank" :span="2"></el-col>
-                <el-col :span="11">
-                  <el-date-picker
-                    v-model="query.payFinishEndTime"
-                    type="date"
-                    placeholder="结束时间">
-                  </el-date-picker>
-                </el-col>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="商品名称">
-                <el-input v-model="query.productName"  placeholder="请输入"></el-input>
+              <el-form-item label="订单编号">
+                <el-input v-model="query.orderNo"  placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -38,8 +19,29 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="订单编号">
-                <el-input v-model="query.orderNo"  placeholder="请输入"></el-input>
+              <el-form-item label="订单起止">
+                <el-col :span="11">
+                  <el-date-picker
+                    v-model="query.appraiseStartTime"
+                    type="date"
+                    placeholder="开始时间">
+                  </el-date-picker>
+                </el-col>
+                <el-col :class="$style.blank" :span="2"></el-col>
+                <el-col :span="11">
+                  <el-date-picker
+                    v-model="query.appraiseEndTime"
+                    type="date"
+                    placeholder="结束时间">
+                  </el-date-picker>
+                </el-col>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="评价类型">
+                <el-select v-model="query.fdType"  clearable placeholder="请选择">
+                  <el-option v-for="item in evaluationType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-form>
@@ -50,29 +52,11 @@
           <el-button type="primary" @click="getData">查询</el-button>
         </el-col>
       </el-row>
-      <el-tabs class="mb-10" type="border-card" v-model="query.orderStatus" @tab-click="tabClick">
-        <el-tab-pane v-for="item in tabs" :key="item.name" v-bind="item"></el-tab-pane>
-      </el-tabs>
       <m-table :data="tableData" :columns="columns"
         ref="table"
        :showOperation="false"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
-       <template v-slot:col-productName="{scope}">
-          <div :class="$style['order-content']">
-            <div :class="$style['order-header']">
-              <span :class="$style.orderNo">订单编号:{{scope.row.orderNo}}</span>  <span>成交时间: {{scope.row.createTime}}</span>
-            </div>
-            <div :class="$style.content">
-              <img :class="$style.img" :src="scope.row.mainPictureUrl" alt="">
-              <div :class="$style.right">
-                <div :class="$style.product">{{scope.row.productName}}</div>
-                <div :class="$style.product">{{scope.row.productProfile}}</div>
-                <div :class="$style.productSku">{{scope.row.productSkuInfo}}</div>
-              </div>
-            </div>
-          </div>
-        </template>
         <template v-slot:col-operate="{scope}">
           <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">详情</el-button>
         </template>
@@ -80,11 +64,10 @@
     </div>
 </template>
 <script>
-import { getOrderListByPage } from '@/service/service.js'
-import { orderStatus } from '../config.json'
+import { getOrderAppraiseByPage } from '@/service/service.js'
+import { evaluationType } from '../config.json'
 import pagination from '@/mixins/pagination'
-import { accDiv } from '@/util/main'
-const formPath = '/h/order_detail'
+const formPath = '/h/evaluation_detail'
 export default {
   mixins: [pagination],
   data () {
@@ -98,34 +81,22 @@ export default {
         {
           label: '商品',
           prop: 'productName',
-          type: 'slot',
-          width: '500px'
         },
         {
-          label: '单价',
-          prop: 'productPrice',
-          formatter: row => accDiv(row.productPrice, 1000)
+          label: '评价类型',
+          prop: 'fdType',
+          formatter: row => (evaluationType.find(tab => tab.value === `${row.fdType}`) || {}).label
         },
         {
-          label: '数量',
-          prop: 'productCount'
+          label: '总评分',
+          prop: 'realTotalMoney',
         },
         {
-          label: '买家',
+          label: '评价内容',
           prop: 'buyerName'
         },
         {
-          label: '交易状态',
-          prop: 'orderStatus',
-          formatter: row => this.tabs.find(tab => tab.name === `${row.orderStatus}`).label
-        },
-        {
-          label: '实收款',
-          prop: 'realTotalMoney',
-          formatter: row => accDiv(row.realTotalMoney, 1000)
-        },
-        {
-          label: '评价',
+          label: '评价时间',
           prop: 'buyerName'
         },
         {
@@ -136,14 +107,13 @@ export default {
       ],
       query: {
         productId: '',
-        payFinishStartTime: '',
-        payFinishEndTime: '',
-        productName: '',
+        appraiseStartTime: '',
+        appraiseEndTime: '',
         buyerName: '',
-        orderStatus: '10',
-        orderNo: ''
+        orderNo: '',
+        fdType: ''
       },
-      tabs: orderStatus
+      evaluationType: evaluationType
     }
   },
   methods: {
@@ -151,19 +121,13 @@ export default {
       return this.$refs.table.getSelection()
     },
     async getData () {
-      let res = await getOrderListByPage({
+      let res = await getOrderAppraiseByPage({
         ...this.query,
         pageNo: this.currentPage,
         pageSize: this.pageSize
       })
       if (res.code === 200) {
-        this.tableData = (res.data ? res.data.records : []).map(item => {
-          const skuInfo = JSON.parse(item.productSkuInfo);
-          item.productSkuInfo = Object.keys(skuInfo).map(key => {
-            return `${key}:${skuInfo[key]}`
-          }).join('，');
-          return item;
-        })
+        this.tableData = (res.data ? res.data.records : [])
         this.total = res.data.total || 0
       }
     },

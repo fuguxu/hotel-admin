@@ -121,6 +121,54 @@ const routesMap = [
                 name: '交易管理',
                 meta: setMeta()
               },
+              {
+                path: '/h/order_detail',
+                component: (resolve) => { require(['@/pages/MarketManage/OrderForm/main.vue'], resolve) },
+                name: '订单详情',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/evaluation_manage',
+                component: (resolve) => { require(['@/pages/MarketManage/EvaluationManage/main.vue'], resolve) },
+                name: '评价管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/evaluation_detail',
+                component: (resolve) => { require(['@/pages/MarketManage/EvaluationForm/main.vue'], resolve) },
+                name: '评价详情',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/logistics_manage',
+                component: (resolve) => { require(['@/pages/MarketManage/LogisticsManage/main.vue'], resolve) },
+                name: '物流管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/after_sale_manage',
+                component: (resolve) => { require(['@/pages/MarketManage/AfterSaleManage/main.vue'], resolve) },
+                name: '售后管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/after_sale_detail',
+                component: (resolve) => { require(['@/pages/MarketManage/AfterSaleForm/main.vue'], resolve) },
+                name: '售后详情',
+                meta: setMeta(false)
+              },
+              {
+                path: '/h/buyer_show_manage',
+                component: (resolve) => { require(['@/pages/MarketManage/BuyerShowManage/main.vue'], resolve) },
+                name: '买家秀管理',
+                meta: setMeta()
+              },
+              {
+                path: '/h/buyer_show_detail',
+                component: (resolve) => { require(['@/pages/MarketManage/BuyerShowForm/main.vue'], resolve) },
+                name: '买家秀详情',
+                meta: setMeta(false)
+              }
             ]
           },
           // {

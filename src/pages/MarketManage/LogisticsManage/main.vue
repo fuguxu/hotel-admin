@@ -4,12 +4,12 @@
         <el-col :span="24">
           <el-form :form="query" label-width="120px">
             <el-col :span="8">
-              <el-form-item label="商品id">
-                <el-input v-model="query.productId"  placeholder="请输入"></el-input>
+              <el-form-item label="买家昵称">
+                <el-input v-model="query.buyerName"  placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="成交时间">
+              <el-form-item label="订单成交时间">
                 <el-col :span="11">
                   <el-date-picker
                     v-model="query.payFinishStartTime"
@@ -28,18 +28,24 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
+              <el-form-item label="收件人名称">
+                <el-input v-model="query.receiver"  placeholder="请输入"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="收件人手机号">
+                <el-input v-model="query.receiverMobile"  placeholder="请输入"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="商品名称">
                 <el-input v-model="query.productName"  placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
+
             <el-col :span="8">
-              <el-form-item label="买家昵称">
-                <el-input v-model="query.buyerName"  placeholder="请输入"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="订单编号">
-                <el-input v-model="query.orderNo"  placeholder="请输入"></el-input>
+              <el-form-item label="快递单号">
+                <el-input v-model="query.deliverNo"  placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
           </el-form>
@@ -48,9 +54,10 @@
       <el-row class="mb-10">
         <el-col :span="4" >
           <el-button type="primary" @click="getData">查询</el-button>
+          <el-button type="primary" @click="getInDeliverNo">录入快递单号</el-button>
         </el-col>
       </el-row>
-      <el-tabs class="mb-10" type="border-card" v-model="query.orderStatus" @tab-click="tabClick">
+      <el-tabs class="mb-10" type="border-card" v-model="query.deliverStatus" @tab-click="tabClick">
         <el-tab-pane v-for="item in tabs" :key="item.name" v-bind="item"></el-tab-pane>
       </el-tabs>
       <m-table :data="tableData" :columns="columns"
@@ -77,11 +84,24 @@
           <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">详情</el-button>
         </template>
       </m-table>
+      <el-dialog title="录入快递单号" :visible.sync="visible" width="40%">
+      <el-form :model="form" label-width="100px">
+        <el-form-item label="物流单号">
+          <el-input type="text" v-model="form.deliverNo" placeholder="请输入" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="订单号">
+          <el-input type="text" v-model="form.orderNo" placeholder="请输入" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="visible = false">取 消</el-button>
+        <el-button type="primary" @click="save">保 存</el-button>
+      </div>
+    </el-dialog>
     </div>
 </template>
 <script>
-import { getOrderListByPage } from '@/service/service.js'
-import { orderStatus } from '../config.json'
+import { getDeliverGoods } from '@/service/service.js'
 import pagination from '@/mixins/pagination'
 import { accDiv } from '@/util/main'
 const formPath = '/h/order_detail'
@@ -102,30 +122,27 @@ export default {
           width: '500px'
         },
         {
-          label: '单价',
-          prop: 'productPrice',
-          formatter: row => accDiv(row.productPrice, 1000)
+          label: '收货人名称',
+          prop: 'receiver',
         },
         {
-          label: '数量',
-          prop: 'productCount'
+          label: '收货人手机号',
+          prop: 'receiverMobile'
         },
         {
-          label: '买家',
+          label: '收货人地址',
           prop: 'buyerName'
         },
         {
-          label: '交易状态',
-          prop: 'orderStatus',
-          formatter: row => this.tabs.find(tab => tab.name === `${row.orderStatus}`).label
+          label: '快递单号',
+          prop: 'deliverNo',
         },
         {
-          label: '实收款',
+          label: '发货时间',
           prop: 'realTotalMoney',
-          formatter: row => accDiv(row.realTotalMoney, 1000)
         },
         {
-          label: '评价',
+          label: '是否提醒发货',
           prop: 'buyerName'
         },
         {
@@ -135,15 +152,21 @@ export default {
         }
       ],
       query: {
-        productId: '',
         payFinishStartTime: '',
         payFinishEndTime: '',
         productName: '',
         buyerName: '',
-        orderStatus: '10',
-        orderNo: ''
+        deliverStatus: '20',
+        deliverNo: '',
+        receiver: '',
+        receiverMobile: ''
       },
-      tabs: orderStatus
+      tabs: [{name: '20',label: '待发货的订单'},{name:'30',label: '已发货的订单'}],
+      form: {
+        orderNo: '',
+        deliverNo: ''
+      },
+      visible: false
     }
   },
   methods: {
@@ -151,7 +174,7 @@ export default {
       return this.$refs.table.getSelection()
     },
     async getData () {
-      let res = await getOrderListByPage({
+      let res = await getDeliverGoods({
         ...this.query,
         pageNo: this.currentPage,
         pageSize: this.pageSize
@@ -166,6 +189,12 @@ export default {
         })
         this.total = res.data.total || 0
       }
+    },
+    getInDeliverNo () {
+      this.visible = true;
+    },
+    save () {
+
     },
     tabClick() {
       this.getData()
