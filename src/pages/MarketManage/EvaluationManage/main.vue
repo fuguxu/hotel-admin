@@ -1,6 +1,6 @@
 <template>
     <div class="order_manage">
-      <el-row >
+      <el-row v-if="!onlyShow">
         <el-col :span="24">
           <el-form :form="query" label-width="120px">
             <el-col :span="8">
@@ -37,7 +37,7 @@
                 </el-col>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8" v-if="!onlyShow">
               <el-form-item label="评价类型">
                 <el-select v-model="query.fdType"  clearable placeholder="请选择">
                   <el-option v-for="item in evaluationType" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -47,7 +47,7 @@
           </el-form>
         </el-col>
       </el-row>
-      <el-row class="mb-10">
+      <el-row class="mb-10" v-if="!onlyShow">
         <el-col :span="4" >
           <el-button type="primary" @click="getData">查询</el-button>
         </el-col>
@@ -57,6 +57,21 @@
        :showOperation="false"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
+       <template v-slot:col-orderInfo="{scope}">
+          <div :class="$style['order-content']">
+            <div :class="$style['order-header']">
+              <span :class="$style.orderNo">订单编号:{{scope.row.orderInfo.orderNo}}</span>  <span>成交时间: {{scope.row.orderInfo.createTime}}</span>
+            </div>
+            <div :class="$style.content">
+              <img :class="$style.img" :src="scope.row.orderInfo.mainPictureUrl" alt="">
+              <div :class="$style.right">
+                <div :class="$style.product">{{scope.row.orderInfo.productName}}</div>
+                <div :class="$style.product">{{scope.row.orderInfo.productProfile}}</div>
+                <div :class="$style.productSku">{{scope.row.orderInfo.productSkuInfo}}</div>
+              </div>
+            </div>
+          </div>
+        </template>
         <template v-slot:col-operate="{scope}">
           <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">详情</el-button>
         </template>
@@ -70,6 +85,13 @@ import pagination from '@/mixins/pagination'
 const formPath = '/h/evaluation_detail'
 export default {
   mixins: [pagination],
+  props: {
+    onlyShow:{
+      type: Boolean,
+      default: false
+    },
+    orderNo:''
+  },
   data () {
     return {
       tableData: [],
@@ -80,7 +102,9 @@ export default {
         },
         {
           label: '商品',
-          prop: 'productName',
+          prop: 'orderInfo',
+          width: '510px',
+          type: 'slot'
         },
         {
           label: '评价类型',
@@ -89,15 +113,15 @@ export default {
         },
         {
           label: '总评分',
-          prop: 'realTotalMoney',
+          prop: 'totalityScore',
         },
         {
           label: '评价内容',
-          prop: 'buyerName'
+          prop: 'appraiseMsg'
         },
         {
           label: '评价时间',
-          prop: 'buyerName'
+          prop: 'createTime'
         },
         {
           label: '操作',
@@ -110,7 +134,7 @@ export default {
         appraiseStartTime: '',
         appraiseEndTime: '',
         buyerName: '',
-        orderNo: '',
+        orderNo: this.orderNo,
         fdType: ''
       },
       evaluationType: evaluationType
@@ -127,7 +151,13 @@ export default {
         pageSize: this.pageSize
       })
       if (res.code === 200) {
-        this.tableData = (res.data ? res.data.records : [])
+        this.tableData = (res.data ? res.data.records : []).map(item => {
+          const skuInfo = JSON.parse(item.orderInfo.productSkuInfo);
+          item.orderInfo.productSkuInfo = Object.keys(skuInfo).map(key => {
+            return `${key}:${skuInfo[key]}`
+          }).join('，');
+           return item
+        })
         this.total = res.data.total || 0
       }
     },
@@ -135,7 +165,7 @@ export default {
       this.getData()
     },
     detail(row) {
-      this.$router.push({ path: formPath, query: { orderNo: row.orderNo} })
+      this.$router.push({ path: formPath, query: { id: row.id} })
     }
   },
   created () {

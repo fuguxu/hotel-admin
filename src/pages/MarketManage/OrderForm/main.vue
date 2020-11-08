@@ -3,14 +3,14 @@
       <el-tabs class="mb-10" type="border-card" v-model="currentComp" >
         <el-tab-pane v-for="item in tabs" :key="item.name" v-bind="item"></el-tab-pane>
       </el-tabs>
-      <component :is="currentComp" :orderNo="orderNo"></component>
+      <component :is="currentComp" :onlyShow="true" :orderNo="orderNo"></component>
     </div>
 </template>
 <script>
 import baseInfo from './base-info'
 import logisticsInfo from './logistics-info'
 import afterSaleInfo from './after-sale-info'
-import evaluationInfo from './evaluation-info'
+import evaluationManage from '../EvaluationManage/main'
 export default {
   data () {
     return {
@@ -29,7 +29,7 @@ export default {
         },
         {
           label: '评价信息',
-          name: evaluationInfo
+          name: evaluationManage
         },
       ],
       currentComp: baseInfo

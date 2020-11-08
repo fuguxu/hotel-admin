@@ -1,16 +1,16 @@
 <template>
   <div>
-    <after-sale-info :orderNo="orderNo"></after-sale-info>
+    <logistics-info :orderNo="orderNo"></logistics-info>
   </div>
 </template>
 <script>
-import afterSaleInfo from '../OrderForm/after-sale-info'
+import logisticsInfo from '../OrderForm/logistics-info'
 export default {
   components: {
-    afterSaleInfo
+    logisticsInfo
   },
   computed: {
-    orderNo() {
+    orderNo(){
       return this.$route.query.orderNo
     }
   }

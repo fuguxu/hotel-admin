@@ -75,13 +75,14 @@
               <div :class="$style.right">
                 <div :class="$style.product">{{scope.row.productName}}</div>
                 <div :class="$style.product">{{scope.row.productProfile}}</div>
-                <div :class="$style.productSku">{{scope.row.productSkuInfo}}</div>
+                <div :class="$style.productSku">{{scope.row.productSkuItemInfo}}</div>
               </div>
             </div>
           </div>
         </template>
         <template v-slot:col-operate="{scope}">
           <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">详情</el-button>
+          <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'deliver')" size="mini">立即发货</el-button>
         </template>
       </m-table>
       <el-dialog title="录入快递单号" :visible.sync="visible" width="40%">
@@ -90,7 +91,7 @@
           <el-input type="text" v-model="form.deliverNo" placeholder="请输入" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="订单号">
-          <el-input type="text" v-model="form.orderNo" placeholder="请输入" autocomplete="off"></el-input>
+          <el-input type="text" v-model="form.orderNo" disabled placeholder="请输入" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -101,10 +102,9 @@
     </div>
 </template>
 <script>
-import { getDeliverGoods } from '@/service/service.js'
+import { getDeliverGoods, deliverGoods } from '@/service/service.js'
 import pagination from '@/mixins/pagination'
-import { accDiv } from '@/util/main'
-const formPath = '/h/order_detail'
+const formPath = '/h/logistics_detail'
 export default {
   mixins: [pagination],
   data () {
@@ -127,11 +127,11 @@ export default {
         },
         {
           label: '收货人手机号',
-          prop: 'receiverMobile'
+          prop: 'mobileNo'
         },
         {
           label: '收货人地址',
-          prop: 'buyerName'
+          prop: 'detailAddress'
         },
         {
           label: '快递单号',
@@ -139,16 +139,18 @@ export default {
         },
         {
           label: '发货时间',
-          prop: 'realTotalMoney',
+          prop: 'deliverTime',
         },
         {
           label: '是否提醒发货',
-          prop: 'buyerName'
+          prop: 'noticeDeliver',
+          formatter: row => row.noticeDeliver ? '是': '否'
         },
         {
           label: '操作',
           prop: 'operate',
-          type: 'slot'
+          type: 'slot',
+          width: '200px'
         }
       ],
       query: {
@@ -156,17 +158,18 @@ export default {
         payFinishEndTime: '',
         productName: '',
         buyerName: '',
-        deliverStatus: '20',
+        deliverStatus: '0',
         deliverNo: '',
         receiver: '',
         receiverMobile: ''
       },
-      tabs: [{name: '20',label: '待发货的订单'},{name:'30',label: '已发货的订单'}],
+      tabs: [{name: '0',label: '待发货的订单'},{name:'1',label: '已发货的订单'}],
       form: {
         orderNo: '',
         deliverNo: ''
       },
-      visible: false
+      visible: false,
+      current:{}
     }
   },
   methods: {
@@ -181,8 +184,8 @@ export default {
       })
       if (res.code === 200) {
         this.tableData = (res.data ? res.data.records : []).map(item => {
-          const skuInfo = JSON.parse(item.productSkuInfo);
-          item.productSkuInfo = Object.keys(skuInfo).map(key => {
+          const skuInfo = JSON.parse(item.productSkuItemInfo);
+          item.productSkuItemInfo = Object.keys(skuInfo).map(key => {
             return `${key}:${skuInfo[key]}`
           }).join('，');
           return item;
@@ -191,16 +194,28 @@ export default {
       }
     },
     getInDeliverNo () {
-      this.visible = true;
+      // this.visible = true;
     },
-    save () {
-
+    async save () {
+      const res = await deliverGoods({
+        ...this.form,
+        needPayOrderToDeliver: false
+      })
+      this.$handleRequestTip(res)
+      if(res.code === 200) {
+        this.visible = false;
+        this.getData()
+      }
     },
     tabClick() {
       this.getData()
     },
     detail(row) {
       this.$router.push({ path: formPath, query: { orderNo: row.orderNo} })
+    },
+    deliver(row){
+      this.form.orderNo = row.orderNo
+      this.visible = true;
     }
   },
   created () {

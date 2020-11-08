@@ -94,7 +94,7 @@
               <div :class="$style.right">
                 <div :class="$style.product">{{scope.row.productName}}</div>
                 <div :class="$style.product">{{scope.row.productProfile}}</div>
-                <div :class="$style.productSku">{{scope.row.productSkuInfo}}</div>
+                <div :class="$style.productSku">{{scope.row.productSkuItemInfo}}</div>
               </div>
             </div>
           </div>
@@ -123,6 +123,7 @@
 import { getReturnsApply } from '@/service/service.js'
 import pagination from '@/mixins/pagination'
 import { accDiv } from '@/util/main'
+import { orderReturnsStatus, storeIsAccept } from '../config.json.js'
 const formPath = '/h/after_sale_detail'
 export default {
   mixins: [pagination],
@@ -142,23 +143,26 @@ export default {
         },
         {
           label: '交易金额',
-          prop: 'receiver',
+          prop: 'productMoney',
+          formatter: row => accDiv(row.productMoney,1000)
         },
         {
           label: '退款金额',
-          prop: 'receiverMobile'
+          prop: 'productMoney',
+          formatter: row => accDiv(row.productMoney,1000)
         },
         {
           label: '最近申请时间',
-          prop: 'buyerName'
+          prop: 'createTime'
         },
         {
           label: '原因',
-          prop: 'deliverNo',
+          prop: 'reasonMsg',
         },
         {
           label: '退货物流',
-          prop: 'realTotalMoney',
+          prop: 'storeIsAccept',
+          formatter: row => (storeIsAccept.find(item => item.value === row.storeIsAccept) || {}).label
         },
         {
           label: '发货物流',
@@ -166,7 +170,8 @@ export default {
         },
         {
           label: '退款状态',
-          prop: 'buyerName'
+          prop: 'orderReturnsStatus',
+          formatter: row => (orderReturnsStatus.find(item => item.value === row.orderReturnsStatus) || {}).label
         },
         {
           label: '操作',
@@ -205,8 +210,8 @@ export default {
       })
       if (res.code === 200) {
         this.tableData = (res.data ? res.data.records : []).map(item => {
-          const skuInfo = JSON.parse(item.productSkuInfo);
-          item.productSkuInfo = Object.keys(skuInfo).map(key => {
+          const skuInfo = JSON.parse(item.productSkuItemInfo);
+          item.productSkuItemInfo = Object.keys(skuInfo).map(key => {
             return `${key}:${skuInfo[key]}`
           }).join('，');
           return item;

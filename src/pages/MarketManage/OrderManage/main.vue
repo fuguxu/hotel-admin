@@ -99,7 +99,7 @@ export default {
           label: '商品',
           prop: 'productName',
           type: 'slot',
-          width: '500px'
+          width: '510px'
         },
         {
           label: '单价',
@@ -126,7 +126,8 @@ export default {
         },
         {
           label: '评价',
-          prop: 'buyerName'
+          prop: 'totalityScore',
+          formatter: row => `${row.totalityScore}分`
         },
         {
           label: '操作',

@@ -4,7 +4,7 @@ const { stringQuery } = require('@/util/main').default
 
 const TIME_OUT = 50000
 
-export const BasePrefix = __DEV__ ? (0 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
+export const BasePrefix = __DEV__ ? (1 ? `http://ming849358679.imwork.net` : 'http://8.129.62.222:9085') : ''
 
 const BaseAxiosOptions = {
   withCredentials: true,
@@ -466,9 +466,21 @@ export async function getOrderAppraiseInfo (params) {
 export async function getOrderAppraiseByPage (params) {
   return OrderModuleApi.post(`/appraise/orderAppraise/getByPage`, params)
 }
+// 获取评价详情
+export async function getOrderAppraiseByPaId (params) {
+  return OrderModuleApi.get(`/appraise/orderAppraise/getById`, params)
+}
 // 分页获取物流
 export async function getDeliverGoods (params) {
-  return OrderModuleApi.get(`/base/deliver/getDeliverGoods`, params)
+  return OrderModuleApi.post(`/base/deliver/getDeliverGoods`, params)
+}
+// 获取订单物流信息
+export async function getOrderLogisticsInfo(params) {
+  return OrderModuleApi.get(`/base/orderInfo/getOrderLogisticsInfo`, params)
+}
+// 发货
+export async function deliverGoods(params) {
+  return OrderModuleApi.post(`/base/deliver/deliverGoods`, params)
 }
 // 售后申请分页查询
 export async function getReturnsApply (params) {

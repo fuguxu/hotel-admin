@@ -3,17 +3,8 @@
     <el-col :span="20">
       <block title="物流轨迹" class="mb-15">
         <el-row :class="$style['block-content']">
-          <el-col :span="24">
-            <span :class="$style.label">已签收</span>
-            <span >广东省广州市天河区xxxxxxx,由xxx派送xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-          </el-col>
-          <el-col :span="24">
-            <span :class="$style.label">派送中</span>
-            <span >广东省广州市天河区xxxxxxx,由xxx派送xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-          </el-col>
-          <el-col :span="24">
-            <span :class="$style.label">已揽件</span>
-            <span >广东省广州市天河区xxxxxxx,由xxx派送xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+          <el-col :span="24" v-for="(item,index) in data.context" :key="index">
+            <span v-html="item.context"></span>
           </el-col>
         </el-row>
       </block>
@@ -21,10 +12,8 @@
   </el-row>
 </template>
 <script>
-import { getOrderInfo, getOrderPaymentInfo } from '@/service/service.js'
-import { orderStatus } from '../config.json'
+import { getOrderLogisticsInfo } from '@/service/service.js'
 import block from '@/pages/Components/block/man'
-import { accDiv } from '@/util/main'
 export default {
   props: {
     orderNo: ''
@@ -34,16 +23,25 @@ export default {
   },
   data () {
     return {
-      orderData: {
-        detail:{}
+      data: {
+        context: []
       }
     }
   },
   mounted() {
-
+    this.getOrderLogisticsInfo()
   },
   methods: {
-
+    async getOrderLogisticsInfo() {
+      const { data } = await getOrderLogisticsInfo({
+        orderNo: this.orderNo
+      })
+      if (data){
+        data.context = data.context ? JSON.parse(data.context) : []
+        this.data = data;
+        console.log(this.data)
+      }
+    }
   },
 }
 </script>

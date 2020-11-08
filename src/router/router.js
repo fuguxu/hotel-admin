@@ -146,6 +146,12 @@ const routesMap = [
                 meta: setMeta()
               },
               {
+                path: '/h/logistics_detail',
+                component: (resolve) => { require(['@/pages/MarketManage/LogisticsForm/main.vue'], resolve) },
+                name: '物流详情',
+                meta: setMeta(false)
+              },
+              {
                 path: '/h/after_sale_manage',
                 component: (resolve) => { require(['@/pages/MarketManage/AfterSaleManage/main.vue'], resolve) },
                 name: '售后管理',
