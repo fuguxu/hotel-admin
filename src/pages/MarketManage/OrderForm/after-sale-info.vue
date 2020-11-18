@@ -5,52 +5,44 @@
         <el-row :class="$style['block-content']">
           <el-col :span="16">
             <span :class="$style.label">申请人</span>
-            <span ></span>
+            <span >{{data.createBy}}</span>
           </el-col>
           <el-col :span="8">
             <span :class="$style.label">申请时间</span>
-            <span >2020-12-3</span>
+            <span >{{data.createTime}}</span>
           </el-col>
           <el-col :span="16">
             <span :class="$style.label">订单号</span>
-            <span >23243243435435</span>
+            <span >{{data.orderNo}}</span>
           </el-col>
           <el-col :span="8">
             <span :class="$style.label">商品数量</span>
-            <span >1</span>
+            <span >{{data.productCount}}</span>
           </el-col>
           <el-col :span="16">
             <span :class="$style.label">商品金额</span>
-            <span >234</span>
+            <span >{{data.productMoney | moneyFormat}}</span>
           </el-col>
           <el-col :span="8">
             <span :class="$style.label">售后类型</span>
-            <span >退货</span>
+            <span >{{data.type | statusFormat}}</span>
           </el-col>
           <el-col :span="24">
             <span :class="$style.label">申请原因</span>
-            <span >sdgfdgdfggh第三个豆腐干豆腐干反对</span>
+            <span >{{data.reasonMsg}}</span>
           </el-col>
           <el-col :span="16">
             <span :class="$style.label">受理时间</span>
-            <span ></span>
+            <span >{{data.storeAcceptExpireTime}}</span>
           </el-col>
         </el-row>
       </block>
 
-      <block title="处理进度" class="mb-15">
+      <block title="协商过程记录" class="mb-15">
         <el-row :class="$style['block-content']">
-          <el-col :span="24">
-            <span :class="$style.label">xxx买家</span>
-            <span >xxx申请退货，理由xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-          </el-col>
-          <el-col :span="24">
-            <span :class="$style.label">xxxx商家</span>
-            <span >请提供货物不影响二次销售，凭证。谢谢</span>
-          </el-col>
-          <el-col :span="16">
-            <span :class="$style.label">平台</span>
-            <span >退货成功</span>
+          <el-col :span="24" v-for="(item, index) in (data.discussLogs || [])" :key="index">
+            <span :class="$style.label">{{item.userType | userTypeFormat}}</span>
+            <span >{{item.orderReturnsReason}}</span>
           </el-col>
         </el-row>
       </block>
@@ -67,20 +59,20 @@
     <el-dialog title="售后处理" :visible.sync="visible" width="40%">
       <el-form :model="form" label-width="100px">
         <el-form-item label="售后类型" >
-          退款
+          {{data.type | statusFormat}}
         </el-form-item>
         <el-form-item label="处理" >
-          <el-select v-model="form.brandId"  clearable placeholder="请选择">
+          <el-select v-model="form.handleResult"  clearable placeholder="请选择">
             <el-option v-for="item in hanldeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="买家补充" >
+        <!-- <el-form-item label="买家补充" >
           <el-select v-model="form.brandId"  clearable placeholder="请选择">
             <el-option v-for="item in supplementOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="意见">
-          <el-input type="textarea" v-model="form.name" placeholder="请输入" autocomplete="off"></el-input>
+          <el-input type="textarea" v-model="form.remark" placeholder="请输入" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -91,10 +83,11 @@
   </el-row>
 </template>
 <script>
-import { getOrderReturnInfo } from '@/service/service.js'
-import { orderStatus } from '../config.json'
+import { getOrderReturnInfo, handleApply } from '@/service/service.js'
+import { afterSaleType } from '../config.json'
 import block from '@/pages/Components/block/man'
 import { accDiv } from '@/util/main'
+let userType = [{value: '0',label:'系统'},{value: '1',label:'商家'},{value: '2',label:'买家'}]
 export default {
   props: {
     orderNo: ''
@@ -105,29 +98,53 @@ export default {
   data () {
     return {
       visible: false,
-      hanldeOptions: [{value: 'agree',label:'同意'},{value: 'unagree',label:'不同意'}],
+      hanldeOptions: [{value: '1',label:'同意'},{value: '2',label:'补充售后凭证'},{value: '3',label:'拒绝'}],
       supplementOptions: [{value: 'agree',label:'上传凭证'},{value: 'unagree',label:'买家寄回商品'}],
       form: {
-
-      }
+        handleResult: '',
+        remark: ''
+      },
+      data: {},
     }
   },
   mounted() {
     this.getAfterSaleInfo();
   },
   methods: {
-    getAfterSaleInfo() {
-      getOrderReturnInfo({
+    async getAfterSaleInfo() {
+     const {data} = await getOrderReturnInfo({
         orderNo: this.orderNo
       })
+      this.data = data || {}
     },
-    save(){
-
+    async save(){
+      let { type , id: orderReturnsApplyId} = this.data;
+      let res = await handleApply({
+        ...this.form,
+        orderReturnsApplyId,
+        type
+      })
+      this.$handleRequestTip(res)
+      if (res.code === 200) {
+        this.visible = false;
+        this.getAfterSaleInfo();
+      }
     },
     handleAfterSale(){
       this.visible = true;
     }
   },
+  filters:{
+    moneyFormat(n){
+      return accDiv(n, 1000)
+    },
+    statusFormat(n){
+      return (afterSaleType.find(s => `${s.value}` === `${n}`) || {}).label
+    },
+    userTypeFormat(n) {
+      return (userType.find(s => `${s.value}` === `${n}`) || {}).label
+    }
+  }
 }
 </script>
 <style lang="scss" module>

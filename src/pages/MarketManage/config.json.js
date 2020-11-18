@@ -146,3 +146,17 @@ export const storeIsAccept = [
     label: '拒签'
   }
 ]
+export const afterSaleType = [
+  {
+    value: '0',
+    label: '退款'
+  },
+  {
+    value: '1',
+    label: '退货'
+  },
+  {
+    value: '1',
+    label: '换货'
+  }
+]

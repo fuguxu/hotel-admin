@@ -486,6 +486,10 @@ export async function deliverGoods(params) {
 export async function getReturnsApply (params) {
   return OrderModuleApi.post(`/postsale/orderReturnsApply/getByPage`, params)
 }
+// 售后处理
+export async function handleApply (params) {
+  return OrderModuleApi.post(`/postsale/orderReturnsApply/handleApply`, params)
+}
 // 分页获取买家秀
 export async function getBuyerShowByPage (params) {
   return UserModuleApi.get(`/show/userBuyingShow/getByPage`, params)
@@ -493,4 +497,8 @@ export async function getBuyerShowByPage (params) {
 // 获取买家秀详情
 export async function getBuyerShowById (params) {
   return UserModuleApi.get(`/show/userBuyingShow/getById`, params)
+}
+// 审核买家秀
+export async function buyerShowApproval (params) {
+  return UserModuleApi.post(`/show/userBuyingShow/approval`, params)
 }

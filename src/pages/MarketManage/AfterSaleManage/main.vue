@@ -76,7 +76,7 @@
           <el-button type="primary" @click="getData">查询</el-button>
         </el-col>
       </el-row>
-      <el-tabs class="mb-10" type="border-card" v-model="query.deliverStatus" @tab-click="tabClick">
+      <el-tabs class="mb-10" type="border-card" v-model="query.orderReturnType" @tab-click="tabClick">
         <el-tab-pane v-for="item in tabs" :key="item.name" v-bind="item"></el-tab-pane>
       </el-tabs>
       <m-table :data="tableData" :columns="columns"
@@ -161,12 +161,12 @@ export default {
         },
         {
           label: '退货物流',
-          prop: 'storeIsAccept',
-          formatter: row => (storeIsAccept.find(item => item.value === row.storeIsAccept) || {}).label
+          prop: 'userDeliverNo',
+          // formatter: row => (storeIsAccept.find(item => item.value === row.storeIsAccept) || {}).label
         },
         {
           label: '发货物流',
-          prop: 'buyerName'
+          prop: 'deliverNo'
         },
         {
           label: '退款状态',
@@ -184,13 +184,13 @@ export default {
         payFinishEndTime: '',
         productName: '',
         buyerName: '',
-        deliverStatus: '20',
+        orderReturnType: 'all',
         deliverNo: '',
         receiver: '',
         receiverMobile: '',
         orderNo: ''
       },
-      tabs: [{name: 'all',label: '全部订单'},{name: '20',label: '仅款退'},{name:'30',label: '退款'}],
+      tabs: [{name: 'all',label: '全部订单'},{name: '1',label: '退货'},{name:'0',label: '退款'}],
       form: {
         orderNo: '',
         deliverNo: ''
@@ -203,8 +203,10 @@ export default {
       return this.$refs.table.getSelection()
     },
     async getData () {
+      let orderReturnType = this.query.orderReturnType === 'all' ? '' : this.query.orderReturnType
       let res = await getReturnsApply({
         ...this.query,
+        orderReturnType,
         pageNo: this.currentPage,
         pageSize: this.pageSize
       })

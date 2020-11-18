@@ -82,7 +82,7 @@
         </template>
         <template v-slot:col-operate="{scope}">
           <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">详情</el-button>
-          <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'deliver')" size="mini">立即发货</el-button>
+          <el-button v-if="scope.row.deliverStatus === '0'"  type="primary"  @click="operationHandler(scope.row, scope.$index, 'deliver')" size="mini">立即发货</el-button>
         </template>
       </m-table>
       <el-dialog title="录入快递单号" :visible.sync="visible" width="40%">
@@ -208,6 +208,7 @@ export default {
       }
     },
     tabClick() {
+      this.currentPage = 1;
       this.getData()
     },
     detail(row) {

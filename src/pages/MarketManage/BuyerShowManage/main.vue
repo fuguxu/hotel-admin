@@ -30,18 +30,24 @@
           <img :class="$style.img" :src="scope.row.mainPictureUrl" alt="">
         </template>
         <template v-slot:col-operate="{scope}">
-          <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">审核</el-button>
+          <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'approval')" size="mini">审核</el-button>
           <el-button  type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">明细</el-button>
         </template>
       </m-table>
+      <approval-dialog :id="id" @success="success" ref="approvalDialog"></approval-dialog>
     </div>
 </template>
 <script>
 import { getBuyerShowByPage } from '@/service/service.js'
 import pagination from '@/mixins/pagination'
+import approvalDialog from './approvalDialog'
 const formPath = '/h/buyer_show_detail'
+const auditStatusOptions = [{value: '0',label:'未审核'},{value: '1',label:'审核通过'},{value: '2',label:'审核不通过'}]
 export default {
   mixins: [pagination],
+  components: {
+    approvalDialog
+  },
   data () {
     return {
       tableData: [],
@@ -77,7 +83,8 @@ export default {
         },
         {
           label: '审核状态',
-          prop: 'auditStatus'
+          prop: 'auditStatus',
+          formatter:row =>  (auditStatusOptions.find(s => `${s.value}` === `${row.auditStatus}`) || {} ).label
         },
         {
           label: '发布时间',
@@ -94,6 +101,7 @@ export default {
         province: '',
         city: ''
       },
+      id: ''
     }
   },
   methods: {
@@ -116,6 +124,13 @@ export default {
     },
     detail(row) {
       this.$router.push({ path: formPath, query: { id: row.id} })
+    },
+    approval(row) {
+      this.id = row.id;
+      this.$refs.approvalDialog.open()
+    },
+    success(){
+      this.getData()
     }
   },
   created () {
