@@ -147,6 +147,7 @@
 </template>
 <script>
 import { getProductBrand, getConfSpuByCategroy, getConfSkuByCategroy, saveProductInfo, getProductById, getSpuValue, getSkuValue, getCustomCategory } from '@/service/service.js'
+import { accMul, accDiv } from '@/util/main'
 import { storeTypeOptions } from '@/pages/MarketManage/config.json.js'
 import asyncFormItem from '@/pages/Components/asyncFormItem/main'
 import editor from '@/pages/Components/editor/main'
@@ -373,7 +374,15 @@ export default {
       })
     },
     async submit () {
-      this.formBase.skuItemValues = this.tableData
+      let tableData = this.tableData.map(item => {
+        return {
+          ...item,
+          salePrice: accMul(item.salePrice, 100),
+          costPrice: accMul(item.costPrice, 100),
+          originalPrice: accMul(item.originalPrice, 100)
+        }
+      })
+      this.formBase.skuItemValues = tableData;
       this.formBase.categoryId = this.categoryId
       const res = await saveProductInfo(this.formBase)
       this.$handleRequestTip(res)
@@ -440,7 +449,13 @@ export default {
     setTableData (skuItemValue = []) {
       this.tableData = skuItemValue.map(item => {
         item.skuInfo = JSON.stringify(this.sortObjectAttr(JSON.parse(item.skuInfo)))
-        item = { ...item, ...JSON.parse(item.skuInfo) }
+        item = { ...item, ...JSON.parse(item.skuInfo),
+          ...{
+            salePrice: accDiv(item.salePrice, 100),
+            costPrice: accDiv(item.costPrice, 100),
+            originalPrice: accDiv(item.originalPrice, 100)
+          }
+        }
         return item
       })
     },

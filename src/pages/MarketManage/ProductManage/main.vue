@@ -44,6 +44,7 @@
 </template>
 <script>
 import { getProduct, deleteProduct, handleProduct } from '@/service/service.js'
+import { accDiv } from '@/util/main'
 import pagination from '@/mixins/pagination'
 const publishPath = '/h/product_publish'
 const formPath = '/h/product_detail'
@@ -67,11 +68,17 @@ export default {
         },
         {
           label: '售价(元)',
-          prop: 'salePrice'
+          prop: 'salePrice',
+          formatter: (row, column, cellValue, index) => {
+            return accDiv(row.salePrice, 100)
+          }
         },
         {
           label: '原价(元)',
-          prop: 'originalPrice'
+          prop: 'originalPrice',
+          formatter: (row, column, cellValue, index) => {
+            return accDiv(row.originalPrice, 100)
+          }
         },
         {
           label: '销量',
