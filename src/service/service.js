@@ -440,6 +440,14 @@ export async function getMerchantRebateConf (params) {
 export async function getMerchantLevel (params) {
   return MerchantModuleApi.get(`/info/merchantInfo/getMerchantLevel`, params)
 }
+// 商户绑定用户
+export async function bindUser (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/bindUser`, params)
+}
+// 获取商户已绑定用户
+export async function getBindUser (params) {
+  return MerchantModuleApi.get(`/info/merchantInfo/getBindUser`, params)
+}
 
 // 获取订单分页接口
 export async function getOrderListByPage (params) {

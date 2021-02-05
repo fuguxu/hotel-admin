@@ -15,11 +15,12 @@ import base from './base'
 import info from './info'
 import infoDetail from './infoForm/main'
 import profile from './profile'
-const comps = { base, info, infoDetail, profile }
+import bindUser from './bindUser'
+const comps = { base, info, infoDetail, profile, bindUser }
 export default {
   data () {
     return {
-      tabs: [{ label: '基本信息', name: 'base', comp: base }, { label: '账户信息', name: 'account', comp: info }, { label: '分润属性', name: 'profile', comp: profile }],
+      tabs: [{ label: '基本信息', name: 'base', comp: base }, { label: '账户信息', name: 'account', comp: info }, { label: '分润属性', name: 'profile', comp: profile },{ label: '绑定用户', name: 'bindUser', comp: bindUser }],
       tab: 'base',
       currentTabComponent: '',
       merchantId: this.$route.query.id,
