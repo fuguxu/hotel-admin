@@ -73,7 +73,7 @@ export default {
           label: '合同日期',
           prop: 'contract',
           formatter: (row, column, cellValue, index) => {
-            return row.contractStartTime.slice(0, 10) + '/' + row.contractEndTime.slice(0, 10)
+            return (row.contractStartTime || '').slice(0, 10) + '/' + (row.contractEndTime || '').slice(0, 10)
           }
         },
         {
