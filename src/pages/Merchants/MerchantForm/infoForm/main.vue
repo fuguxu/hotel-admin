@@ -10,7 +10,7 @@
                 </el-select>
               </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="12" class="mb-10">
              <el-form-item label="是否默认">
               <el-radio-group v-model="form.isDefault">
                 <el-radio v-for="item in sisDefaultOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
@@ -70,12 +70,12 @@
             <el-form-item label="身份证号码">
               <el-input v-model="form.idcard" placeholder="请输入身份证号码"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="12">
             <el-form-item label="手机号码">
               <el-input v-model="form.mobileNo" placeholder="请输入手机号码"></el-input>
             </el-form-item>
-          </el-col> -->
+          </el-col>
           <!-- <el-col :span="12">
              <el-form-item label="状态">
               <el-radio-group v-model="form.status">
@@ -136,11 +136,11 @@ export default {
       sisDefaultOptions: [
         {
           label: '是',
-          value: true
+          value: 1
         },
         {
           label: '否',
-          value: false
+          value: 0
         }
       ],
       accountTypeOptions: [

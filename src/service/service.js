@@ -448,6 +448,10 @@ export async function bindUser (params) {
 export async function getBindUser (params) {
   return MerchantModuleApi.get(`/info/merchantInfo/getBindUser`, params)
 }
+// 分页获取商户提现记录
+export async function getMerchantWithdrawRecordByPage (params) {
+  return MerchantModuleApi.get(`/account/merchantWithdrawRecord/getByPage`, params)
+}
 
 // 获取订单分页接口
 export async function getOrderListByPage (params) {

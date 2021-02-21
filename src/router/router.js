@@ -390,7 +390,13 @@ const routesMap = [
                 component: (resolve) => { require(['@/pages/Merchants/MerchantForm/main.vue'], resolve) },
                 name: '商户表单',
                 meta: setMeta(false)
-              }
+              },
+              {
+                path: '/h/merchant_withdraw',
+                component: (resolve) => { require(['@/pages/Merchants/withdraw/main.vue'], resolve) },
+                name: '商户提现记录',
+                meta: setMeta()
+              },
             ]
           }
         ]
