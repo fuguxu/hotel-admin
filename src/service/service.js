@@ -510,3 +510,38 @@ export async function getBuyerShowById (params) {
 export async function buyerShowApproval (params) {
   return UserModuleApi.post(`/show/userBuyingShow/approval`, params)
 }
+
+export async function downloadFileByBlobURL(url, filename) {
+  const tempLink = document.createElement('a');
+  tempLink.style.display = 'none';
+  tempLink.href = url;
+  tempLink.setAttribute('download', filename);
+  if (typeof tempLink.download === 'undefined') {
+    tempLink.setAttribute('target', '_blank');
+  }
+
+  document.body.appendChild(tempLink);
+  tempLink.click();
+  document.body.removeChild(tempLink);
+  window.URL.revokeObjectURL(url);
+}
+// 下载二维码图片
+export async function downLoadFile(url,data={},filename = 'download') {
+  return axios({
+    url: `${BaseUrl}/${url}`,
+    method: 'get',
+    responseType: 'blob',
+    withCredentials:true,
+    params:data,
+  }).then(res => {
+    console.log(res)
+    const data = res.data;
+    const blob = new Blob([data], { type: data.type || 'application/octet-stream' });
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      window.navigator.msSaveBlob(blob, filename);
+    } else {
+      const blobURL = window.URL.createObjectURL(blob);
+      downloadFileByBlobURL(blobURL, filename);
+    }
+  })
+}

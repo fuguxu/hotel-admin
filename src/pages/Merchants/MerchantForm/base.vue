@@ -138,6 +138,14 @@
               </el-form-item>
             </el-col>
           </el-col>
+          <el-col :span="24" v-if="$route.query.id">
+            <h1>二维码</h1>
+            <el-col :span="12">
+              <el-form-item label="">
+                <img :src="form.invitationQrCode" title="点击下载二维码" @click="down">
+              </el-form-item>
+            </el-col>
+          </el-col>
         </el-form>
       </el-col>
       <div class="text-center">
@@ -149,7 +157,7 @@
   </section>
 </template>
 <script>
-import { merchantInfoSave, getMerchantInfoById } from '@/service/service.js'
+import { merchantInfoSave, getMerchantInfoById, downLoadFile } from '@/service/service.js'
 export default {
   name: 'merchant-base',
   props: {
@@ -222,6 +230,15 @@ export default {
     async getData (id) {
       let res = await getMerchantInfoById({ id })
       res.code === 200 && (res.data.detailInfoDto = res.data.detailInfoDto || {}) && (this.form = res.data || this.form)
+    },
+    async down(){
+      downLoadFile(
+        'merchant/info/merchantInfo/downloadInvitationQrCode',
+        {
+          merchantId: this.form.detailInfoDto.merchantId
+        },
+        '商家二维码.png'
+      )
     }
   },
   activated () {
