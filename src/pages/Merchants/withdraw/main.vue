@@ -12,7 +12,7 @@
               </el-form-item>
             </el-col>
              <el-col :span="11">
-              <el-form-item label="公司名称">
+              <el-form-item label="账户号">
                 <el-input v-model="query.accountNo"  placeholder="请输入账户号"></el-input>
               </el-form-item>
             </el-col>
@@ -62,8 +62,8 @@ export default {
           type: 'selection'
         },
         {
-          label: '商户编号',
-          prop: 'merchantNo'
+          label: '提现申请号',
+          prop: 'withdrawNo'
         },
         {
           label: '账户名',
@@ -74,8 +74,19 @@ export default {
           prop: 'accountNo'
         },
         {
+          label: '提现金额',
+          prop: 'withdrawMoney'
+        },
+        {
           label: '联系方式',
           prop: 'mobileNo'
+        },
+        {
+          label: '账户类型',
+          prop: 'accountType',
+          formatter: (row, column, cellValue, index) => {
+            return (this.accountTypeOptions.find(item => `${item.value}` === `${row.accountType}`) || {}).label
+          }
         },
         {
           label: '状态',
@@ -113,6 +124,21 @@ export default {
         {
           label: '处理成功',
           value: 3
+        }
+      ],
+      //0-微信；1-支付宝；2-银行卡
+      accountTypeOptions: [
+        {
+          label: '微信',
+          value: 0
+        },
+        {
+          label: '支付宝',
+          value: 1
+        },
+        {
+          label: '银行卡',
+          value: 2
         }
       ]
     }
