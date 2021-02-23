@@ -40,17 +40,34 @@
        @selection-change="selectChange"
        @handlePagination="handlePagination"
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
-          <!-- <template v-slot:col-operate="{scope}"> -->
-            <!-- <el-button type="primary" @click="operationHandler(scope.row, scope.$index, 'edit')" size="mini">审核</el-button> -->
+          <template v-slot:col-operate="{scope}">
+            <el-button type="primary" v-if="scope.row.status==0" @click="operationHandler(scope.row, scope.$index, 'approve')" size="mini">审核</el-button>
             <!-- <el-button type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">明细</el-button> -->
-          <!-- </template> -->
+          </template>
       </m-table>
+      <el-dialog title="提现审核" :visible.sync="visible" width="40%">
+        <el-form :model="form" label-width="100px">
+          <el-form-item label="意见">
+            <el-select v-model="form.status" clearable>
+              <el-option v-for="item in statusOptions" v-bind="item" :key="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input type="textarea" v-model="form.remark" placeholder="请输入" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="visible = false">取 消</el-button>
+          <el-button type="primary" @click="save">保 存</el-button>
+        </div>
+      </el-dialog>
     </div>
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { getMerchantWithdrawRecordByPage } from '@/service/service'
+import { getMerchantWithdrawRecordByPage, approvalMerchantWithdraw} from '@/service/service'
 let selectionDatas = []
+let id = ''
 const formPath = '/h/merchant_detail'
 export default {
   mixins: [pagination],
@@ -108,6 +125,10 @@ export default {
         withdrawNo: '',
         status: ''
       },
+      form: {
+        remark: '',
+        status: ''
+      },
       statusOptions:[
         {
           label: '待审核',
@@ -140,7 +161,8 @@ export default {
           label: '银行卡',
           value: 2
         }
-      ]
+      ],
+      visible: false
     }
   },
   async created () {
@@ -166,6 +188,22 @@ export default {
     },
     detail (row) {
       this.$router.push({ path: formPath, query: { id: row.id, edit: 1 } })
+    },
+    approve(row) {
+      id = row.id;
+      this.visible = true;
+    },
+    save() {
+      approvalMerchantWithdraw({
+        ...this.form,
+        id
+      }).then(res =>{
+        this.$handleRequestTip(res)
+        if(res.code === 200){
+          this.visible = false;
+          this.getData()
+        }
+      })
     }
   },
   components: {

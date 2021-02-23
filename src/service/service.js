@@ -452,6 +452,10 @@ export async function getBindUser (params) {
 export async function getMerchantWithdrawRecordByPage (params) {
   return MerchantModuleApi.get(`/account/merchantWithdrawRecord/getByPage`, params)
 }
+// 商户提现审核接口
+export async function approvalMerchantWithdraw (params) {
+  return MerchantModuleApi.post(`/account/merchantWithdrawRecord/approval`, params)
+}
 
 // 获取订单分页接口
 export async function getOrderListByPage (params) {
