@@ -93,6 +93,11 @@
         <el-form-item label="订单号">
           <el-input type="text" v-model="form.orderNo" disabled placeholder="请输入" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="物流公司">
+          <el-select v-model="form.deliverPlatform" filterable   clearable placeholder="请选择">
+            <el-option v-for="item in deliverCompany" :key="item.id" :label="item.itemName" :value="item.itemValue"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="visible = false">取 消</el-button>
@@ -102,7 +107,7 @@
     </div>
 </template>
 <script>
-import { getDeliverGoods, deliverGoods } from '@/service/service.js'
+import { getDeliverGoods, deliverGoods, getDictData } from '@/service/service.js'
 import pagination from '@/mixins/pagination'
 const formPath = '/h/logistics_detail'
 export default {
@@ -169,7 +174,8 @@ export default {
         deliverNo: ''
       },
       visible: false,
-      current:{}
+      current:{},
+      deliverCompany: []
     }
   },
   methods: {
@@ -215,8 +221,17 @@ export default {
       this.$router.push({ path: formPath, query: { orderNo: row.orderNo} })
     },
     deliver(row){
+      this.getDeliverCompany()
       this.form.orderNo = row.orderNo
       this.visible = true;
+    },
+    getDeliverCompany() {
+      if (this.deliverCompany.length) return
+      getDictData({
+        dictKey: 'express_company'
+      }).then(res => {
+        res.code === 200 && (this.deliverCompany = res.data || [])
+      })
     }
   },
   created () {

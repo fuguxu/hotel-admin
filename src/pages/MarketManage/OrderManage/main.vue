@@ -104,7 +104,7 @@ export default {
         {
           label: '单价',
           prop: 'productPrice',
-          formatter: row => accDiv(row.productPrice, 1000)
+          formatter: row => accDiv(row.productPrice, 100)
         },
         {
           label: '数量',
@@ -122,12 +122,12 @@ export default {
         {
           label: '实收款',
           prop: 'realTotalMoney',
-          formatter: row => accDiv(row.realTotalMoney, 1000)
+          formatter: row => accDiv(row.realTotalMoney, 100)
         },
         {
           label: '评价',
           prop: 'totalityScore',
-          formatter: row => `${row.totalityScore}分`
+          formatter: row => row.totalityScore ? `${row.totalityScore}分` : ''
         },
         {
           label: '操作',

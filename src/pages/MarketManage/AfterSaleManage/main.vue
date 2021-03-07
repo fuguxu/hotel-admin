@@ -144,12 +144,12 @@ export default {
         {
           label: '交易金额',
           prop: 'productMoney',
-          formatter: row => accDiv(row.productMoney,1000)
+          formatter: row => accDiv(row.productMoney,100)
         },
         {
           label: '退款金额',
           prop: 'productMoney',
-          formatter: row => accDiv(row.productMoney,1000)
+          formatter: row => accDiv(row.productMoney,100)
         },
         {
           label: '最近申请时间',

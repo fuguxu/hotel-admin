@@ -218,6 +218,10 @@ export async function getDictItemByPage (params) {
 export async function deleteDictItem (params) {
   return DictModuleApi.post(`/sysDictItem/del`, params)
 }
+// 获取某个字典
+export async function getDictData (params) {
+  return DictModuleApi.get(`/sysDict/getDictData`, params)
+}
 
 // 项目管理保存接口
 export async function projectSave (params) {

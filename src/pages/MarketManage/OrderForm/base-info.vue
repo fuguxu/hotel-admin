@@ -50,7 +50,7 @@
         </el-row>
       </block>
       <block title="支付信息">
-        hahaah
+
       </block>
     </el-col>
   </el-row>
@@ -93,7 +93,7 @@ export default {
   },
   filters: {
     moneyFormat(n){
-      return accDiv(n, 1000)
+      return accDiv(n, 100)
     },
     orderStatusFormat(n) {
       return (orderStatus.find(tab => tab.name === `${n}`) || {}).label

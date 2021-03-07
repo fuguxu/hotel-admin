@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="20">
+    <el-col :span="20" v-if="data.orderNo">
       <block title="售后信息" class="mb-15">
         <el-row :class="$style['block-content']">
           <el-col :span="16">
@@ -55,6 +55,9 @@
       <el-col class="text-center" :span="24">
         <el-button @click="handleAfterSale" type="primary">处理售后</el-button>
       </el-col>
+    </el-col>
+    <el-col :class="$style['no-data']" v-else>
+      暂无售后
     </el-col>
     <el-dialog title="售后处理" :visible.sync="visible" width="40%">
       <el-form :model="form" label-width="100px">
@@ -136,7 +139,7 @@ export default {
   },
   filters:{
     moneyFormat(n){
-      return accDiv(n, 1000)
+      return accDiv(n, 100)
     },
     statusFormat(n){
       return (afterSaleType.find(s => `${s.value}` === `${n}`) || {}).label
@@ -144,6 +147,9 @@ export default {
     userTypeFormat(n) {
       return (userType.find(s => `${s.value}` === `${n}`) || {}).label
     }
+  },
+  computed:{
+
   }
 }
 </script>
@@ -154,5 +160,8 @@ export default {
   }
   .label {
     margin-right: 10px;
+  }
+  .no-data {
+    font-size: 14px;
   }
 </style>

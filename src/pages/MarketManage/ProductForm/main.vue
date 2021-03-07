@@ -193,13 +193,13 @@ export default {
       storeTypeOptions: storeTypeOptions,
       brandOptions: [],
       commonColumns: [
-        {
-          label: '成本价',
-          prop: 'costPrice',
-          placeholder: '成本价(元)',
-          colValue: '',
-          type: 'slot'
-        },
+        // {
+        //   label: '成本价',
+        //   prop: 'costPrice',
+        //   placeholder: '成本价(元)',
+        //   colValue: '',
+        //   type: 'slot'
+        // },
         {
           label: '原价',
           prop: 'originalPrice',

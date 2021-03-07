@@ -139,7 +139,7 @@
             </el-col>
           </el-col>
           <el-col :span="24" v-if="$route.query.id">
-            <h1>二维码</h1>
+            <h1>邀请二维码</h1>
             <el-col :span="12">
               <el-form-item label="">
                 <img :src="form.invitationQrCode" title="点击下载二维码" @click="down">
@@ -203,10 +203,10 @@ export default {
         }
       ],
       merchantTypeOptions: [
-        {
-          label: '分销会员',
-          value: 1
-        },
+        // {
+        //   label: '分销会员',
+        //   value: 1
+        // },
         {
           label: '商家',
           value: 2
