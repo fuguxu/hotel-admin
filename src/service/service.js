@@ -460,6 +460,10 @@ export async function getMerchantWithdrawRecordByPage (params) {
 export async function approvalMerchantWithdraw (params) {
   return MerchantModuleApi.post(`/account/merchantWithdrawRecord/approval`, params)
 }
+// 商户处理转账
+export async function saveVoucherMerchantWithdraw (params) {
+  return MerchantModuleApi.post(`/account/merchantWithdrawRecord/saveVoucher`, params)
+}
 
 // 获取订单分页接口
 export async function getOrderListByPage (params) {

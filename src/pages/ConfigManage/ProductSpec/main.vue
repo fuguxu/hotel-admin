@@ -38,6 +38,9 @@
                 </el-col>
               </el-form>
             </el-col>
+            <el-col>
+              <div class="ml-15 mb-10" :class="$style.tip">属性值有多个，请用 | 分割</div>
+            </el-col>
           </el-row>
           <m-table :data="tableData" :columns="columns" :class="$style.table"
           row-key="id"
@@ -255,6 +258,9 @@ $border-color: #DCDFE6;
   border-right: 1px solid $border-color;
   border-left: 1px solid $border-color;
   border-bottom: 1px solid $border-color;
+}
+.tip {
+  color: #409EFF;
 }
 </style>
 <style scoped>

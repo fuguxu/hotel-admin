@@ -42,11 +42,11 @@
        :currentPage="currentPage" :pageSize="pageSize" :total="total">
           <template v-slot:col-operate="{scope}">
             <el-button type="primary" v-if="scope.row.status==0" @click="operationHandler(scope.row, scope.$index, 'approve')" size="mini">审核</el-button>
-            <!-- <el-button type="primary" @click="operationHandler(scope.row, scope.$index, 'detail')" size="mini">明细</el-button> -->
+            <el-button type="primary" v-if="scope.row.status==1" @click="operationHandler(scope.row, scope.$index, 'transfer')" size="mini">处理转账</el-button></el-button>
           </template>
       </m-table>
       <el-dialog title="提现审核" :visible.sync="visible" width="40%">
-        <el-form :model="form" label-width="100px">
+        <el-form :model="form" label-width="100px" v-if="handleType === 'approve'">
           <el-form-item label="意见">
             <el-select v-model="form.status" clearable>
               <el-option v-for="item in statusOptions" v-bind="item" :key="item.value"></el-option>
@@ -54,6 +54,19 @@
           </el-form-item>
           <el-form-item label="备注">
             <el-input type="textarea" v-model="form.remark" placeholder="请输入" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <el-form :model="transfertForm" label-width="100px" v-if="handleType === 'transfer'">
+          <el-form-item label="转账结果" >
+            <el-select v-model="transfertForm.status" clearable>
+              <el-option v-for="item in transferOptions" v-bind="item" :key="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="转账凭证说明" >
+            <el-input type="textarea" v-model="transfertForm.voucherDesc" placeholder="请输入转账凭证说明" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="转账凭证">
+            <m-upload v-model="transfertForm.voucherImageUrl" dir="product/category"></m-upload>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -65,7 +78,7 @@
 </template>
 <script>
 import pagination from '@/mixins/pagination'
-import { getMerchantWithdrawRecordByPage, approvalMerchantWithdraw} from '@/service/service'
+import { getMerchantWithdrawRecordByPage, approvalMerchantWithdraw, saveVoucherMerchantWithdraw} from '@/service/service'
 let selectionDatas = []
 let id = ''
 const formPath = '/h/merchant_detail'
@@ -116,7 +129,7 @@ export default {
           label: '操作',
           prop: 'operate',
           type: 'slot',
-          width: '100px'
+          width: '120px'
         }
       ],
       query: {
@@ -128,6 +141,11 @@ export default {
       form: {
         remark: '',
         status: ''
+      },
+      transfertForm: {
+        status: '',
+	      voucherDesc: "",
+	      voucherImageUrl: ""
       },
       statusOptions:[
         {
@@ -162,7 +180,18 @@ export default {
           value: 2
         }
       ],
-      visible: false
+      transferOptions: [
+        {
+          label: '失败',
+          value: 0
+        },
+        {
+          label: '成功',
+          value: 1
+        },
+      ],
+      visible: false,
+      handleType: ''
     }
   },
   async created () {
@@ -190,20 +219,30 @@ export default {
       this.$router.push({ path: formPath, query: { id: row.id, edit: 1 } })
     },
     approve(row) {
+      this.handleType = 'approve';
+      id = row.id;
+      this.visible = true;
+    },
+    transfer(row){
+      this.handleType = 'transfer';
       id = row.id;
       this.visible = true;
     },
     save() {
-      approvalMerchantWithdraw({
-        ...this.form,
-        id
-      }).then(res =>{
+      this.request().then(res =>{
         this.$handleRequestTip(res)
         if(res.code === 200){
           this.visible = false;
           this.getData()
         }
       })
+    },
+    request() {
+      let p = {
+        ...(this.handleType === 'approve'? this.form : this.transfertForm),
+        id
+      }
+      return (this.handleType === 'approve' ? approvalMerchantWithdraw(p) : saveVoucherMerchantWithdraw(p))
     }
   },
   components: {
