@@ -14,8 +14,8 @@ import { doLogin } from '@/service/service.js'
 export default {
   data () {
     return {
-      username: 'admin',
-      password: 'admin123'
+      username: '',
+      password: ''
     }
   },
   methods: {
