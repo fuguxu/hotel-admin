@@ -4,7 +4,6 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
 const env = process.env.NODE_ENV
 const DEV = env === 'dev'
 const HappyPack = require('happypack')
@@ -68,67 +67,23 @@ module.exports = {
       chunkFilename: DEV ? 'css/[id].css' : 'css/[hash:8].[id].css',
       allChunks: true
     }),
-    // new webpack.ProvidePlugin({// 使用时不用再import了 可以直接使用
+    // new webpack.ProvidePlugin({// 使用时不用再import了 可以直接使用，是在每个模块中都定义了一个vue|$，而不是放在window上了,放在window上可以用expose-loader
     //   Vue: [resolve('node_modules/vue/dist/vue.min.js')] // 如果使用此编译版本，el-table无法渲染
+          // $: 'jquery'
     // }),
-    new webpack.DllReferencePlugin({
-      manifest: require('../src/public/dll/vendor.manifest')
-    }),
-    new webpack.DllReferencePlugin({
-      manifest: require('../src/public/dll/polyfill.manifest')
-    }),
-    new AddAssetHtmlPlugin([
-      {
-        filepath: resolve('src/public/dll/_dll_polyfill.js'),
-        outputPath: 'dll',
-        publicPath: 'dll',
-        includeSourcemap: false
-      },
-      {
-        filepath: resolve('src/public/dll/_dll_vendor.js'),
-        outputPath: 'dll',
-        publicPath: 'dll',
-        includeSourcemap: false
-      }
-    ]),
+    
     new HappyPack({
       id: 'babel',
       loaders: ['babel-loader?cacheDirectory'],
       threadPool: happyThreadPool
     })
   ],
-  externals: {
+  externals: { // 引用的时候 不打包进去
     lodash: {
       commonjs: 'lodash',
       commonjs2: 'lodash',
       amd: 'lodash',
       root: '_'
-    }
-  },
-  optimization: { // webpack4.0打包相同代码配置  一般多入口时使用
-    // concatenateModules:true,
-    splitChunks: {
-      cacheGroups: {// 缓存组 单独提取JS文件引入html
-        // core: {
-        //     chunks: 'initial',
-        //     test: /node_modules/,
-        //     name: 'core',// 入口的entry的key
-        //     enforce: true
-        // },
-        commons: { // 公共模块
-          chunks: 'all',
-          minSize: 1,
-          minChunks: 2,
-          name: 'vendor'
-        },
-        vender: {// 第三方模块抽离
-          priority: 1, // 权重 比commons要重
-          test: /node_modules/,
-          chunks: 'all',
-          minSize: 1,
-          minChunks: 2
-        }
-      }
     }
   },
   module: {

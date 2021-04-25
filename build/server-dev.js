@@ -37,3 +37,8 @@ app.listen(port, (err) => {
     console.log('listening on port %s', port)
   }
 })
+
+// 设置接口 ，可以模拟接口供前端调用
+app.get('/user', (req,res) =>{
+  res.json({name: 'app'})
+})
