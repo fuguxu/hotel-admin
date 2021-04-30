@@ -34,6 +34,9 @@ const devConfig = {
   plugins: [
     // new OpenBrowserPlugin({ url: 'http://localhost:9999/main.html' })
     // new BundleAnalyzerPlugin()
+    new webpack.HotModuleReplacementPlugin(), // 热更新插件
+    // new webpack.NamedModulesPlugin(), // 告诉我们哪个模块更新了 webpack4已经默认安装这个插件
+    new webpack.optimize.ModuleConcatenationPlugin(), // scope hoisting作用域提升，打包代码体积更小，运行更快，production模式下默认开启
     new webpack.DllReferencePlugin({
       manifest: require('../src/public/dll/vendor.manifest')
     }),

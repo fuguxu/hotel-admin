@@ -1,5 +1,5 @@
 <template>
-    <div :class="$style['app-main']">
+    <div class="app-main-g" :class="$style['app-main']">
         <headerBar></headerBar>
         <section :class="$style['main-container']">
             <router-view></router-view>
@@ -13,7 +13,7 @@ import headerBar from '../HeaderBar/main'
 export default {
   data () {
     return {
-
+      user: {name:'jack',age:18,sex:'girl',from:'china'}
     }
   },
   mounted () {

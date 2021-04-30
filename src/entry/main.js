@@ -22,3 +22,4 @@ if (__PROD__) {
 } else {
   Vue.config.devtools = true
 }
+console.log(11)

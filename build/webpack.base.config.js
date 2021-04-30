@@ -9,7 +9,7 @@ const DEV = env === 'dev'
 const HappyPack = require('happypack')
 const os = require('os')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
-const cssModuleOption = {
+const cssModuleOption = { // 在cssModule的样式 无法通过postcss-loader给样式加前缀
   modules: true,
   localIdentName: '[local]--[hash:base64:5]',
   camelCase: true,
@@ -60,8 +60,6 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
     new MiniCssExtractPlugin({
       filename: DEV ? 'css/[name].css' : 'css/[hash:8].[name].min.css',
       chunkFilename: DEV ? 'css/[id].css' : 'css/[hash:8].[id].css',

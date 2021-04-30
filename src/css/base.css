@@ -132,3 +132,7 @@ textarea{border:1px solid #CBCED8;border-radius: 3px;resize: none;}
 .el-date-editor.el-input, .el-date-editor.el-input__inner {
   width: auto;
 }
+.logo {
+  transform: scale(1.2);
+  display: flex;
+}
